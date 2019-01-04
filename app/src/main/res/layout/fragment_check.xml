@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--usamos esta etiqueta frameLayout, y colocamos nuestros componentes con cualquier xml-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/cardview_shadow_start_color"
+             tools:context=".Fragments.FragmentCheck">
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/hello_blank_fragment"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center"
+        android:padding="10dp">
+        <CheckBox
+            android:id="@+id/cbxA"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="A"/>
+        <CheckBox
+            android:id="@+id/cbxB"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="B"/>
+        <CheckBox
+            android:id="@+id/cbxC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="C"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/btnSelec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:text="Seleccion"/>
+</FrameLayout>

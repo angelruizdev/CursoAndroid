@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--android:id="@+id/contfrgmnt", este id en la etiqueta padre nos permite usarla como contenedor con frgmnts dinamicos-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contfrgmnt"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activitys.ActivityFragmentProdMaDeBD">
+
+<fragment
+    android:id="@+id/fmtRecyDetallBD"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:name="com.example.angelruiz.cursoandroid.Fragments.FragmentRecyDetalleBD"
+    tools:layout="@layout/fragment_recy_detalle_bd"/>
+
+<fragment
+    android:id="@+id/fmtRecyBD"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:name="com.example.angelruiz.cursoandroid.Fragments.FragmentRecyProductosBD"
+    tools:layout="@layout/fragment_recy_productos_bd"/>
+
+</LinearLayout>

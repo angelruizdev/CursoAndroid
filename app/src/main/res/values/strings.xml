@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">CursoAndroid</string>
+    <string name="btnVista">Vista</string>
+    <string name="encabezado">Bienvenido</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="mostrarPass">Mostrar</string>
+    <string name="enviar">Enviar</string>
+    <string name="nombre">Nombre…</string>
+    <string name="param">nombre</string>
+    <string name="contacto_menu_opsiones">Fragment</string>
+    <string name="sucursales_menu_opsiones">Spinner</string>
+    <string name="menu_contexto_nombre">Nombre</string>
+    <string name="menu_contexto_telefono">Teléfono</string>
+    <string name="menu_appbar_tocar">tocar</string>
+    <string name="menu_popup_detalle">Detalles</string>
+
+    <string-array name="nombres">
+        <item>Ángel</item>
+        <item>Manuel</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rbdesactivado">Desactivado</string>
+    <string name="rbactivado">Activado</string>
+    <string name="title_activity_prueba">Prueba</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_3">Tab 3</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="trespnts">⋮</string>
+    <string name="sqlite">SQLite</string>
+
+</resources>

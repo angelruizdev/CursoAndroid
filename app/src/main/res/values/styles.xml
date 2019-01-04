@@ -1,0 +1,24 @@
+<resources>
+    <!-- Base application theme. -->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">quitamos el actionBar, para crear uno propio con MD -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="android:textColor">#0f20b7</item>
+    </style>
+
+    <style name="botonMaterialDesign" parent="Theme.AppCompat.Light">
+        <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="colorControlHighlight">@color/colorAccent</item>
+    </style>
+
+    <style name="Theme.AppTheme.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar"/>
+
+    <style name="Theme.AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar"/>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+</resources>

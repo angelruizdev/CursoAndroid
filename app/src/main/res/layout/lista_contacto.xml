@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activitys.ListaContacto">
+
+    <ListView
+        android:id="@+id/lsvLista"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Nombre ---> File I/O"
+        android:layout_marginTop="200dp"/>
+    <EditText
+        android:id="@+id/etTelefono"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Teléfono ---> Shared Preference"
+        android:inputType="phone"
+        android:maxLength="10"
+        android:layout_marginTop="250dp"/>
+    <TextView
+        android:id="@+id/tvMosShPreference"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Shared Preference"
+        android:layout_marginTop="330dp"/>
+    <Button
+        android:id="@+id/btnGuardarFileIO"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Guardar"
+        android:layout_marginTop="390dp"/>
+    <Button
+        android:id="@+id/btnGuardShPreference"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Guardar Preference"
+        android:layout_marginTop="450dp"/>
+    <Button
+        android:id="@+id/btnMosShPreference"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:text="Mostrar Preference"
+        android:layout_marginTop="500dp"/>
+</RelativeLayout>

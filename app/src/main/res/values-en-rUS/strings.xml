@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="btnVista">View</string>
+    <string name="app_name">CureseAndroid</string>
+    <string name="encabezado">Welcome</string>
+    <string name="enviar">Send</string>
+    <string name="nombre">Name…</string>
+</resources>

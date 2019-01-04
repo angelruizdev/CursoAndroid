@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--creamos este archivo xml de tipo menu en res -->
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+<!--cada item sera una opsion para nuestro menú, aquí hay dos opsiones-->
+<item
+    android:id="@+id/fragmentSpnrBD"
+    android:title="@string/contacto_menu_opsiones"
+    android:orderInCategory="100">
+</item>
+<item
+    android:id="@+id/muestraSpinner"
+    android:title="@string/sucursales_menu_opsiones"
+    android:orderInCategory="100">
+</item>
+
+<!--este item es para mostrar un icono en la app bar que sirve como un menu, con este atributo:app:showAsAction="always":hacemos que se muestre en la appbar -->
+<item
+    android:id="@+id/menuRecyBD"
+    android:title="@string/menu_appbar_tocar"
+    android:icon="@drawable/email"
+    android:orderInCategory="100"
+    app:showAsAction="always">
+</item>
+    <item
+    android:id="@+id/menuTocarTabs"
+    android:title="@string/menu_appbar_tocar"
+    android:icon="@drawable/ic_touch_app"
+    android:orderInCategory="100"
+    app:showAsAction="always">
+</item>
+</menu>

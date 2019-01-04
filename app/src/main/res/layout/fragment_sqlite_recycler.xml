@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".Fragments.FragmentSqliteRecycler">
+
+    <!-- TODO: Update blank fragment layout -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sqlite"
+            android:textSize="20sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/etPrecioProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Precio Producto"
+            android:textSize="15sp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/etNomProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Producto"
+            android:textSize="15sp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btGuardarProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Guardar"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="center"/>
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp"
+            android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etBuscIdProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:hint="ingresar"
+            android:textSize="15sp"
+            android:layout_marginTop="55dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btBuscarProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Buscar"
+            android:layout_marginTop="100dp"/>
+    </LinearLayout>
+
+        <EditText
+            android:id="@+id/etCoinsidencia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:hint="Coinsidencia"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="225dp"/>
+
+        <EditText
+            android:id="@+id/etCoinsidencia1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Coinsidencia"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="270dp"/>
+
+        <Button
+            android:id="@+id/btActualizarProducto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualizar"
+            android:layout_marginTop="320dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="280dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/etElimIdProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:hint="id"
+            android:textSize="15sp"
+            android:layout_marginTop="55dp"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/btEliminarProducto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Eliminar"
+            android:layout_marginTop="100dp"/>
+    </LinearLayout>
+
+</FrameLayout>

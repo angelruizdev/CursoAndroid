@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--con este archivo inflamos el menu y creamos el item que mostrara dicho menú-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/mDetalle"
+    android:title="@string/menu_popup_detalle"
+    android:orderInCategory="100">
+</item>
+</menu>
