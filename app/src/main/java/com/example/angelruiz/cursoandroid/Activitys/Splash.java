@@ -27,15 +27,16 @@ String nombre;
 
         edtNombre = (EditText) findViewById(R.id.edtNombres);
         //nombre = edtNombre.getText().toString();
-        /*btnMsg = (Button)findViewById(R.id.btnMsg);
+        btnMsg = (Button)findViewById(R.id.btnMsg);
         btnMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Splash.this, "Enviando...", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getApplicationContext(),WebServiceMysql.class));
                 //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com"));
                 //startActivity(intent);
             }
-        });*/
+        });
         //lo inicializamos como cualquier componente
         btnFlota = (FloatingActionButton)findViewById(R.id.btnFloat);
         //nos brinda un escuchador setOnClickListener, para ejecutar una accion

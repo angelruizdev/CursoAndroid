@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED"/>
     <!-- agregamos permisos para hacer llamadas de telefono -->
     <uses-permission android:name="android.permission.CALL_PHONE"/>
@@ -71,6 +72,11 @@
         <activity android:name=".Activitys.ViewPagerTabs">
         </activity>
         <activity android:name=".Activitys.ActivityFragmentProdMaDeBD">
+        </activity>
+        <activity
+            android:name=".Activitys.WebServiceMysql"
+            android:label="@string/title_activity_web_service_mysql"
+            android:theme="@style/AppTheme">
         </activity>
     </application>
 
