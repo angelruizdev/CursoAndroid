@@ -1,14 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:orientation="vertical"
+             android:gravity="center"
              tools:context=".Fragments.FragmentRegistroWsMysql">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <EditText
+        android:id="@+id/etFolio"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="registro"/>
+        android:layout_height="wrap_content"
+        android:hint="Numero Folio"
+        android:inputType="number"/>
+    <EditText
+        android:id="@+id/etNombre"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/nombre"
+        android:inputType="text"/>
+    <EditText
+        android:id="@+id/etOcupasion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Ocupación"
+        android:inputType="text"/>
+    <Button
+        android:id="@+id/btRegistrar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/enviar"/>
 
-</FrameLayout>
+</LinearLayout>

@@ -37,5 +37,6 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="ws_mysql_menu">Eliga una opsion del menú</string>
 
 </resources>
