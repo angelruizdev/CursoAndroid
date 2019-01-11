@@ -48,7 +48,7 @@ String nombre;
                 Snackbar.make(view, "SnackBar...", Snackbar.LENGTH_LONG).setAction("Enviar", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                //los dos toast hacen lo mismo a uno se le jala elvalor desde elrecurso string, podemos hacerlo de las 2 formas
+                                //los dos toast hacen lo mismo a uno se le jala el valor desde el recurso string, podemos hacerlo de las 2 formas
                                 //Toast.makeText(Splash.this, "Enviando...", Toast.LENGTH_SHORT).show();
                                 Toast.makeText(Splash.this, getResources().getString(R.string.enviar), Toast.LENGTH_SHORT).show();
 
