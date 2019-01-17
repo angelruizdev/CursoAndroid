@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED"/>
     <!-- agregamos permisos para hacer llamadas de telefono -->
@@ -24,7 +25,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activitys.Splash">
+        <activity android:name=".Activitys.WebServiceMysql">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -75,7 +76,7 @@
         <activity android:name=".Activitys.ActivityFragmentProdMaDeBD">
         </activity>
         <activity
-            android:name=".Activitys.WebServiceMysql"
+            android:name=".Activitys.Splash"
             android:label="@string/title_activity_web_service_mysql"
             android:theme="@style/AppTheme">
         </activity>

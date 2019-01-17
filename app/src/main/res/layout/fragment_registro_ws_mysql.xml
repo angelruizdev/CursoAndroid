@@ -4,15 +4,33 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:orientation="vertical"
-             android:gravity="center"
              tools:context=".Fragments.FragmentRegistroWsMysql">
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginTop="10dp">
+    <EditText
+        android:id="@+id/etFolioBuscar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Buscar por folio"
+        android:inputType="number"/>
+    <Button
+        android:id="@+id/btConsultar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="@string/buscarFolio"/>
+</LinearLayout>
     <EditText
         android:id="@+id/etFolio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Numero Folio"
-        android:inputType="number"/>
+        android:inputType="number"
+        android:layout_marginTop="30dp"/>
     <EditText
         android:id="@+id/etNombre"
         android:layout_width="match_parent"
