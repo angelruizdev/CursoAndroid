@@ -1,6 +1,7 @@
 package com.example.angelruiz.cursoandroid.Fragments;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -27,12 +28,13 @@ public class FragmentRegistroWsMysql extends Fragment implements View.OnClickLis
 
     View vista;
     Context context;
-    EditText etFolio, etNombre, etProfesion;
+    EditText etFolio, etNombre, etProfesion, etFolioBuscar, etMostDatos;
     Button btRegistrar, btConsultar;
     ConexionWSMysql conexion;
     ProgressBar progressBar;
     RequestQueue colaSolicitud;//permiten hacer conexion con WS
     JsonObjectRequest objetoJsonSolicita;
+    String numeroFolio,nombre,profesion;
 
     public FragmentRegistroWsMysql() {
 
@@ -42,69 +44,37 @@ public class FragmentRegistroWsMysql extends Fragment implements View.OnClickLis
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vista = inflater.inflate(R.layout.fragment_registro_ws_mysql, container, false);
         context = getContext();
+        progressBar = vista.findViewById(R.id.pbWebService);
         conexion = new ConexionWSMysql();//instanciamos nuestra conexion
+        etFolioBuscar = vista.findViewById(R.id.etFolioBuscar);
         etFolio = vista.findViewById(R.id.etFolio);
         etNombre = vista.findViewById(R.id.etNombre);
         etProfesion = vista.findViewById(R.id.etProfesion);
-        btRegistrar = vista.findViewById(R.id.btRegistrar);
+        etMostDatos = vista.findViewById(R.id.etMostDatos);
         btConsultar = vista.findViewById(R.id.btConsultar);
+        btRegistrar = vista.findViewById(R.id.btRegistrar);
 
-        btRegistrar.setOnClickListener(this);
         btConsultar.setOnClickListener(this);
+        btRegistrar.setOnClickListener(this);
 
         //colaSolicitud = Volley.newRequestQueue(context);
+        MiAsyncTask miAsyncTask = new MiAsyncTask();//new MiAsyncTask.execute();
+        miAsyncTask.execute();
         return vista;
     }
 
     @Override
     public void onClick(View v) {
       switch (v.getId()){
-          case R.id.btRegistrar:
-
-              try {
-                  String response = conexion.execute("http://192.168.0.3/webServiceMysql/wsJSONRegistro.php?numeroFolio="
-                                  +etFolio.getText().toString()
-                                  +"&nombre="+etNombre.getText().toString()
-                                  +"&profesion="+etProfesion.getText().toString()).get();
-
-                  if (response!=null){
-                      Toast.makeText(context, "¡Registro guardado!", Toast.LENGTH_SHORT).show();
-                      etFolio.setText("");
-                      etNombre.setText("");
-                      etProfesion.setText("");
-                  }
-              } catch (ExecutionException e) {
-                  e.printStackTrace();
-              } catch (InterruptedException e) {
-                  e.printStackTrace();
-              }
-              break;
-
           case R.id.btConsultar:
-              Toast.makeText(context, "isissi", Toast.LENGTH_SHORT).show();
-              try {                                                                                    //wsJSONMostDatos.php?numeroFolio=etNum...
-                  String response = conexion.execute("http://192.168.0.3/webServiceMysql/wsJSONMostDatos.php?numeroFolio="+etFolio.getText().toString()).get();//ejecutamos la conexion
-                  JSONArray jsonArray = new JSONArray(response);
-
-                      JSONObject jsonObject = jsonArray.getJSONObject(0);
-                      String numeroFolio = jsonObject.getString("numeroFolio");
-                      String nombre = jsonObject.getString("nombre");
-                      String profesion = jsonObject.getString("profesion");
-
-                      etFolio.setText(numeroFolio);
-                      etNombre.setText(nombre);
-                      etProfesion.setText(profesion);
-
-              } catch (ExecutionException e) {
-                  e.printStackTrace();
-              } catch (InterruptedException e) {
-                  e.printStackTrace();
-              } catch (JSONException e) {
-                  e.printStackTrace();
-              }
-          break;
-      }
+              buscarDatos();
+              break;
+          case R.id.btRegistrar:
+              insertarDatos();
+              break;
+        }
     }
+
         /*String url = "http://192.168.0.3/webServiceMysql/wsJSONRegistro.php?"
                 +"numeroFolio="+etFolio.getText().toString()
                 +"&nombre="+etNombre.getText().toString()
@@ -129,4 +99,87 @@ public class FragmentRegistroWsMysql extends Fragment implements View.OnClickLis
         .setAction("", null).show();
         Log.i("ERROR", error.toString());
     }*/
+    public void buscarDatos(){
+        try {                                                                                    //wsJSONMostDatos.php?numeroFolio=etNum...
+            String response = conexion.execute("http://192.168.0.3/webServiceMysql/wsJSONMostDatos.php?numeroFolio="+etFolioBuscar.getText().toString()).get();//ejecutamos la conexion
+            JSONArray jsonArray = new JSONArray(response);
+
+            JSONObject jsonObject = jsonArray.getJSONObject(0);
+            numeroFolio = jsonObject.getString("numeroFolio");
+            nombre = jsonObject.getString("nombre");
+            profesion = jsonObject.getString("profesion");
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }finally {
+            etMostDatos.setText(String.valueOf("Folio: "+numeroFolio+"-"+"Nombre: "+nombre+"-"+"Profesion: "+profesion));
+        }
+        Toast.makeText(context, "Mostrando", Toast.LENGTH_SHORT).show();
+    }
+
+    public void insertarDatos() {
+        try {
+            String response = conexion.execute("http://192.168.0.3/webServiceMysql/wsJSONRegistro.php?numeroFolio="
+                    +etFolio.getText().toString()
+                    +"&nombre="+etNombre.getText().toString()
+                    +"&profesion="+etProfesion.getText().toString()).get();
+
+            if (response!=null){
+                Toast.makeText(context, "¡Registro guardado!", Toast.LENGTH_SHORT).show();
+                etFolio.setText("");
+                etNombre.setText("");
+                etProfesion.setText("");
+            }
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public class MiAsyncTask extends AsyncTask<Void, Integer, Void>{
+        public MiAsyncTask() {
+            super();
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setMax(100);
+            progressBar.setProgress(0);
+            Toast.makeText(context, "inicio", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            progressBar.setVisibility(View.VISIBLE);
+            for (int i = 0; i < 10; i++) {
+                publishProgress(i);
+                //Toast.makeText(context, ""+i, Toast.LENGTH_SHORT).show();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(context, "fin", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setProgress(values[0]);
+        }
+
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    }
 }

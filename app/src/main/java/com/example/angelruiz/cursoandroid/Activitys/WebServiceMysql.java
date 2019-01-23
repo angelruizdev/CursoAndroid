@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentPendiente;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentRegistroWsMysql;
 import com.example.angelruiz.cursoandroid.R;
@@ -21,6 +22,8 @@ import com.example.angelruiz.cursoandroid.R;
 public class WebServiceMysql extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 FragmentRegistroWsMysql fragment_registro_ws_mysql;
 FragmentPendiente fragmentPendiente;
+FragmentApiRest fragmentApiRest;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,7 @@ FragmentPendiente fragmentPendiente;
         setSupportActionBar(toolbar);
         fragment_registro_ws_mysql = new FragmentRegistroWsMysql();
         fragmentPendiente = new FragmentPendiente();
+        fragmentApiRest = new FragmentApiRest();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +97,7 @@ FragmentPendiente fragmentPendiente;
         } else if (id == R.id.nav_gallery) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentPendiente);
         } else if (id == R.id.nav_slideshow) {
-
+           fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentApiRest);
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {

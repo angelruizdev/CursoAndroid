@@ -5,6 +5,11 @@
              android:layout_height="match_parent"
              android:orientation="vertical"
              tools:context=".Fragments.FragmentRegistroWsMysql">
+    <ProgressBar
+        android:id="@+id/pbWebService"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -24,6 +29,10 @@
         android:layout_weight="1"
         android:text="@string/buscarFolio"/>
 </LinearLayout>
+    <EditText
+        android:id="@+id/etMostDatos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
     <EditText
         android:id="@+id/etFolio"
         android:layout_width="match_parent"
