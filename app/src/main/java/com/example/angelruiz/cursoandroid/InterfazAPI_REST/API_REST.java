@@ -1,4 +1,5 @@
 package com.example.angelruiz.cursoandroid.InterfazAPI_REST;
+
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.RespuestaApiRest;
 
 import retrofit2.Call;
@@ -12,6 +13,8 @@ public interface API_REST {//esta interface nos permite acceder al listado JSON 
     Call<RespuestaApiRest> obtenerListadoJson();//como solo muestra datos de la API, no recibe parametros este metodo
 
     @FormUrlEncoded
+    //@Multipart//permite cargar archivos video, docs etc..
     @POST("wsJSONRegistro.php")
-    Call<RespuestaApiRest> registroAPIRest(@Field("numeroFolio") String numeroFolio, @Field("nombre") String nombre, @Field("profesion") String profesion);
+    Call<RespuestaApiRest> registroAPIRest(@Field("numeroFolio") String numeroFolio, @Field("nombre") String nombre,
+                                           @Field("profesion") String profesion);
 }

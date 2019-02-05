@@ -49,7 +49,7 @@ public class FragmentListaContacts extends Fragment  {
         // Required empty public constructor
     }
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
        vista=inflater.inflate(R.layout.fragment_lista_contacts, container, false);
        context=getContext();//inicializamos nuestro context, obteniendo el contexto de donde nos encontramos
        ivImg=vista.findViewById(R.id.ivImg);
@@ -139,6 +139,7 @@ public class FragmentListaContacts extends Fragment  {
         cargarImg.setType("image/*");//permite seleccionar imagenes con cualquier extencion con /*, y determinar de que tipo sera el archivo
         startActivityForResult(Intent.createChooser(cargarImg,"Seleccione una App"), SELECT_PICTURE);//permite elegir una app para abrir la galeria, si se tienen varias apps de fotos/imagenes, y pasarle el codigo de solicitud SELECT_PICTURE
     }
+
     @Override//este metodo recibe los codigos de solicitud de cada startActivituResult(), de cada intent que envia uno, son de utilidad para los intent implicitos que abren apps o sition we
     public void onActivityResult(int requestCode, int resultCode, Intent data) {//como vemos uno de sus parametros es requestCode, el cual recibe el codigo de silicitud
        super.onActivityResult(requestCode, resultCode, data);//el parametro data guarda la foto tomada, y con el podemos mostrarla en el IV

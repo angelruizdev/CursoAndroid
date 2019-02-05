@@ -17,6 +17,13 @@
             android:layout_width="0dp"
             android:layout_height="50dp"
             android:layout_weight="1"
+            android:layout_gravity="center"
             android:padding="10dp"/>
+        <ImageView
+            android:id="@+id/ivElimProducto"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:src="@drawable/email"/>
 </LinearLayout>
 </RelativeLayout>

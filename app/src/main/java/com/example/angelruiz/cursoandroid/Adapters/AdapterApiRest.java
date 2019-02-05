@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
 import com.example.angelruiz.cursoandroid.R;
 
@@ -32,9 +34,10 @@ public Context context;
     @Override
     public void onBindViewHolder(@NonNull ViewHolderAdapterApiRest viewHolderAdapterApiRest, int i) {
         //String urlImage = "https://source.unsplash.com/random/"+pokemon.get(i).getImagenPokemon()+".png";
-        //Glide.with(context).load(urlImage).into(viewHolderAdapterApiRest.ivImgProducto);
+        String urlImage = "https://source.unsplash.com/random/";
+        Glide.with(context).load(urlImage).into(viewHolderAdapterApiRest.ivImgProducto);
         //viewHolderAdapterApiRest.ivImgProducto.setImageResource(pokemon.get(i).getImagenPokemon());
-        viewHolderAdapterApiRest.tvDetalleProducto.setText(String.valueOf(pokemon.get(i).getNombre()+"-"+pokemon.get(i).getProfesion()));
+        viewHolderAdapterApiRest.tvDetalleProducto.setText(String.valueOf(pokemon.get(i).getNombre()+" - "+pokemon.get(i).getProfesion()));
     }
 
     @Override
