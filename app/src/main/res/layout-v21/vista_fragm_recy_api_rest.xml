@@ -10,8 +10,8 @@
     android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/ivImgProducto"
-            android:layout_width="100dp"
-            android:layout_height="100dp"/>
+            android:layout_width="80dp"
+            android:layout_height="80dp"/>
         <TextView
             android:id="@+id/tvDetalleProducto"
             android:layout_width="0dp"
@@ -21,9 +21,9 @@
             android:padding="10dp"/>
         <ImageView
             android:id="@+id/ivElimProducto"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@drawable/email"/>
+            android:src="@drawable/ic_delete"/>
 </LinearLayout>
 </RelativeLayout>

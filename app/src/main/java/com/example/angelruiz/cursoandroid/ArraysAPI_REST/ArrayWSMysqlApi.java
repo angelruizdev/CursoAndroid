@@ -4,12 +4,21 @@ import com.google.gson.annotations.SerializedName;
 
 public class ArrayWSMysqlApi {//este array de clase, tiene los mismos campos del JSON que devuelve la API, ya que aqui los guardara para mostrarlos en el RV
 
+    private int idPersona;
     private int numeroFolio;
     private String nombre;
     @SerializedName("profesion")
     private String profesion;
-    @SerializedName("imagen")//permite cargar archivos, doc, img etc..
+    @SerializedName("imagen")//permite cargar archivos, doc, img etc.., si bienen con otro nombre desde el ws
     private Integer imagen;
+
+    public int getIdPersona() {
+        return idPersona;
+    }
+
+    public void setIdPersona(int idPersona) {
+        this.idPersona = idPersona;
+    }
 
     public int getNumeroFolio() {//creamos get y set de cada uno para acceder a ellos desde el adapterRV
         return numeroFolio;

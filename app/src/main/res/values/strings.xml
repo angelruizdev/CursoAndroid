@@ -39,5 +39,6 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="ws_mysql_menu">Eliga una opsion del menú</string>
     <string name="buscarFolio">Buscar</string>
+    <string name="title_activity_maps">Map</string>
 
 </resources>

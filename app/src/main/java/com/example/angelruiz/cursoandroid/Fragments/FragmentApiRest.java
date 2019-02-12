@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -20,11 +21,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.angelruiz.cursoandroid.Adapters.AdapterApiRest;
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
-import com.example.angelruiz.cursoandroid.InterfazAPI_REST.API_REST;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.EndPointAPI_REST;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.RespuestaApiRest;
 
@@ -39,6 +41,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentApiRest extends Fragment implements View.OnClickListener {
     private static final int SELECT_PIKTURE = 100;
+    private ProgressBar pb;
     Bitmap uriPath;
     Uri path;
     View vista;
@@ -47,7 +50,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     EditText etNumeroFolio, etNombre, etProfesion;
     Button btRegistraApi;
     private Retrofit retrofit;
-    private static final String TAG = "API_REST";
+    ArrayList<ArrayWSMysqlApi> listaJson;
+    private static final String TAG = "API_REST_LOG_E";
     private int offset;
     RecyclerView rvDatosApiRest;
     SwipeRefreshLayout srfRVAPI;
@@ -65,6 +69,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         etNombre = vista.findViewById(R.id.etNombre);
         etProfesion = vista.findViewById(R.id.etProfesion);
         btRegistraApi = vista.findViewById(R.id.btRegistraApi);
+        pb = vista.findViewById(R.id.pbDatosApi);
+        pb.setVisibility(View.VISIBLE);
 
         srfRVAPI = vista.findViewById(R.id.srfRVAPI);
         btRegistraApi.setOnClickListener(this);
@@ -72,16 +78,16 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         rvDatosApiRest.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
         //rvDatosApiRest.setLayoutManager(gridLayoutManager);
-        retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()//inicializamos nuestro obj retrofit
                 .baseUrl("https://proyectosangelito.000webhostapp.com/webServiceMysql/")//url de la API, debe terminar con slash(/)rft2
                 .addConverterFactory(GsonConverterFactory.create()).build();//GsonConverterFactory, nos permite decerealizar los datos Json
         offset = 0;
-        obtenerDatosApi();
+        new DatosApiRest().execute();//mostramos los datos, con una instancia de la clase que extiende de AsynckTask ejecutamos dicha clase en segundo plano, para ejecutar un AsynckTask creamos un objeto de la clase que lo extiende y accedemos a su metodo execute(), puede recibir parametros
 
         srfRVAPI.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                obtenerDatosApi();
+                new DatosApiRest().execute();//si refrescamos se ejecuta la instancia a la clase que trae los datos en segundo plano(AsynckTask)
             }
         });
 
@@ -127,66 +133,92 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     }
 
     private void registrarUsuarioApi() {
-        API_REST service = retrofit.create(API_REST.class);
-        String numeroFolio = etNumeroFolio.getText().toString();
+        EndPointAPI_REST service = retrofit.create(EndPointAPI_REST.class);//unimos nuestra interfaz mediante el obj retrofit
+        String numeroFolio = etNumeroFolio.getText().toString();//parametros a guardar en bd mediante ws en interfaz
         String nombre = etNombre.getText().toString();
         String profesion = etProfesion.getText().toString();
 
-            Call<RespuestaApiRest> registrarUusario = service.registroAPIRest(numeroFolio, nombre, profesion);
-            registrarUusario.enqueue(new Callback<RespuestaApiRest>() {
-                @Override
-                public void onResponse(@NonNull Call<RespuestaApiRest> call, @NonNull Response<RespuestaApiRest> response) {
-                    if (response.isSuccessful()) {
-                        Toast.makeText(context, "Se guardo", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, "Error al guardar usuario", Toast.LENGTH_SHORT).show();
-                    }
+        Call<RespuestaApiRest> registrarUusario = service.registroAPIRest(numeroFolio, nombre, profesion);//mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
+        registrarUusario.enqueue(new Callback<RespuestaApiRest>() {//con el objeto Call, llamamos al metodo equeue, para crear los metodos onResponse, onFilure, el primero gestiona la respuesta debuelta por el server, el segundo cacha si hay error de malformacion de JSON o wx
+            @Override
+            public void onResponse(@NonNull Call<RespuestaApiRest> call, @NonNull Response<RespuestaApiRest> response) {//gestiona respuesta de datos de server
+                if (response.isSuccessful()) {
+                    Toast.makeText(context, "Se guardo", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "Error al guardar usuario", Toast.LENGTH_SHORT).show();
                 }
+            }
 
-                @Override
-                public void onFailure(@NonNull Call<RespuestaApiRest> call, @NonNull Throwable t) {
-                    Toast.makeText(context, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-            });
+            @Override
+            public void onFailure(@NonNull Call<RespuestaApiRest> call, @NonNull Throwable t) {//gestiona si ocurren fallos al traer datos del server
+                Toast.makeText(context, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-        private void obtenerDatosApi () {
-            API_REST service = retrofit.create(API_REST.class);
-            Call<RespuestaApiRest> llamarRespuesta = service.obtenerListadoJson();
+    @SuppressLint("StaticFieldLeak")
+    public class DatosApiRest extends AsyncTask<Void, Integer, Void> {//esta clase extiende de AsynckTask(hilo) ya que puede ser pesado traer los datos desde el servidor y lo hara en segundo plano
+
+        @Override
+        protected void onPreExecute() {//lo que queremos que se ejecute antes del doInBackground
+            super.onPreExecute();
+            pb.setMax(10);//el maximo para llenar el progressBar
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {//lo que se ejecuta durante la operacion
+            super.onProgressUpdate(values);
+            pb.setProgress(values[0]);//podemos colocar el progreso de un progressBar
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {//colocamos la logica en su metodo, doInBackground, lo que hara el AnsyckTask
+            EndPointAPI_REST service = retrofit.create(EndPointAPI_REST.class);
+            Call<RespuestaApiRest> llamarRespuesta = service.obtenerListadoJson();//el metodo para traer datos del server no pide parametros
             llamarRespuesta.enqueue(new Callback<RespuestaApiRest>() {
                 @Override
                 public void onResponse(@NonNull Call<RespuestaApiRest> call, @NonNull Response<RespuestaApiRest> response) {//el metodo response recibe,RespuestaApiRest, que guarda los datos de la API
                     if (response.isSuccessful()) {//verificamos que la respuesta del servidor sea = 200 a 300 satisfactoria
-                        RespuestaApiRest respuestaApiRest = response.body();
+                        RespuestaApiRest respuestaApiRest = response.body();//creamos un obj de RespuestaApiRest, para que guarde los datos del ws,Body() trae la data, los datos del arreglo json a consumir del ws ApRst
 
                         if (respuestaApiRest != null) {
-                            Toast.makeText(context, "Entro", Toast.LENGTH_SHORT).show();
-                            ArrayList<ArrayWSMysqlApi> listaJson = respuestaApiRest.getResults();
-
+                            listaJson = respuestaApiRest.getResults();//con un obj de tipo ArrayWSMysqlApi guardamos los datos para pasarcelos al adapter del RV
                             if (listaJson != null) {//checamos si el array trae los datos de la API
                                 final AdapterApiRest adapterApiRest = new AdapterApiRest(listaJson, context);//si es asi los mostramos en el RV, ya que recibe un array desde eladapter
                                 rvDatosApiRest.setAdapter(adapterApiRest);
+                                pb.setVisibility(View.GONE);//ocultamos el progressBar cuando se muestren los datos en el RV,publishProgress(n);este metodo recibe un entero y mostrara el estado de progreso en en progressBar
                                 srfRVAPI.setRefreshing(false);
+                                //mostramos los valores desde el ws por consla
+                                for (ArrayWSMysqlApi x : listaJson) {
+                                    Log.e(TAG, "noms: " + x.getNombre());
+                                }
+                                for (int i = 0; i < listaJson.size(); i++) {
+                                    ArrayWSMysqlApi api = listaJson.get(i);
+                                    Log.e(TAG, "nombres: " + api.getNombre());
+                                }
                             } else {
                                 Toast.makeText(context, "vacio", Toast.LENGTH_SHORT).show();
                             }
-                            //ArrayApiRest api = listaJson.get(i);
-                            //Log.i(TAG, "Nombre Pokemon"+ api.getName());
+
                         } else {
                             Toast.makeText(context, "sin respuesta", Toast.LENGTH_SHORT).show();
+                            //Log.e(TAG, "onResponse: "+ response.errorBody());
                         }
                     } else {
-                        Toast.makeText(context, "error" + response.errorBody(), Toast.LENGTH_SHORT).show();
-                        //Log.e(TAG, "onResponse: "+ response.errorBody());
+                        Log.e(TAG, "onResponse: "+ response.errorBody());
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<RespuestaApiRest> call, @NonNull Throwable t) {//este metodo cacha si hay un error al conectar al servidor API
                     Log.e(TAG, "onFailure: " + t.getMessage());
-                    Toast.makeText(context, "" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
-      }
+            return null;
+        }
+    }
 }
+
+
 
