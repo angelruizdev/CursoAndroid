@@ -1,5 +1,6 @@
 package com.example.angelruiz.cursoandroid.Activitys;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTransaction;
@@ -86,7 +87,7 @@ FragmentApiRest fragmentApiRest;
         } else if (id == R.id.nav_slideshow) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentApiRest);
         } else if (id == R.id.nav_manage) {
-
+           startActivity(new Intent(getApplicationContext(), MapsActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {
