@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "422992128370",
+    "firebase_url": "https://curso-android-11cc5.firebaseio.com",
+    "project_id": "curso-android-11cc5",
+    "storage_bucket": "curso-android-11cc5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:422992128370:android:1f75a7a60c1841e1",
+        "android_client_info": {
+          "package_name": "com.example.angelruiz.cursoandroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "422992128370-4ef13iqer48fqnf8e3rqeluaub414sjp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_JOC3lCmtQvNVKiRwTWnglMfj7-Eox08"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

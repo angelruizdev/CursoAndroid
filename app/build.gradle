@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.example.angelruiz.cursoandroid"
+        applicationId "com.example.angelruiz.cursoandroid" //firebase lo usa para registrar app
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -38,4 +38,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-messaging:17.6.0'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
 }
+
+    apply plugin: 'com.google.gms.google-services'

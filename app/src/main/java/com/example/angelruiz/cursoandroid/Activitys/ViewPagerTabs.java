@@ -44,7 +44,7 @@ private ViewPager viewPager;
         //este metodo crea el adaptador, pasamos los parametros que pide el constructor del adapter
         private void setViewPager(){
           // viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),agregaFragmentsTab()));//adapter comprimido es lo mismo que el de abajo
-         final ViewPagerAdapter viewPagerAdapter=new ViewPagerAdapter(getSupportFragmentManager(),agregaFragmentsTab());
+         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),agregaFragmentsTab());
          viewPager.setAdapter(viewPagerAdapter);//mostramos el adapter en el viewPager
          tabLayout.setupWithViewPager(viewPager);//pasamos el viePager ya con los fragments como parametro a cada tab, con este metodo:setupWithViewPager
          tabLayout.getTabAt(0).setText(getResources().getString(R.string.enviar));//colocamos un texto a cada tab, con el metodo getTabAt(), que recibe como parametro la posision,para determinar en cual colocar cada texto o icono

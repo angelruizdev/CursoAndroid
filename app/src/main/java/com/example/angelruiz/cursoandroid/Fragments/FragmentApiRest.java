@@ -2,9 +2,12 @@ package com.example.angelruiz.cursoandroid.Fragments;
 
 
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +15,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +28,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.angelruiz.cursoandroid.Activitys.WebServiceMysql;
 import com.example.angelruiz.cursoandroid.Adapters.AdapterApiRest;
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.EndPointAPI_REST;
@@ -135,7 +140,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     private void registrarUsuarioApi() {
         EndPointAPI_REST service = retrofit.create(EndPointAPI_REST.class);//unimos nuestra interfaz mediante el obj retrofit
         String numeroFolio = etNumeroFolio.getText().toString();//parametros a guardar en bd mediante ws en interfaz
-        String nombre = etNombre.getText().toString();
+        final String nombre = etNombre.getText().toString();
         String profesion = etProfesion.getText().toString();
 
         Call<RespuestaApiRest> registrarUusario = service.registroAPIRest(numeroFolio, nombre, profesion);//mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
@@ -152,8 +157,25 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
             @Override
             public void onFailure(@NonNull Call<RespuestaApiRest> call, @NonNull Throwable t) {//gestiona si ocurren fallos al traer datos del server
                 Toast.makeText(context, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                notificacionNvoUsuario(nombre);
             }
         });
+    }
+
+    private void notificacionNvoUsuario(String nombre) {
+        Intent i = new Intent(context, WebServiceMysql.class);
+        PendingIntent pendingIntent =  PendingIntent.getActivity(context,0,i,PendingIntent.FLAG_ONE_SHOT);
+        Uri sonidoNotification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificacion = new NotificationCompat.Builder(context, "N")
+                .setSmallIcon(R.drawable.ic_menu_camera)
+                .setContentTitle("Nuevo usuario")
+                .setContentText("Se registro, "+nombre)
+                .setSound(sonidoNotification)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0,notificacion.build());
+
     }
 
     @SuppressLint("StaticFieldLeak")
