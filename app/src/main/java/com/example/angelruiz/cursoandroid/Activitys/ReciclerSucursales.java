@@ -35,7 +35,7 @@ RecyclerView rvSucursales;//declaramos e inicializamos el control recyclerV como
           imgSucursales.add(R.drawable.face);
           imgSucursales.add(R.drawable.face);
 
-          String nombre[]={"Soriana","Ahurrera"};//array para nombres
+            String[] nombre = {"Soriana", "Ahurrera"};//array para nombres
             for (int i = 0; i < imgSucursales.size(); i++) {
              //pasamos como parametros los arrays recorriendolos con for() para colocarlo en cada posision del item del recyclerV
              sucursales.add(new ArraySucursales(imgSucursales.get(i),nombre[i]));

@@ -115,7 +115,7 @@ public class DetalleContacto extends AppCompatActivity {
         public void correo(View v){
             //Toast.makeText(this, "em"+email, Toast.LENGTH_SHORT).show();
             //guardamos el email que esta en el TV, en un array string y ese se lo pasamos al EXTRA_EMAIL, para mandarle un email
-            String to[]={tvEmail.getText().toString()};
+            String[] to = {tvEmail.getText().toString()};
             Intent mail=new Intent((Intent.ACTION_SEND));
             mail.setData(Uri.parse("mailto:"));
             mail.putExtra(Intent.EXTRA_EMAIL, to);//recibimos el array que guarda el correo

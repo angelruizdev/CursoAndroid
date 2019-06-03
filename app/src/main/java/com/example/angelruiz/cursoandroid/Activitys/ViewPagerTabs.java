@@ -5,7 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Toolbar;
+import android.support.v7.widget.Toolbar;
 
 import com.example.angelruiz.cursoandroid.Adapters.ViewPagerAdapter;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentListaContacts;

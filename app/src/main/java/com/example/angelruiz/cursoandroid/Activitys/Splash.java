@@ -32,7 +32,7 @@ String nombre;
             @Override
             public void onClick(View view) {
                 Toast.makeText(Splash.this, "Enviando...", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(),WebServiceMysql.class));
+                startActivity(new Intent(getApplicationContext(), WebServiceMysql.class));
                 //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com"));
                 //startActivity(intent);
             }

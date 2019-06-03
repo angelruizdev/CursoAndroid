@@ -68,7 +68,6 @@ public String libros [][];
                 matrizNumeros[f][c]=Integer.parseInt(entrada.next());
                 suma += matrizNumeros[f][c];//igual suma los valores pero esta resumido
                 //suma = suma + matrizNumeros[f][c];//sumamos los valores ingresados de la matriz
-
             }
         }
 

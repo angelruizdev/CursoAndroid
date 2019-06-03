@@ -1,11 +1,15 @@
 package com.example.angelruiz.cursoandroid.Fragments;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Explode;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,11 +18,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.angelruiz.cursoandroid.Activitys.Splash;
 import com.example.angelruiz.cursoandroid.Adapters.AdapterFragmentListaRecycler;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayFragmentListaRecycler;
 import com.example.angelruiz.cursoandroid.R;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FragmentListaRecycler extends Fragment {
     View vista;
@@ -82,6 +88,15 @@ public class FragmentListaRecycler extends Fragment {
                 viewHolder = (RecyclerView.ViewHolder) view.getTag ();//guardamos en el objeto viewHolder el ,RecyclerView.ViewHolder, ya que mediante view podremos recivir la posision desde el adapterFLR, con el metodo getTag()
                 positionAFLR=viewHolder.getAdapterPosition();//mediante el objeto viewHolder accedemos al metodo(), getAdapterPosition(), el cual tiene la posision de cada item del RV, la cual la guardamos en la variable ,positionAFLR, y asi manipular dicha posision
                 Toast.makeText(getContext(), "Nombre: " + personas.get(rvPersonas.getChildAdapterPosition(view)).getNomPersona() + "\n" + positionAFLR, Toast.LENGTH_SHORT).show();
+
+                Intent pas = new Intent(context, Splash.class);//terminar transision md, animaciones, //nuevo
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+                    Explode duration = new Explode();
+                    duration.setDuration(1000);
+                    Objects.requireNonNull(getActivity()).getWindow().setExitTransition(new Explode());
+                    getActivity().startActivity(pas, ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), view, "").toBundle());
+                }
+                startActivity(pas);//nuevo
             }
         });
         rvPersonas.setAdapter(adapter);
