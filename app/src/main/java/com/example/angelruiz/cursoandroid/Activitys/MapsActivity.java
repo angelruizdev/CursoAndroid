@@ -2,6 +2,7 @@ package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.widget.Toast;
 
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,5 +43,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         LatLng sydney = new LatLng(-99.2419666, 19.361002);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        Toast.makeText(this, "Mostrando mapa", Toast.LENGTH_SHORT).show();
     }
 }
