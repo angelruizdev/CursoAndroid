@@ -10,7 +10,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 private ArrayList<Fragment> fragments;
     public ViewPagerAdapter(FragmentManager fm, ArrayList<Fragment> fragments) {
         super(fm);
-        this.fragments=fragments;
+        this.fragments = fragments;
     }
 
     @Override

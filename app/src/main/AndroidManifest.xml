@@ -3,16 +3,14 @@
     xmlns:andrtoid="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.angelruiz.cursoandroid">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -32,7 +30,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".Activitys.ActivityVPagerInstruction"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -47,8 +45,7 @@
 
         <activity
             android:name=".Activitys.MapsActivity"
-            android:label="@string/title_activity_maps">
-        </activity>
+            android:label="@string/title_activity_maps" />
         <activity android:name=".Activitys.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,8 +62,8 @@
             <!-- podemos darle un style diferente a cada activity. -->
             <!-- android:theme="@style/Theme.AppTheme.Light.NoActionBar"> -->
         </activity>
-        <activity android:name=".Activitys.Lista"></activity>
-        <activity android:name=".Activitys.ListaContacto"></activity>
+        <activity android:name=".Activitys.Lista" />
+        <activity android:name=".Activitys.ListaContacto" />
         <!--
         parentActivityName,permite regresar a la activity anterior con el boton de subir en la actionBar,
         funciona con una clase padre y una hija, la padre sera ala que va a regresar, aqui sera:.ListaContacto,
@@ -80,23 +77,23 @@
             <!-- soporte para versiones 4.0 y menores -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Activitys.ListaContacto"></meta-data>
+                android:value=".Activitys.ListaContacto" />
         </activity>
-        <activity android:name=".Activitys.ImagenGrid"></activity>
-        <activity android:name=".Activitys.DetalleImgContacto"></activity>
-        <activity android:name=".Activitys.ListaAgenda"></activity>
-        <activity android:name=".Activitys.ReciclerSucursales"></activity>
-        <activity android:name=".Activitys.ActivityFragmet"></activity>
-        <activity android:name=".Activitys.ViewPagerTabs"></activity>
-        <activity android:name=".Activitys.ActivityFragmentProdMaDeBD"></activity>
+        <activity android:name=".Activitys.ImagenGrid" />
+        <activity android:name=".Activitys.DetalleImgContacto" />
+        <activity android:name=".Activitys.ListaAgenda" />
+        <activity android:name=".Activitys.ReciclerSucursales" />
+        <activity android:name=".Activitys.ActivityFragmet" />
+        <activity android:name=".Activitys.ViewPagerTabs" />
+        <activity android:name=".Activitys.ActivityFragmentProdMaDeBD" />
         <activity
             android:name=".Activitys.WebServiceMysql"
             android:label="@string/title_activity_web_service_mysql"
-            android:theme="@style/AppTheme"></activity>
-        <service
-            android:name=".FireBaseNotification.Notification">
+            android:theme="@style/AppTheme" />
+
+        <service android:name=".FireBaseNotification.Notification">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>

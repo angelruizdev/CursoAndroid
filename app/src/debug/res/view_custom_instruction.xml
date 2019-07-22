@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Con
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llviewInflateSlider"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/tvSlideTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="#000000" />
+
+    <RadioGroup
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/circleimage"
+        android:layout_marginTop="25dp">
+
+        <ImageView
+            android:id="@+id/ivSlideImage"
+            android:layout_width="230dp"
+            android:layout_height="230dp"
+            android:paddingBottom="28dp"
+            android:paddingRight="6dp"
+            android:paddingEnd="6dp"
+            android:paddingStart="5dp"
+            android:paddingLeft="2dp"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center_horizontal"/>
+    </RadioGroup>
+    <TextView
+        android:id="@+id/tvSlideDescription"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:textStyle="normal"
+        android:textColor="#000000"/>
+
+</Con>

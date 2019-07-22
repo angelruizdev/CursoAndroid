@@ -24,9 +24,6 @@
     <string name="rbdesactivado">Desactivado</string>
     <string name="rbactivado">Activado</string>
     <string name="title_activity_prueba">Prueba</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
-    <string name="tab_text_3">Tab 3</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="trespnts">⋮</string>
@@ -40,5 +37,7 @@
     <string name="ws_mysql_menu">Eliga una opsion del menú</string>
     <string name="buscarFolio">Buscar</string>
     <string name="title_activity_maps">Map</string>
-
+    <string name="mi_mensaje">Hola <b>mundo</b>, me llamo <b>Pepe</b></string> <!-- pone en negritas <b> -->
+    <string name="bttext_next_instruction">Finalizar</string>
+    <string name="tvtext_description_instruction">Eneyda es una exelente persona. \nMuy inteligente</string> <!-- pone un salto de linea \n -->
 </resources>

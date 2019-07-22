@@ -1,4 +1,4 @@
-package ejercicios;
+package ejercicios.Clases1;
 
 public class Maestro implements InterfActividades,InterfComer{
  private String nombre;

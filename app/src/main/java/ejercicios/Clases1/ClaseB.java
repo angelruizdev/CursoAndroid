@@ -1,4 +1,4 @@
-package ejercicios;
+package ejercicios.Clases1;
 import java.util.Scanner;
 public class ClaseB {
 String nombre;

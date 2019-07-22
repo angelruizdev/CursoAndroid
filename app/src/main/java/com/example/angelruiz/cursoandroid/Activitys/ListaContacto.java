@@ -135,7 +135,7 @@ public class ListaContacto extends AppCompatActivity implements View.OnClickList
         public void mostrarShPreference(View v){//este metodo recupera el contenido enviado y lo muestra en un TV
           SharedPreferences sharedPreferences = getSharedPreferences("MiSharedPreference", Context.MODE_PRIVATE);//puede ser global para no sobreescribirlo
           String telefono = sharedPreferences.getString("telefono", "No se encontro la variable");//recuperamos el contenido mediante la clave
-          String datos="File: "+nombre+"\n ShaPrf: "+telefono;//en datos guardamos la variable de File I/O y el contenido de SP
+          String datos = "File: "+nombre+"\n ShaPrf: "+telefono;//en datos guardamos la variable de File I/O y el contenido de SP
           tvMosShPreference.setText(datos);//los mostramos en el TV
         }
 }

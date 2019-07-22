@@ -18,7 +18,7 @@ import com.example.angelruiz.cursoandroid.R;
 public class Bienvenido extends AppCompatActivity {
     private EditText edt;
     private Button btn;
-    public TextView tvNombre;
+    public TextView tvNombre, tvPassIncomp;
     String pass;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +29,9 @@ public class Bienvenido extends AppCompatActivity {
         int so = extra.getInt("entero");
 
         tvNombre = (TextView) findViewById(R.id.tvNombre);
-        edt=findViewById(R.id.edt);
+        tvPassIncomp = findViewById(R.id.tvPassIncomp);
+        tvPassIncomp.setVisibility(View.INVISIBLE);
+        edt = findViewById(R.id.edt);
 
         tvNombre.setText(nom);
         btn = (Button) findViewById(R.id.btnPassword);
@@ -37,10 +39,13 @@ public class Bienvenido extends AppCompatActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               pass=edt.getText().toString();//dentro del metodo guardamos lo que tenga el ET en la variable pass
-                if (pass.length()>4){//con el metodo length() contamos el tamaño de la cadena, si es >4 pasa a otra Activity
-                   Intent enviar = new Intent(getApplicationContext(), ListaContacto.class);
-                   startActivity(enviar);
+               pass = edt.getText().toString();//dentro del metodo guardamos lo que tenga el ET en la variable pass
+                if (pass.length() > 4){//con el metodo length() contamos el tamaño de la cadena, si es >4 pasa a otra Activity
+                    tvPassIncomp.setVisibility(View.INVISIBLE);
+                    Intent enviar = new Intent(getApplicationContext(), ListaContacto.class);
+                    startActivity(enviar);
+                }else {
+                    tvPassIncomp.setVisibility(View.VISIBLE);
                 }
             }
         });

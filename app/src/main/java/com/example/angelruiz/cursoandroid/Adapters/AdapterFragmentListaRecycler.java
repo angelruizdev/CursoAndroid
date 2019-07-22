@@ -100,7 +100,7 @@ public class AdapterFragmentListaRecycler extends
     //para crear menu popup en recycler, implementamos en este metodo la siguiente interfaz
     public class ViewHolderFragmentListRecycler extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         ImageView imgPersona;
-        TextView nomPersona,tvEliminar;
+        TextView nomPersona, tvEliminar;
         private ViewHolderFragmentListRecycler(View itemView) {
             super(itemView);
             imgPersona=itemView.findViewById(R.id.imgPersona);
