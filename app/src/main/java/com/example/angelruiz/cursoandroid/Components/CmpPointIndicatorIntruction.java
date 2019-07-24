@@ -8,10 +8,10 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.angelruiz.cursoandroid.Arrays.ArrayVPagerInstruction;
 import com.example.angelruiz.cursoandroid.R;
-
 import java.util.List;
 
 public class CmpPointIndicatorIntruction extends FrameLayout { //extendemos de esta clase para inflar e inicializar los componentes de la vista personalizada, nos crea 2 métodos constructores
@@ -23,15 +23,16 @@ public class CmpPointIndicatorIntruction extends FrameLayout { //extendemos de e
     public CmpPointIndicatorIntruction(Context context) {
         super(context);
         this.context = context;
-        View view = inflate(context, R.layout.view_cmp_point_instruction, null);
-        llcontentPointsIntruction = view.findViewById(R.id.llcontentPointsIntruction);
-        btExitInstruction = view.findViewById(R.id.btExitInstruction);
-        this.addView(view);
+        init();
     }
 
     public CmpPointIndicatorIntruction(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        init();
+    }
+
+    public void init(){ //inicializa la vista y sus componentes que inflan al adapter
         View view = inflate(context, R.layout.view_cmp_point_instruction, null);
         llcontentPointsIntruction = view.findViewById(R.id.llcontentPointsIntruction);
         btExitInstruction = view.findViewById(R.id.btExitInstruction);
@@ -56,10 +57,14 @@ public class CmpPointIndicatorIntruction extends FrameLayout { //extendemos de e
             llcontentPointsIntruction.setVisibility(View.INVISIBLE);
             btExitInstruction.setVisibility(View.VISIBLE);
         }
-        if (position < informacion.size() - 1) { // si es menor oculta el boton
+        if (position < informacion.size() - 1) { //si es menor oculta el boton
             llcontentPointsIntruction.setVisibility(View.VISIBLE);
             btExitInstruction.setVisibility(View.INVISIBLE);
         }
+    }
+
+    public void mensaje(){
+        Toast.makeText(context, "fragment...", Toast.LENGTH_SHORT).show();
     }
 }
 /*un coponente personalizado trae la logica de funcionamiento, y se ejecuta desde la activity mediante mesiante un obj de dicha clase

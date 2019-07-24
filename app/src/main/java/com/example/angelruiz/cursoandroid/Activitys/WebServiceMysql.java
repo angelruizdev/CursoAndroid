@@ -1,5 +1,4 @@
 package com.example.angelruiz.cursoandroid.Activitys;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;

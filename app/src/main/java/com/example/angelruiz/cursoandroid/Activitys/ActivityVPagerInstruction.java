@@ -42,6 +42,8 @@ public class ActivityVPagerInstruction extends AppCompatActivity {
         cmpPointIndicatorIntruction.showPointInstruction(0, informacion); //llamamos al metodo del componente mediante su obj
     }
 
+
+
     private void llenarViewPagerInstruction() { //llenamos el array pojo
         informacion.add(new ArrayVPagerInstruction("GUSTAVO", R.drawable.email, "choco", getResources().getColor(R.color.colorBoton)));
         informacion.add(new ArrayVPagerInstruction("ROBERTO", R.drawable.email, "pano", getResources().getColor(R.color.primary_dark_material_dark)));
