@@ -7,11 +7,10 @@
     tools:context=".Fragments.FragmentPendiente">
 
 
-    <ImageView
-        android:id="@+id/imageView3"
+    <com.example.angelruiz.cursoandroid.Components.CmpCarouselImage
+        android:id="@+id/ivCaroucelCmp"
         android:layout_width="0dp"
         android:layout_height="290dp"
-        android:src="@drawable/email"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +22,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/ivCaroucelCmp" />
 
     <Button
         android:id="@+id/btCargarImg"

@@ -50,10 +50,6 @@ public class ActivityVPagerInstruction extends AppCompatActivity {
         informacion.add(new ArrayVPagerInstruction("ENEYDA", R.drawable.email, getResources().getString(R.string.tvtext_description_instruction), getResources().getColor(R.color.colorText)));
     }
 
-    public void btExitInstructionM(View view) { //metodo finaliza activity
-        finish();
-    }
-
     ViewPager.OnPageChangeListener onPageChangeListener = new ViewPager.OnPageChangeListener() { //acedemos a la interface OnPageChangeListener, para ver en que slider se encuentra en vp, y obtener la posision, nos genera 3 metodos
         @Override
         public void onPageScrolled(int i, float v, int i1) {
@@ -70,5 +66,9 @@ public class ActivityVPagerInstruction extends AppCompatActivity {
 
         }
     };
+
+    public void btExitInstructionM(View view) { //metodo finaliza activity
+        finish();
+    }
 }
 //desde el activity llamamos al componente, asi como a sus metodos mediante este
