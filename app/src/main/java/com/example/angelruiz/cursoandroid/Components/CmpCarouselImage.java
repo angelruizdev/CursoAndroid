@@ -8,11 +8,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.angelruiz.cursoandroid.R;
 
-import java.util.Random;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -20,9 +19,10 @@ public class CmpCarouselImage extends FrameLayout {
     Context context;
     ImageView ivCaroucel;
     Handler handler;
-    int count;
+    int current;
     Timer timer;
     int timerSeconds;
+    ArrayList<Integer> imagesCaroucel;
 
     public CmpCarouselImage(Context context) {
         super(context);
@@ -40,6 +40,11 @@ public class CmpCarouselImage extends FrameLayout {
         View view = inflate(context, R.layout.view_cmp_inflate_caroucel, null);
          this.ivCaroucel = view.findViewById(R.id.ivCaroucel);
          view.setOnTouchListener(new OnSwipeTouchListener(context));
+         imagesCaroucel = new ArrayList<>();
+         handler = new Handler();
+         current = 0;
+         timerSeconds = 1000;
+         timer = new Timer();
         this.addView(view);
     }
 
@@ -47,19 +52,16 @@ public class CmpCarouselImage extends FrameLayout {
 
         private final GestureDetector gestureDetector;
 
-        final int []imagesCaroucel = {R.drawable.email, R.drawable.phone, R.drawable.ic_touch_app};
-        public OnSwipeTouchListener(Context context) {
+        private OnSwipeTouchListener(Context context) {
             gestureDetector = new GestureDetector(context, new GestureListener());
         }
 
         public void onSwipeLeft() {
-            //count++;
-            Toast.makeText(context, "left touch", Toast.LENGTH_SHORT).show();
-            //ivCaroucel.setImageResource(imagesCaroucel[count-1]);
+          touchLeft();
         }
 
         public void onSwipeRight() {
-            Toast.makeText(context, "right touch", Toast.LENGTH_SHORT).show();
+          touchRight();
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -91,26 +93,45 @@ public class CmpCarouselImage extends FrameLayout {
             }
         }
     }
-    public void carrucel() {
-        final int []imagesCaroucel = {R.drawable.email, R.drawable.phone, R.drawable.ic_touch_app};
-        handler = new Handler();
-        count = 0;
-        timerSeconds = 1000;
-        timer = new Timer();
+    public void carrucelAnimation(final ArrayList<Integer> imagesCaroucel) {
+
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        count++;
-                        Random random = new Random();
-                        final int randomInteger = random.nextInt(3);
-                        ivCaroucel.setImageResource(imagesCaroucel[count-1]);
+                        current++;
+                        if(current < 4){
+                           ivCaroucel.setImageResource(imagesCaroucel.get(current-1));
+                        }
                     }
                 });
             }
         };
         timer.schedule(timerTask, 0, timerSeconds);
     }
+
+    public void setCurrentCaroucel(int index){ // continuar checar logica
+        if (index < 0){
+           current = imagesCaroucel.size() -1;
+        }else if (index > imagesCaroucel.size() -1){
+           current = 0;
+        }else {
+            current = index;
+        }
+    }
+
+    //HACER EL MOVIMIENTO DE IMG LUEGO LA ANIMACION
+
+    public void touchLeft(){
+      setCurrentCaroucel(current + 1);
+    }
+    public void touchRight(){
+        setCurrentCaroucel(current - 1);
+    }
 }
+
+/*Random random = new Random();
+final int randomInteger = random.nextInt(3);
+ivCaroucel.setImageResource(imagesCaroucel[randomInteger]);random de imagenes*/

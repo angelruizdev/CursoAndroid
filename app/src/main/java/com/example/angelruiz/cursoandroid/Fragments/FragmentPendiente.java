@@ -14,12 +14,15 @@ import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.Components.CmpCarouselImage;
 import com.example.angelruiz.cursoandroid.R;
 
+import java.util.ArrayList;
+
 public class FragmentPendiente extends Fragment {
     View vista;
     Context context;
     ImageView ivImgGlade;
     Button btCargarImg;
     CmpCarouselImage cmpCarouselImage;
+    ArrayList<Integer> imagesCaroucel;
 
     public FragmentPendiente() {
         // Required empty public constructor
@@ -30,7 +33,13 @@ public class FragmentPendiente extends Fragment {
         vista = inflater.inflate(R.layout.fragment_pendiente, container, false);
         context = getContext();
         cmpCarouselImage = vista.findViewById(R.id.ivCaroucelCmp);
-        cmpCarouselImage.carrucel();
+
+        imagesCaroucel = new ArrayList<>();
+        imagesCaroucel.add(R.drawable.phone);
+        imagesCaroucel.add(R.drawable.email);
+        imagesCaroucel.add(R.drawable.ic_touch_app);
+        cmpCarouselImage.carrucelAnimation(imagesCaroucel);
+        cmpCarouselImage.setCurrentCaroucel(0);
 
         ivImgGlade = vista.findViewById(R.id.ivImgGlade);
         btCargarImg = vista.findViewById(R.id.btCargarImg);
@@ -43,6 +52,4 @@ public class FragmentPendiente extends Fragment {
         });
         return vista;
     }
-
-
 }
