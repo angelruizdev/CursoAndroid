@@ -17,9 +17,11 @@ import java.util.TimerTask;
 
 public class CmpCarouselImage extends FrameLayout {
     Context context;
+    View view;
     ImageView ivCaroucel;
     Handler handler;
-    int current;
+    int current, index;
+
     Timer timer;
     int timerSeconds;
     ArrayList<Integer> imagesCaroucel;
@@ -30,21 +32,22 @@ public class CmpCarouselImage extends FrameLayout {
         init();
     }
 
-    public CmpCarouselImage(Context context,  AttributeSet attrs) {
+    public CmpCarouselImage(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         init();
     }
 
-    public void init(){
-        View view = inflate(context, R.layout.view_cmp_inflate_caroucel, null);
-         this.ivCaroucel = view.findViewById(R.id.ivCaroucel);
-         view.setOnTouchListener(new OnSwipeTouchListener(context));
-         imagesCaroucel = new ArrayList<>();
-         handler = new Handler();
-         current = 0;
-         timerSeconds = 1000;
-         timer = new Timer();
+    public void init() {
+        view = inflate(context, R.layout.view_cmp_inflate_caroucel, null);
+        this.ivCaroucel = view.findViewById(R.id.ivCaroucel);
+        view.setOnTouchListener(new OnSwipeTouchListener(context));
+        imagesCaroucel = new ArrayList<>();
+        handler = new Handler();
+        current = 0;
+        index = 0;
+        timerSeconds = 2000;
+        timer = new Timer();
         this.addView(view);
     }
 
@@ -57,11 +60,11 @@ public class CmpCarouselImage extends FrameLayout {
         }
 
         public void onSwipeLeft() {
-          touchLeft();
+            touchLeft(imagesCaroucel);
         }
 
         public void onSwipeRight() {
-          touchRight();
+            touchRight(imagesCaroucel);
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -93,6 +96,7 @@ public class CmpCarouselImage extends FrameLayout {
             }
         }
     }
+
     public void carrucelAnimation(final ArrayList<Integer> imagesCaroucel) {
 
         TimerTask timerTask = new TimerTask() {
@@ -101,10 +105,7 @@ public class CmpCarouselImage extends FrameLayout {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        current++;
-                        if(current < 4){
-                           ivCaroucel.setImageResource(imagesCaroucel.get(current-1));
-                        }
+                        animation(current++, imagesCaroucel);
                     }
                 });
             }
@@ -112,23 +113,25 @@ public class CmpCarouselImage extends FrameLayout {
         timer.schedule(timerTask, 0, timerSeconds);
     }
 
-    public void setCurrentCaroucel(int index){ // continuar checar logica
-        if (index < 0){
-           current = imagesCaroucel.size() -1;
-        }else if (index > imagesCaroucel.size() -1){
-           current = 0;
-        }else {
-            current = index;
+    public void animation(int crnt, final ArrayList<Integer> imagesCaroucel) {
+        if (current <= imagesCaroucel.size()) {
+            ivCaroucel.setImageResource(imagesCaroucel.get(current - 1));
+        } else {
+            current = 0;
         }
+    }
+
+    public void setCurrentCaroucel(int index) { // continuar checar logica
     }
 
     //HACER EL MOVIMIENTO DE IMG LUEGO LA ANIMACION
 
-    public void touchLeft(){
-      setCurrentCaroucel(current + 1);
+    public void touchLeft(ArrayList<Integer> imagesCaroucel) {
+        animation(current++, imagesCaroucel);
     }
-    public void touchRight(){
-        setCurrentCaroucel(current - 1);
+
+    public void touchRight(ArrayList<Integer> imagesCaroucel) {
+        animation(current--, imagesCaroucel);
     }
 }
 
