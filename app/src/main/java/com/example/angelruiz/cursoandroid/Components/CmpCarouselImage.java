@@ -21,7 +21,6 @@ public class CmpCarouselImage extends FrameLayout {
     ImageView ivCaroucel;
     Handler handler;
     int current, index;
-
     Timer timer;
     int timerSeconds;
     ArrayList<Integer> imagesCaroucel;
@@ -115,16 +114,21 @@ public class CmpCarouselImage extends FrameLayout {
 
     public void animation(int crnt, final ArrayList<Integer> imagesCaroucel) {
         if (current <= imagesCaroucel.size()) {
-            ivCaroucel.setImageResource(imagesCaroucel.get(current - 1));
+            ivCaroucel.setImageResource(imagesCaroucel.get(current -1));
         } else {
             current = 0;
+       }
+    }
+
+    public void cancelAnimation(){
+        if(this.handler != null){
+            this.timer.cancel();
+            this.handler = null;
         }
     }
 
     public void setCurrentCaroucel(int index) { // continuar checar logica
     }
-
-    //HACER EL MOVIMIENTO DE IMG LUEGO LA ANIMACION
 
     public void touchLeft(ArrayList<Integer> imagesCaroucel) {
         animation(current++, imagesCaroucel);

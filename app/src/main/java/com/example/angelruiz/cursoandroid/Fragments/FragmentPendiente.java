@@ -5,17 +5,28 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.angelruiz.cursoandroid.Arrays.ArrayCaroucelResponceRest;
+import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.Components.CmpCarouselImage;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.ICaroucelImageRest;
 import com.example.angelruiz.cursoandroid.R;
 
 import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentPendiente extends Fragment implements View.OnClickListener{
     View vista;
@@ -24,6 +35,8 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
     Button btCargarImg;
     CmpCarouselImage cmpCarouselImage;
     ArrayList<Integer> imagesCaroucel;
+    Retrofit retrofit;
+    private static final String TAG = "SALIDA";
     FloatingActionButton fabPrevius, fabNext;
 
     public FragmentPendiente() {
@@ -36,6 +49,11 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
         context = getContext();
         cmpCarouselImage = vista.findViewById(R.id.ivCaroucelCmp);
 
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://pokeapi.co/api/v2/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        obtenerDatosApiRest();
         imagesCaroucel = new ArrayList<>();
         imagesCaroucel.add(R.drawable.phone);
         imagesCaroucel.add(R.drawable.email);
@@ -60,6 +78,32 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
         return vista;
     }
 
+    private void obtenerDatosApiRest() {
+        ICaroucelImageRest iCaroucelImageRest = retrofit.create(ICaroucelImageRest.class);
+        Call<ArrayCaroucelResponceRest> caroucelResponseCall = iCaroucelImageRest.obtenerImagesRest();
+        caroucelResponseCall.enqueue(new Callback<ArrayCaroucelResponceRest>() {
+            @Override
+            public void onResponse(Call<ArrayCaroucelResponceRest> call, Response<ArrayCaroucelResponceRest> response) {
+                if(response.isSuccessful()){
+                    ArrayCaroucelResponceRest arrayCaroucelResponceRest = response.body();
+                    ArrayList<ArrayImgCaroucelRest> names = arrayCaroucelResponceRest.getResults();
+                    for (int i = 0; i < names.size(); i++) {
+
+                       ArrayImgCaroucelRest arrayImgCaroucelRest = names.get(i);
+                        Log.i(TAG, "NAMES:" + arrayImgCaroucelRest.getName());
+                    }
+                }else {
+                    Log.e(TAG, "onResponse:" + response.errorBody());
+                    Toast.makeText(context, "fatal error:", Toast.LENGTH_SHORT).show();
+                }
+            }
+            @Override
+            public void onFailure(Call<ArrayCaroucelResponceRest> call, Throwable t) {
+                    Log.e(TAG, "onFailure:" + t.getMessage());
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
        switch (v.getId()){
@@ -74,6 +118,7 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
 
     @Override
     public void onDestroy() {
+        this.cmpCarouselImage.cancelAnimation();
         super.onDestroy();
     }
 }
