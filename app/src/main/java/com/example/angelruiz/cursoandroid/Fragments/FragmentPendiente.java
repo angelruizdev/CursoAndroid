@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.angelruiz.cursoandroid.Adapters.AdapterCaroucelImgRest;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayCaroucelResponceRest;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.Components.CmpCarouselImage;
@@ -34,8 +37,10 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
     ImageView ivImgGlade;
     Button btCargarImg;
     CmpCarouselImage cmpCarouselImage;
-    ArrayList<Integer> imagesCaroucel;
+    ArrayList<ArrayImgCaroucelRest> imagesCaroucel;
     Retrofit retrofit;
+    AdapterCaroucelImgRest adapterCaroucelImgRest;
+    RecyclerView rvImageCaroucel;
     private static final String TAG = "SALIDA";
     FloatingActionButton fabPrevius, fabNext;
 
@@ -55,11 +60,13 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
                 .build();
         obtenerDatosApiRest();
         imagesCaroucel = new ArrayList<>();
-        imagesCaroucel.add(R.drawable.phone);
-        imagesCaroucel.add(R.drawable.email);
-        imagesCaroucel.add(R.drawable.ic_touch_app);
-        imagesCaroucel.add(R.drawable.face);
-        cmpCarouselImage.carrucelAnimation(imagesCaroucel);
+        imagesCaroucel.add(new ArrayImgCaroucelRest());
+        rvImageCaroucel = vista.findViewById(R.id.rvImageCaroucel);
+        rvImageCaroucel.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        adapterCaroucelImgRest = new AdapterCaroucelImgRest(context, imagesCaroucel);
+        rvImageCaroucel.setAdapter(adapterCaroucelImgRest);
+
+        //cmpCarouselImage.carrucelAnimation(imagesCaroucel);
         cmpCarouselImage.setCurrentCaroucel(0);
 
         fabPrevius = vista.findViewById(R.id.fabPrevius);
@@ -91,6 +98,7 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
 
                        ArrayImgCaroucelRest arrayImgCaroucelRest = names.get(i);
                         Log.i(TAG, "NAMES:" + arrayImgCaroucelRest.getName());
+
                     }
                 }else {
                     Log.e(TAG, "onResponse:" + response.errorBody());
@@ -108,10 +116,10 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
        switch (v.getId()){
          case R.id.fabPrevius:
-             cmpCarouselImage.touchRight(imagesCaroucel);
+             //cmpCarouselImage.touchRight(imagesCaroucel);
          break;
          case R.id.fabNext:
-             cmpCarouselImage.touchLeft(imagesCaroucel);
+             //cmpCarouselImage.touchLeft(imagesCaroucel);
              break;
        }
     }
