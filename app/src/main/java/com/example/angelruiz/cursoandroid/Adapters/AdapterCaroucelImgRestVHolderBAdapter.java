@@ -50,7 +50,7 @@ public class AdapterCaroucelImgRestVHolderBAdapter extends BaseAdapter {
         Holder holder = new Holder();
         convertView = layoutInflater.inflate(R.layout.view_cmp_inflate_caroucel, parent);
         holder.ivCaroucel = convertView.findViewById(R.id.ivCaroucel);
-        holder.ivCaroucel.setImageResource(imagesCaroucel.get(position).getNumberImage());
+        //holder.ivCaroucel.setImageResource(imagesCaroucel.get(position).getNumberImage());
         convertView.setTag(holder);
         parent.addView(convertView);
         return convertView;

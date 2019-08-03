@@ -1,8 +1,15 @@
 package com.example.angelruiz.cursoandroid.Arrays;
 
 public class ArrayImgCaroucelRest {
+
     private String name, url;
     private Integer numberImage;
+
+    public ArrayImgCaroucelRest(String name, String url, Integer numberImage) {
+        this.name = name;
+        this.url = url;
+        this.numberImage = numberImage;
+    }
 
     public String getName() {
         return name;
@@ -18,7 +25,8 @@ public class ArrayImgCaroucelRest {
     }
     public Integer getNumberImage() {
         String[] urlParts = url.split("/");
-        return Integer.parseInt(urlParts[urlParts.length -1]); //accedemos a ultima pos del array urlParts que es el num de img
+        numberImage = Integer.parseInt(urlParts[urlParts.length -1]); //accedemos a ultima pos del array urlParts que es el num de img
+        return numberImage;
     }
     public void setNumberImage(Integer numberImage) {
         this.numberImage = numberImage;

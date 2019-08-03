@@ -36,8 +36,8 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
     Context context;
     ImageView ivImgGlade;
     Button btCargarImg;
+    ArrayList<ArrayImgCaroucelRest> imgCaroucel;
     CmpCarouselImage cmpCarouselImage;
-    ArrayList<ArrayImgCaroucelRest> imagesCaroucel;
     Retrofit retrofit;
     AdapterCaroucelImgRest adapterCaroucelImgRest;
     RecyclerView rvImageCaroucel;
@@ -52,19 +52,19 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vista = inflater.inflate(R.layout.fragment_pendiente, container, false);
         context = getContext();
+        imgCaroucel = new ArrayList<>();
         cmpCarouselImage = vista.findViewById(R.id.ivCaroucelCmp);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("http://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        obtenerDatosApiRest();
-        imagesCaroucel = new ArrayList<>();
-        imagesCaroucel.add(new ArrayImgCaroucelRest());
+
         rvImageCaroucel = vista.findViewById(R.id.rvImageCaroucel);
         rvImageCaroucel.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
-        adapterCaroucelImgRest = new AdapterCaroucelImgRest(context, imagesCaroucel);
+        adapterCaroucelImgRest = new AdapterCaroucelImgRest(context);
         rvImageCaroucel.setAdapter(adapterCaroucelImgRest);
+        obtenerDatosApiRest();
 
         //cmpCarouselImage.carrucelAnimation(imagesCaroucel);
         cmpCarouselImage.setCurrentCaroucel(0);
@@ -98,11 +98,11 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
 
                        ArrayImgCaroucelRest arrayImgCaroucelRest = names.get(i);
                         Log.i(TAG, "NAMES:" + arrayImgCaroucelRest.getName());
-
+                         adapterCaroucelImgRest.listImagesCaroucel(names);
                     }
                 }else {
                     Log.e(TAG, "onResponse:" + response.errorBody());
-                    Toast.makeText(context, "fatal error:", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Server error:", Toast.LENGTH_SHORT).show();
                 }
             }
             @Override

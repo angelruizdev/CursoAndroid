@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
@@ -18,17 +19,24 @@ public class AdapterCaroucelImgRest extends RecyclerView.Adapter<AdapterCaroucel
     private Context context;
     private ArrayList<ArrayImgCaroucelRest> imagesCaroucel;
 
-    public AdapterCaroucelImgRest(Context context, ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+    public AdapterCaroucelImgRest(Context context) {
         this.context = context;
-        this.imagesCaroucel = imagesCaroucel;
+        imagesCaroucel = new ArrayList<>();
+    }
+
+    public void listImagesCaroucel(ArrayList<ArrayImgCaroucelRest> names) {
+        imagesCaroucel.addAll(names);
+        notifyDataSetChanged();
     }
 
     public class ViewHolderCaroucel extends RecyclerView.ViewHolder {
         ImageView ivCaroucel;
+        TextView tvNameCaroucel;
 
         public ViewHolderCaroucel(@NonNull View itemView) {
             super(itemView);
             ivCaroucel = itemView.findViewById(R.id.ivCaroucel);
+            tvNameCaroucel = itemView.findViewById(R.id.tvNameCaroucel);
         }
     }
     @NonNull
@@ -40,10 +48,12 @@ public class AdapterCaroucelImgRest extends RecyclerView.Adapter<AdapterCaroucel
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderCaroucel viewHolderCaroucel, int i) {
-        viewHolderCaroucel.ivCaroucel.setImageResource(imagesCaroucel.get(i).getNumberImage());
+        ArrayImgCaroucelRest x = imagesCaroucel.get(i);
 
+        //viewHolderCaroucel.ivCaroucel.setImageResource(x.getNumberImage());
+        viewHolderCaroucel.tvNameCaroucel.setText(x.getName());
         Glide.with(context)
-             .load("http://pokeapi.co/media/sprites/pokemon/" + imagesCaroucel.get(i).getName() + ".png")
+             .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/" + x.getNumberImage() + ".png")
              .into(viewHolderCaroucel.ivCaroucel);
     }
 
