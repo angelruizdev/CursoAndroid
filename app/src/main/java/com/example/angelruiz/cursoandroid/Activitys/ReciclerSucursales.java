@@ -1,9 +1,9 @@
 package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.Adapters.AdapterSucursales;
 import com.example.angelruiz.cursoandroid.Arrays.ArraySucursales;
@@ -20,7 +20,7 @@ RecyclerView rvSucursales;//declaramos e inicializamos el control recyclerV como
         setContentView(R.layout.recicler_sucursales);
         sucursales=new ArrayList<>();//inicializamos el array siempre
         rvSucursales = (RecyclerView)findViewById(R.id.rvSucursales);
-        rvSucursales.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false));//posision vertical del RV
+        rvSucursales.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL,false));//posision vertical del RV
         //rvSucursales.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false));//posision horizontal del RV
         //rvSucursales.setLayoutManager(new GridLayoutManager(this,2));//RV en forma de grid pasamos el numero de columnas
 

@@ -2,11 +2,6 @@ package com.example.angelruiz.cursoandroid.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +10,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.Adapters.AdapterCaroucelImgRest;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayCaroucelResponceRest;
@@ -22,6 +22,7 @@ import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.Components.CmpCarouselImage;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.ICaroucelImageRest;
 import com.example.angelruiz.cursoandroid.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -130,3 +131,13 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
         super.onDestroy();
     }
 }
+//https://api.instagram.com/oauth/authorize/?client_id=e329a894184b4d45bacc45b0e20ee39e&redirect_uri=https://www.facebook.com/angeldavid.ruizcruz&response_type=code&scope=basic+comments+likes+public_content
+   /* curl -F 'client_id=e329a894184b4d45bacc45b0e20ee39e' \n
+            -F 'client_secret=1a236022510a4d8099ecf0ef0986c9f3' \n
+            -F 'grant_type=authorization_code' \n
+            -F 'https://www.facebook.com/angeldavid.ruizcruz' \n
+            -F 'code=d839bffd15064d3590c7fc3bd942ed5e' \n
+    https://api.instagram.com/oauth/access_token
+
+    https://www.facebook.com/angeldavid.ruizcruz#access_token=17656472546.e329a89.7d53b35629fe416c817f2d77fcd4cc18*/
+    //https://api.instagram.com/v1/users/self/?access_token=17656472546.e329a89.7d53b35629fe416c817f2d77fcd4cc18

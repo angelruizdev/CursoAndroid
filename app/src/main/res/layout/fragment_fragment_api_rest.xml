@@ -6,18 +6,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.FragmentApiRest">
 
-<android.support.v4.widget.SwipeRefreshLayout
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
     android:id="@+id/srfRVAPI"
     android:layout_width="match_parent"
     android:layout_height="350dp"
     tools:ignore="MissingConstraints">
 
-   <android.support.v7.widget.RecyclerView
+   <androidx.recyclerview.widget.RecyclerView
        android:id="@+id/rvDatosApiRest"
        android:layout_width="match_parent"
        android:layout_height="350dp"/>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
    <ProgressBar
        android:id="@+id/pbDatosApi"
@@ -28,7 +28,7 @@
        android:layout_marginTop="150dp"
        android:layout_marginBottom="150dp" />
 
-<android.support.design.widget.FloatingActionButton
+<com.google.android.material.floatingactionbutton.FloatingActionButton
     android:id="@+id/fabImagenApi"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
