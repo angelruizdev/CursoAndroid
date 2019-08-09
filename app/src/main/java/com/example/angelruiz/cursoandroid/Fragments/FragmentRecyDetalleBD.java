@@ -1,21 +1,21 @@
   package com.example.angelruiz.cursoandroid.Fragments;
 
-
   import android.os.Bundle;
-    import androidx.annotation.NonNull;
-    import androidx.annotation.Nullable;
-    import androidx.fragment.app.Fragment;
-    import android.view.LayoutInflater;
-    import android.view.View;
-    import android.view.ViewGroup;
-    import android.widget.ImageView;
-    import android.widget.TextView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-    import com.example.angelruiz.cursoandroid.Arrays.ArrayProductosBD;
-    import com.example.angelruiz.cursoandroid.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.example.angelruiz.cursoandroid.Arrays.ArrayProductosBD;
+import com.example.angelruiz.cursoandroid.R;
   public class FragmentRecyDetalleBD extends Fragment {
   View vista;
-  ImageView ivImgDetalle;//componentes donde se mostrara el detalle del item seleccionado del RV
+  ImageView ivImgDetalle; //componentes donde se mostrara el detalle del item seleccionado del RV
   TextView tvDetalleProducto;
 
     public FragmentRecyDetalleBD() {

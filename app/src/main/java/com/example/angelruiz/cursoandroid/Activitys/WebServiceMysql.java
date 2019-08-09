@@ -2,27 +2,31 @@ package com.example.angelruiz.cursoandroid.Activitys;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.RequiresApi;
-import com.google.android.material.navigation.NavigationView;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCalculator;
-import com.example.angelruiz.cursoandroid.Fragments.FragmentPendiente;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentCaroucelApiRest;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentInstagramApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentRegistroWsMysql;
 import com.example.angelruiz.cursoandroid.R;
+import com.google.android.material.navigation.NavigationView;
 
 public class WebServiceMysql extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     FragmentRegistroWsMysql fragment_registro_ws_mysql;
-    FragmentPendiente fragmentPendiente;
+    FragmentCaroucelApiRest fragmentCaroucelApiRest;
     FragmentApiRest fragmentApiRest;
     FragmentCalculator fragmentCalculator;
+    FragmentInstagramApiRest fragmentInstagramApiRest;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -32,9 +36,10 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);//desabilitamos actionbar para tener pantalla completa -- > app_bar_web_service_mysql
         //setSupportActionBar(toolbar);
         fragment_registro_ws_mysql = new FragmentRegistroWsMysql();
-        fragmentPendiente = new FragmentPendiente();
+        fragmentCaroucelApiRest = new FragmentCaroucelApiRest();
         fragmentApiRest = new FragmentApiRest();
         fragmentCalculator = new FragmentCalculator();
+        fragmentInstagramApiRest = new FragmentInstagramApiRest();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -77,9 +82,8 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -87,7 +91,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         if (id == R.id.nav_camera) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragment_registro_ws_mysql);
         } else if (id == R.id.nav_gallery) {
-           fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentPendiente);
+           fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentCaroucelApiRest);
         } else if (id == R.id.nav_slideshow) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentApiRest);
         } else if (id == R.id.nav_manage) {
@@ -96,6 +100,8 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
            startActivity(new Intent(getApplicationContext(), ActivityVPagerInstruction.class));
         } else if (id == R.id.nav_send) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentCalculator);
+        } else if(id == R.id.nav_instagram){
+            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentInstagramApiRest);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -103,4 +109,5 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         fragmentTransaction.commit();
         return true;
     }
-}
+   }
+

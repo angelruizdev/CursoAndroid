@@ -55,7 +55,7 @@ public class FragmentListaRecycler extends Fragment {
         nombres = new ArrayList<>();
         tvIngresar = vista.findViewById(R.id.tvIngresar);
         rvPersonas = vista.findViewById(R.id.rvPersonas);
-        rvPersonas.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rvPersonas.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         registerForContextMenu(rvPersonas);//pasamos el RV como parametro al metodo registerForContextMenu(), para inicializarlo y visualizarlo,(menuContext)
 
         btnDatos = vista.findViewById(R.id.btnDatos);

@@ -17,8 +17,8 @@ public class ActivityFragmentProdMaDeBD extends AppCompatActivity implements Int
     }
 
     @Override
-    public void enviarDatos(ArrayProductosBD arrayProductosBD) {//implementamos el metodo de la interface, el cual recibe un parametro de tipo ArrayProductosBD, para poder pasar todos los datos del pojo ArrayProductosBD
-        FragmentRecyDetalleBD fragmentRecyDetalleBD = (FragmentRecyDetalleBD)getSupportFragmentManager().findFragmentById(R.id.fmtRecyDetallBD);//instanciamos y casteamos el fragmnt que recibira los datos
+    public void enviarDatos(ArrayProductosBD arrayProductosBD) { //implementamos el metodo de la interface, el cual recibe un parametro de tipo ArrayProductosBD, para poder pasar todos los datos del pojo ArrayProductosBD
+        FragmentRecyDetalleBD fragmentRecyDetalleBD = (FragmentRecyDetalleBD)getSupportFragmentManager().findFragmentById(R.id.fmtRecyDetallBD); //instanciamos y casteamos el fragmnt que recibira los datos
         if (fragmentRecyDetalleBD != null){//comprovamos que exista el objeto(instancia)
             fragmentRecyDetalleBD.recibirDatos(arrayProductosBD);//si es asi accedemos a su metodo y le pasamos como parametro el objeto del pojo ArrayProductosBD, para pasarlos a FragmentRecyDetalleBD
         }

@@ -11,15 +11,15 @@
         <item
             android:id="@+id/nav_gallery"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery"/>
+            android:title="Caroucel"/>
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow"/>
+            android:title="Regster API REST"/>
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools"/>
+            android:title="Maps"/>
     </group>
 
     <item android:title="Communicate">
@@ -27,11 +27,15 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share"/>
+                android:title="Cmp View Pager"/>
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
-                android:title="Send"/>
+                android:title="Calculator"/>
+            <item
+                android:id="@+id/nav_instagram"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Consume API Instagram"/>
         </menu>
     </item>
 

@@ -5,13 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.angelruiz.cursoandroid.Adapters.AdapterFragmentRecyProdBd;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayProductosBD;
@@ -36,12 +38,12 @@ import java.util.ArrayList;
         }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       vista = inflater.inflate(R.layout.fragment_recy_productos_bd, container, false);
        context = getContext();
        conn = new SQLiteOpnHpr(context, ConstantesSqlite.NOMBRE_BD, null, 1);
        rvProductosBD = vista.findViewById(R.id.rvProductosBD);
-       rvProductosBD.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+       rvProductosBD.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
        DividerItemDecoration did = new DividerItemDecoration(context, LinearLayoutManager.VERTICAL);//linea divisora de items
        rvProductosBD.addItemDecoration(did);
        llenarRecyclerBD();
@@ -70,7 +72,7 @@ import java.util.ArrayList;
     public void llenarRecyclerBD(){//llenamos el RV con datos de SQLite
         SQLiteDatabase db = conn.getReadableDatabase();
         ArrayProductosBD productosBD;
-        listaProductosBD=new ArrayList<>();
+        listaProductosBD = new ArrayList<>();
 
         Cursor fila = db.rawQuery(" SELECT * FROM "+ ConstantesSqlite.TABLA_DETALLE, null);
 
@@ -92,7 +94,7 @@ import java.util.ArrayList;
 
         if (context instanceof  Activity){
             this.activity = (Activity)context;
-            comunicador = (InterfComunicaFgmtDetBDyProBD) this.activity;//casteamos el context de la activity a la interface
+            comunicador = (InterfComunicaFgmtDetBDyProBD) this.activity; //casteamos el context de la activity a la interface
         }
     }
 }

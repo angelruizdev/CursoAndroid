@@ -20,13 +20,16 @@ public class Split {
         return num;
     }
 
-    private static void factorial(){
-        int z, x = 0;
+    private static void factorial(){ //(y) va guardando el valor de la mult
         System.out.println("factorial");
-        int y = 4;
+        int y = 5;
         for (int i = y-1; i >= 1 ; i--) {
           y = y * i;
         }
         System.out.print(y);
+        System.out.println("Primos");
+        for (int i = 1; i < 20; i++) {
+
+        }
     }
 }

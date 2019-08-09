@@ -20,7 +20,7 @@
     android:title="@string/menu_appbar_tocar"
     android:icon="@drawable/email"
     android:orderInCategory="100"
-    app:showAsAction="always">
+    app:showAsAction="ifRoom">
 </item>
     <item
     android:id="@+id/menuTocarTabs"

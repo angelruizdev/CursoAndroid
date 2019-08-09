@@ -2,15 +2,16 @@ package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Spinner;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.angelruiz.cursoandroid.Adapters.AdapterImagenContacto;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgContacto;
@@ -98,13 +99,13 @@ ArrayList<ArrayImgContacto>nomContactos;
     public boolean onOptionsItemSelected(MenuItem item) {
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (item.getItemId()){
-            case R.id.fragmentSpnrBD://id de la primera opsion del menu 3pnts
+            case R.id.fragmentSpnrBD: //id de la primera opsion del menu 3pnts
                 transaction.replace(R.id.contentFmt1, fragmentSprDB);
                 break;
             case R.id.muestraSpinner:
                 sprDB.setVisibility(View.VISIBLE);//muestra el spiner
                 break;
-            case R.id.menuRecyBD://id del icono del appba
+            case R.id.menuRecyBD: //id del icono del appbar
                 startActivity(new Intent(getApplicationContext(), ActivityFragmentProdMaDeBD.class));
                 break;
             case R.id.menuTocarTabs:

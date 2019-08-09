@@ -32,7 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FragmentPendiente extends Fragment implements View.OnClickListener{
+public class FragmentCaroucelApiRest extends Fragment implements View.OnClickListener{
     View vista;
     Context context;
     ImageView ivImgGlade;
@@ -45,7 +45,7 @@ public class FragmentPendiente extends Fragment implements View.OnClickListener{
     private static final String TAG = "SALIDA";
     FloatingActionButton fabPrevius, fabNext;
 
-    public FragmentPendiente() {
+    public FragmentCaroucelApiRest() {
         // Required empty public constructor
     }
 
