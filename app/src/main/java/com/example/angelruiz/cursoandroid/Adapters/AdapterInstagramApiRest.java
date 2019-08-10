@@ -45,7 +45,7 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
     @Override
     public void onBindViewHolder(@NonNull ViewHolderInstagram holder, int position) {
        holder.ivImageInstagram.setImageResource(dataInstagram.get(position).getImageUser());
-       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLike()));
+       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes()));
     }
 
     @Override

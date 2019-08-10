@@ -23,14 +23,14 @@ public class FragmentDetailInstagramApiRest extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) { //recibimos datos desde fmt instagram
         super.onCreate(savedInstanceState);
         Bundle obtData = getArguments();
         if (obtData != null){
             email = getArguments().getString("email");
             Log.i("arguments","successful argument: " + email); //log.i information
         }else {
-            Log.e("Arguments", "without arguments");            //log.e error
+            Log.e("arguments", "without arguments");            //log.e error
         }
     }
 

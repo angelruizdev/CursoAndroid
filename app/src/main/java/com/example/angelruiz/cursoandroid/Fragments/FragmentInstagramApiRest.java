@@ -50,14 +50,14 @@ RecyclerView rvShowInstagram;
         btPrueba = view.findViewById(R.id.btPrueba);
         btPrueba.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) { //pasamos datos al fmt detail
 
                 fragmentTransaction = getFragmentManager() != null ? getFragmentManager().beginTransaction() : null;
                 assert fragmentTransaction != null;
 
                 String email = "angel@gmail.com";
                 Bundle datosAEnviar = new Bundle();
-                datosAEnviar.putString("email", String.valueOf(dataInstagram.get(0).getImageLike()));
+                datosAEnviar.putString("email", String.valueOf(dataInstagram.get(0).getImageLikes()));
                 fragment = new FragmentDetailInstagramApiRest();
                 fragment.setArguments(datosAEnviar);
 
@@ -70,3 +70,14 @@ RecyclerView rvShowInstagram;
     return view;
     }
 }
+//https://api.instagram.com/oauth/authorize/?client_id=e329a894184b4d45bacc45b0e20ee39e&redirect_uri=https://www.facebook.com/angeldavid.ruizcruz&response_type=code&scope=basic+comments+likes+public_content  //datos a traer de la api insta
+   /* curl -F 'client_id=e329a894184b4d45bacc45b0e20ee39e' \n
+            -F 'client_secret=1a236022510a4d8099ecf0ef0986c9f3' \n
+            -F 'grant_type=authorization_code' \n
+            -F 'https://www.facebook.com/angeldavid.ruizcruz' \n
+            -F 'code=d839bffd15064d3590c7fc3bd942ed5e' \n
+    https://api.instagram.com/oauth/access_token
+
+    https://www.facebook.com/angeldavid.ruizcruz#access_token=17656472546.e329a89.7d53b35629fe416c817f2d77fcd4cc18
+    https://api.instagram.com/v1/users/self/?access_token=17656472546.e329a89.7d53b35629fe416c817f2d77fcd4cc18
+    https://api.instagram.com/v1/users/self/media/recent/?access_token=17656472546.e329a89.7d53b35629fe416c817f2d77fcd4cc18*/
