@@ -12,13 +12,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import androidx.annotation.NonNull;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.fragment.app.Fragment;
-import androidx.core.app.NotificationCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +21,20 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.angelruiz.cursoandroid.Activitys.WebServiceMysql;
 import com.example.angelruiz.cursoandroid.Adapters.AdapterApiRest;
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
-import com.example.angelruiz.cursoandroid.InterfazAPI_REST.EndPointAPI_REST;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
 import com.example.angelruiz.cursoandroid.R;
-import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.RespuestaApiRest;
+import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -138,15 +139,15 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     }
 
     private void registrarUsuarioApi() {
-        EndPointAPI_REST service = retrofit.create(EndPointAPI_REST.class);//unimos nuestra interfaz mediante el obj retrofit
+        IEndPointAPI_REST service = retrofit.create(IEndPointAPI_REST.class);//unimos nuestra interfaz mediante el obj retrofit
         String numeroFolio = etNumeroFolio.getText().toString();//parametros a guardar en bd mediante ws en interfaz
         final String nombre = etNombre.getText().toString();
         String profesion = etProfesion.getText().toString();
 
-        Call<RespuestaApiRest> registrarUusario = service.registroAPIRest(numeroFolio, nombre, profesion);//mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
-        registrarUusario.enqueue(new Callback<RespuestaApiRest>() {//con el objeto Call, llamamos al metodo equeue, para crear los metodos onResponse, onFilure, el primero gestiona la respuesta debuelta por el server, el segundo cacha si hay error de malformacion de JSON o wx
+        Call<ArrayRespuestaApiRest> registrarUusario = service.registroAPIRest(numeroFolio, nombre, profesion);//mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
+        registrarUusario.enqueue(new Callback<ArrayRespuestaApiRest>() {//con el objeto Call, llamamos al metodo equeue, para crear los metodos onResponse, onFilure, el primero gestiona la respuesta debuelta por el server, el segundo cacha si hay error de malformacion de JSON o wx
             @Override
-            public void onResponse(@NonNull Call<RespuestaApiRest> call, @NonNull Response<RespuestaApiRest> response) {//gestiona respuesta de datos de server
+            public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//gestiona respuesta de datos de server
                 if (response.isSuccessful()) {
                     Toast.makeText(context, "Se guardo", Toast.LENGTH_SHORT).show();
                 } else {
@@ -155,7 +156,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
             }
 
             @Override
-            public void onFailure(@NonNull Call<RespuestaApiRest> call, @NonNull Throwable t) {//gestiona si ocurren fallos al traer datos del server
+            public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {//gestiona si ocurren fallos al traer datos del server
                 Toast.makeText(context, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
                 notificacionNvoUsuario(nombre);
             }
@@ -196,13 +197,13 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
 
         @Override
         protected Void doInBackground(Void... voids) {//colocamos la logica en su metodo, doInBackground, lo que hara el AnsyckTask
-            EndPointAPI_REST service = retrofit.create(EndPointAPI_REST.class);
-            Call<RespuestaApiRest> llamarRespuesta = service.obtenerListadoJson();//el metodo para traer datos del server no pide parametros
-            llamarRespuesta.enqueue(new Callback<RespuestaApiRest>() {
+            IEndPointAPI_REST service = retrofit.create(IEndPointAPI_REST.class);
+            Call<ArrayRespuestaApiRest> llamarRespuesta = service.obtenerListadoJson();//el metodo para traer datos del server no pide parametros
+            llamarRespuesta.enqueue(new Callback<ArrayRespuestaApiRest>() {
                 @Override
-                public void onResponse(@NonNull Call<RespuestaApiRest> call, @NonNull Response<RespuestaApiRest> response) {//el metodo response recibe,RespuestaApiRest, que guarda los datos de la API
+                public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//el metodo response recibe,ArrayRespuestaApiRest, que guarda los datos de la API
                     if (response.isSuccessful()) {//verificamos que la respuesta del servidor sea = 200 a 300 satisfactoria
-                        RespuestaApiRest respuestaApiRest = response.body();//creamos un obj de RespuestaApiRest, para que guarde los datos del ws,Body() trae la data, los datos del arreglo json a consumir del ws ApRst
+                        ArrayRespuestaApiRest respuestaApiRest = response.body();//creamos un obj de ArrayRespuestaApiRest, para que guarde los datos del ws,Body() trae la data, los datos del arreglo json a consumir del ws ApRst
 
                         if (respuestaApiRest != null) {
                             listaJson = respuestaApiRest.getResults();//con un obj de tipo ArrayWSMysqlApi guardamos los datos para pasarcelos al adapter del RV
@@ -233,7 +234,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<RespuestaApiRest> call, @NonNull Throwable t) {//este metodo cacha si hay un error al conectar al servidor API
+                public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {//este metodo cacha si hay un error al conectar al servidor API
                     Log.e(TAG, "onFailure: " + t.getMessage());
                 }
             });

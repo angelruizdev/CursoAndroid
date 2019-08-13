@@ -28,7 +28,7 @@ public class FragmentDetailInstagramApiRest extends Fragment {
         Bundle obtData = getArguments();
         if (obtData != null){
             email = getArguments().getString("email");
-            Log.i("arguments","successful argument: " + email); //log.i information
+            Log.i("arguments", "successful argument: " + email); //log.i information
         }else {
             Log.e("arguments", "without arguments");            //log.e error
         }
@@ -42,4 +42,8 @@ public class FragmentDetailInstagramApiRest extends Fragment {
         return view;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
 }

@@ -1,4 +1,6 @@
-package com.example.angelruiz.cursoandroid.Arrays;
+package com.example.angelruiz.cursoandroid.RespuestaAPI_REST;
+
+import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 
 import java.util.ArrayList;
 

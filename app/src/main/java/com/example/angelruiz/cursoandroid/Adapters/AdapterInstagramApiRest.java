@@ -10,18 +10,23 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.angelruiz.cursoandroid.Arrays.ArrayInstagramApiRest;
+import com.example.angelruiz.cursoandroid.Arrays.ArrayInstagramObjects;
 import com.example.angelruiz.cursoandroid.R;
 
 import java.util.ArrayList;
 
 public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagramApiRest.ViewHolderInstagram> {
     private Context context;
-    private ArrayList<ArrayInstagramApiRest> dataInstagram;
+    private ArrayList<ArrayInstagramObjects> dataInstagram;
 
-    public AdapterInstagramApiRest(Context context, ArrayList<ArrayInstagramApiRest> dataInstagram) {
+    public AdapterInstagramApiRest(Context context, ArrayList<ArrayInstagramObjects> dataInstagram) {
         this.context = context;
         this.dataInstagram = dataInstagram;
+    }
+
+    public void passData(ArrayList<ArrayInstagramObjects> coments) {
+        dataInstagram.addAll(coments);
+        notifyDataSetChanged();
     }
 
     public class ViewHolderInstagram extends RecyclerView.ViewHolder {
@@ -44,7 +49,7 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderInstagram holder, int position) {
-       holder.ivImageInstagram.setImageResource(dataInstagram.get(position).getImageUser());
+       //holder.ivImageInstagram.setImageResource(dataInstagram.get(position).getImageUser());
        holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes()));
     }
 

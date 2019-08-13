@@ -1,13 +1,14 @@
 package com.example.angelruiz.cursoandroid.Adapters;
 
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
@@ -21,7 +22,7 @@ public class AdapterCaroucelImgRest extends RecyclerView.Adapter<AdapterCaroucel
 
     public AdapterCaroucelImgRest(Context context) {
         this.context = context;
-        imagesCaroucel = new ArrayList<>();
+        this.imagesCaroucel = new ArrayList<>();
     }
 
     public void listImagesCaroucel(ArrayList<ArrayImgCaroucelRest> names) {

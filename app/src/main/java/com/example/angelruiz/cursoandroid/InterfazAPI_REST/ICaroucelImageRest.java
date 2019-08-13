@@ -1,6 +1,6 @@
 package com.example.angelruiz.cursoandroid.InterfazAPI_REST;
 
-import com.example.angelruiz.cursoandroid.Arrays.ArrayCaroucelResponceRest;
+import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayCaroucelResponceRest;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

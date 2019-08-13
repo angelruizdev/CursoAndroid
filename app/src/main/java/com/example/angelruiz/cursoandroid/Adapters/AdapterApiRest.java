@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
-import com.example.angelruiz.cursoandroid.InterfazAPI_REST.EndPointAPI_REST;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
 import com.example.angelruiz.cursoandroid.R;
-import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.RespuestaApiRest;
+import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
 
 import java.util.ArrayList;
 
@@ -57,12 +57,12 @@ private static final String TAG = "API_REST";
         viewHolderAdapterApiRest.ivElimProducto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EndPointAPI_REST service = retrofit.create(EndPointAPI_REST.class);
+                IEndPointAPI_REST service = retrofit.create(IEndPointAPI_REST.class);
 
-                Call<RespuestaApiRest> eliminarUsuario = service.eliminarRegApiRest(pokemon.get(pos).getIdPersona());
-                eliminarUsuario.enqueue(new Callback<RespuestaApiRest>() {
+                Call<ArrayRespuestaApiRest> eliminarUsuario = service.eliminarRegApiRest(pokemon.get(pos).getIdPersona());
+                eliminarUsuario.enqueue(new Callback<ArrayRespuestaApiRest>() {
                     @Override
-                    public void onResponse(@NonNull Call<RespuestaApiRest> call, @NonNull Response<RespuestaApiRest> response) {
+                    public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
                         if (response.isSuccessful()) {
                             Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
                         } else {
@@ -71,7 +71,7 @@ private static final String TAG = "API_REST";
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<RespuestaApiRest> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
                         Log.e(TAG, "onFailure" + t.getMessage());
                     }
                 });            }

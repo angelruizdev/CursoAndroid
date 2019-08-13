@@ -1,12 +1,12 @@
 package com.example.angelruiz.cursoandroid.Arrays;
 
-public class ArrayInstagramApiRest { //datos a consumir de la api rest
+public class ArrayInstagramObjects { //datos a consumir de la api rest
     private String idUser;
     private String fullNameUser;
-    private Integer imageUser;
+    private String imageUser;
     private int imageLikes = 0;
 
-    public ArrayInstagramApiRest(String fullNameUser, Integer imageUser, int imageLikes){
+    public ArrayInstagramObjects(String fullNameUser, String imageUser, int imageLikes){
         this.fullNameUser = fullNameUser;
         this.imageUser = imageUser;
         this.imageLikes = imageLikes;
@@ -27,10 +27,10 @@ public class ArrayInstagramApiRest { //datos a consumir de la api rest
     public void setFullNameUser(String fullNameUser) {
         this.fullNameUser = fullNameUser;
     }
-    public Integer getImageUser() {
+    public String getImageUser() {
         return imageUser;
     }
-    public void setImageUser(Integer imageUser) {
+    public void setImageUser(String imageUser) {
         this.imageUser = imageUser;
     }
 
