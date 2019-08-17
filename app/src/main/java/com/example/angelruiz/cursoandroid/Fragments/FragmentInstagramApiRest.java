@@ -18,10 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.Adapters.AdapterInstagramApiRest;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayInstagramObjects;
-import com.example.angelruiz.cursoandroid.DatosAPI_REST_Instagram.ConstantesApiRestInstagram;
+import com.example.angelruiz.cursoandroid.DatosAPI_REST_Instagram.AdapterDeserializerInstagram;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointsInstagramApiRest;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayResponseInstagram;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -29,7 +30,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FragmentInstagramApiRest extends Fragment {
     View view;
@@ -52,15 +52,11 @@ public class FragmentInstagramApiRest extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         dataInstagram = new ArrayList<>();
-      /*dataInstagram.add(new ArrayInstagramObjects("",R.drawable.email, 1));
-        dataInstagram.add(new ArrayInstagramObjects("",R.drawable.email, 1));
-        dataInstagram.add(new ArrayInstagramObjects("",R.drawable.email, 1));
-        dataInstagram.add(new ArrayInstagramObjects("",R.drawable.email, 1));*/
 
-        retrofit = new Retrofit.Builder()
+      /*  retrofit = new Retrofit.Builder() -->rebisar
                 .baseUrl(ConstantesApiRestInstagram.ROOT_URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create())
-                .build();
+                .build();*/
 
         getDataApiRest();
     }
@@ -79,14 +75,15 @@ public class FragmentInstagramApiRest extends Fragment {
             @Override
             public void onClick(View v) { //we pass data to the fmt detail
                 fragmentManager = getFragmentManager();
-                assert fragmentManager != null;
-                fragmentTransaction = fragmentManager.beginTransaction();
-                fragment = new FragmentDetailInstagramApiRest();
+                if (fragmentManager != null){
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragment = new FragmentDetailInstagramApiRest();
+                }
 
-                /*String email = "angel@gmail.com";
+                String email = "angel@gmail.com";
                 Bundle datosAEnviar = new Bundle();
-                datosAEnviar.putString("email", String.valueOf(dataInstagram.get(0).getImageLikes()));
-                fragment.setArguments(datosAEnviar);*/
+                datosAEnviar.putString("email", String.valueOf(dataInstagram.get(2).getImageLikes()));
+                fragment.setArguments(datosAEnviar);
 
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragment);
@@ -98,7 +95,10 @@ public class FragmentInstagramApiRest extends Fragment {
     }
 
     public void getDataApiRest(){
-        IEndPointsInstagramApiRest iEndPointsInstagramApiRest = retrofit.create(IEndPointsInstagramApiRest.class);
+        //IEndPointsInstagramApiRest iEndPointsInstagramApiRest = retrofit.create(IEndPointsInstagramApiRest.class);-->rebisar
+        AdapterDeserializerInstagram adapterDeserializerInstagram = new AdapterDeserializerInstagram();
+        Gson gsonDeserializerCustom = adapterDeserializerInstagram.buildGsonDeserializerMediaRecent();
+        IEndPointsInstagramApiRest iEndPointsInstagramApiRest = adapterDeserializerInstagram.establishConnectionInstagramApiRest(gsonDeserializerCustom);
         Call<ArrayResponseInstagram> arrayResponseInstagramCall = iEndPointsInstagramApiRest.getRecentMedia();
         arrayResponseInstagramCall.enqueue(new Callback<ArrayResponseInstagram>() {
             @Override
@@ -113,7 +113,7 @@ public class FragmentInstagramApiRest extends Fragment {
                     for (int i = 0; i < coments.size(); i++) {
                         ArrayInstagramObjects arrayInstagramApiRest = coments.get(i);
                         adapterInstagramApiRest.passData(coments);
-                        Log.i("instagram", "response: Successful "+dataInstagram.get(i).getImageLikes());
+                        Log.i("instagram", "response: Successful " + dataInstagram.get(i).getImageLikes());
                     }
                 }else {
                         Log.i("instagram", "response: Failure");

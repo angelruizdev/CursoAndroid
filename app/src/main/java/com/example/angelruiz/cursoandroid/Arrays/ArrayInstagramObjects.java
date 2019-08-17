@@ -3,13 +3,17 @@ package com.example.angelruiz.cursoandroid.Arrays;
 public class ArrayInstagramObjects { //datos a consumir de la api rest
     private String idUser;
     private String fullNameUser;
-    private String imageUser;
+    private String imageUrlUser;
     private int imageLikes = 0;
 
-    public ArrayInstagramObjects(String fullNameUser, String imageUser, int imageLikes){
+    public ArrayInstagramObjects(String fullNameUser, String imageUrlUser, int imageLikes){
         this.fullNameUser = fullNameUser;
-        this.imageUser = imageUser;
+        this.imageUrlUser = imageUrlUser;
         this.imageLikes = imageLikes;
+    }
+
+    public ArrayInstagramObjects(){
+
     }
 
     public String getIdUser() {
@@ -27,11 +31,11 @@ public class ArrayInstagramObjects { //datos a consumir de la api rest
     public void setFullNameUser(String fullNameUser) {
         this.fullNameUser = fullNameUser;
     }
-    public String getImageUser() {
-        return imageUser;
+    public String getImageUrlUser() {
+        return imageUrlUser;
     }
-    public void setImageUser(String imageUser) {
-        this.imageUser = imageUser;
+    public void setImageUrlUser(String imageUrlUser) {
+        this.imageUrlUser = imageUrlUser;
     }
 
     public int getImageLikes() {

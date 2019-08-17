@@ -5,7 +5,7 @@ import com.example.angelruiz.cursoandroid.Arrays.ArrayInstagramObjects;
 import java.util.ArrayList;
 
 public class ArrayResponseInstagram {
-    private ArrayList<ArrayInstagramObjects> data; //nombre del array(trae los datos a consumir) de la api rest
+    private ArrayList<ArrayInstagramObjects> data; //nombre del array(trae los datos a consumir (pojo)) de la api rest
 
     public ArrayList<ArrayInstagramObjects> getData() {
         return data;
