@@ -82,7 +82,7 @@ public class FragmentInstagramApiRest extends Fragment {
 
                 String email = "angel@gmail.com";
                 Bundle datosAEnviar = new Bundle();
-                datosAEnviar.putString("email", String.valueOf(dataInstagram.get(2).getImageLikes()));
+                datosAEnviar.putString("email", email); //String.valueOf(dataInstagram.get(2).getImageLikes())
                 fragment.setArguments(datosAEnviar);
 
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -109,12 +109,11 @@ public class FragmentInstagramApiRest extends Fragment {
                     assert arrayResponseInstagram != null;
                     dataInstagram = arrayResponseInstagram.getData();
 
-                    ArrayList<ArrayInstagramObjects> coments = arrayResponseInstagram.getData();
-                    for (int i = 0; i < coments.size(); i++) {
-                        ArrayInstagramObjects arrayInstagramApiRest = coments.get(i);
-                        adapterInstagramApiRest.passData(coments);
+                    for (int i = 0; i < dataInstagram.size(); i++) {
+                        adapterInstagramApiRest.passData(dataInstagram);
                         Log.i("instagram", "response: Successful " + dataInstagram.get(i).getImageLikes());
                     }
+
                 }else {
                         Log.i("instagram", "response: Failure");
                 }
@@ -128,7 +127,7 @@ public class FragmentInstagramApiRest extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) { //este método recibe data de la Activity
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) { //este método recibe data de la Activity, si le pasamos datos al fmt
         super.onActivityCreated(savedInstanceState);
     }
 

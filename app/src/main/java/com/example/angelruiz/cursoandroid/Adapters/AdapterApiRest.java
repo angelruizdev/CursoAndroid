@@ -2,8 +2,6 @@ package com.example.angelruiz.cursoandroid.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +10,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ private static final String TAG = "API_REST";
     public void onBindViewHolder(@NonNull final ViewHolderAdapterApiRest viewHolderAdapterApiRest, @SuppressLint("RecyclerView") final int pos) {
         //String urlImage = "https://source.unsplash.com/random/"+pokemon.get(i).getImagenPokemon()+".png";
         String urlImage = "https://source.unsplash.com/random/";
-        Glide.with(context).load(urlImage).into(viewHolderAdapterApiRest.ivImgProducto);
+        Picasso.with(context).load(urlImage).into(viewHolderAdapterApiRest.ivImgProducto);
         //viewHolderAdapterApiRest.ivImgProducto.setImageResource(pokemon.get(pos).getImagenPokemon());
         viewHolderAdapterApiRest.tvDetalleProducto.setText(String.valueOf(pokemon.get(pos).getNombre()+" - "+pokemon.get(pos).getProfesion()));
         viewHolderAdapterApiRest.ivElimProducto.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +75,8 @@ private static final String TAG = "API_REST";
                     public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
                         Log.e(TAG, "onFailure" + t.getMessage());
                     }
-                });            }
+                });
+            }
         });
     }
 

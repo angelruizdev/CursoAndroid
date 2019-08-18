@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.Arrays.ArrayInstagramObjects;
 import com.example.angelruiz.cursoandroid.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -49,8 +50,13 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderInstagram holder, int position) {
-       //holder.ivImageInstagram.setImageResource(dataInstagram.get(position).getImageUser());
-       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes()));
+       final ArrayInstagramObjects arrayInstagramObjects = dataInstagram.get(position); // we obtain the position of array
+       Picasso.with(context)
+               .load(arrayInstagramObjects.getImageUrlUser()) //dataInstagram.get(position).getImageUrlUser() - together - we show the image from link inastagram
+               .placeholder(R.drawable.ic_no_image)
+               .into(holder.ivImageInstagram);
+
+       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes())); //we show the likes as string
     }
 
     @Override

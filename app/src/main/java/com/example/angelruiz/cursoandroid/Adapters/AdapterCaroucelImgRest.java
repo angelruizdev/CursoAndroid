@@ -10,9 +10,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.R;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -51,11 +51,12 @@ public class AdapterCaroucelImgRest extends RecyclerView.Adapter<AdapterCaroucel
     public void onBindViewHolder(@NonNull ViewHolderCaroucel viewHolderCaroucel, int i) {
         ArrayImgCaroucelRest x = imagesCaroucel.get(i);
 
-        //viewHolderCaroucel.ivCaroucel.setImageResource(x.getNumberImage());
-        viewHolderCaroucel.tvNameCaroucel.setText(x.getName());
-        Glide.with(context)
+        Picasso.with(context)
              .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/" + x.getNumberImage() + ".png")
              .into(viewHolderCaroucel.ivCaroucel);
+
+        viewHolderCaroucel.tvNameCaroucel.setText(x.getName());
+        //viewHolderCaroucel.ivCaroucel.setImageResource(x.getNumberImage());
     }
 
     @Override
