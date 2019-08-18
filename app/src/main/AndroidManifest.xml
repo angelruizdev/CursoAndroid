@@ -91,6 +91,17 @@
             android:label="@string/title_activity_web_service_mysql"
             android:theme="@style/AppTheme" />
 
+        <!-- permissions api 24 a 7 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/provider_paths"/>
+        </provider>
+
         <service android:name=".FireBaseNotification.Notification">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

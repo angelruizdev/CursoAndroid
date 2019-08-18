@@ -14,10 +14,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.fragment.app.Fragment;
-import androidx.appcompat.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,9 +23,19 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.FileProvider;
+import androidx.fragment.app.Fragment;
+
 import com.example.angelruiz.cursoandroid.R;
+import com.google.android.material.snackbar.Snackbar;
+
 import java.io.File;
-import static android.Manifest.permission.CAMERA;//importamos los permisos de camara y escritura, para esto todo debe ser de android no de java
+
+import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 //asignar permisos para android 6 tomar foto guardarla en galeria y mostrarla en IV
 public class FragmentListaContacts extends Fragment  {
@@ -45,17 +51,24 @@ public class FragmentListaContacts extends Fragment  {
     private Context context;//creamos nuestro objeto context ya que es mu necesario para otros objetos o metodos
     FrameLayout frameLayout;//nos permite pasarlo como parametro context al SnackBar, para ver donde esta el xml
     ProgressBar progressBar;
+
     public FragmentListaContacts() {
         // Required empty public constructor
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getContext();//inicializamos nuestro context, obteniendo el contexto de donde nos encontramos
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-       vista=inflater.inflate(R.layout.fragment_lista_contacts, container, false);
-       context=getContext();//inicializamos nuestro context, obteniendo el contexto de donde nos encontramos
-       ivImg=vista.findViewById(R.id.ivImg);
-       btnCargarImg=vista.findViewById(R.id.btnCargarImg);
-       frameLayout=vista.findViewById(R.id.frameContent);//inicializamos en content xml
-       progressBar=vista.findViewById(R.id.pbImagen);
+       vista = inflater.inflate(R.layout.fragment_lista_contacts, container, false);
+       ivImg = vista.findViewById(R.id.ivImg);
+       btnCargarImg = vista.findViewById(R.id.btnCargarImg);
+       frameLayout = vista.findViewById(R.id.frameContent);//inicializamos en content xml
+       progressBar = vista.findViewById(R.id.pbImagen);
 
        if (myRequestStoragePermission()){//si los permisos se cumplen y aceptan, el boton cargarImagen se abilita si no no
            btnCargarImg.setEnabled(true);
@@ -97,7 +110,7 @@ public class FragmentListaContacts extends Fragment  {
     //este metodo nos permite crear un menuDialog con varias opsiones, se ejecuta alpresionar el boton
     public void showOptions(){
       final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-      final CharSequence options[]={"Tomar foto","Seleccionar foto","Cancelar"};
+      final CharSequence options[] = {"Tomar foto","Seleccionar foto","Cancelar"};
       builder.setTitle("Elegir una opción");
       builder.setItems(options, new DialogInterface.OnClickListener() {
           @Override
@@ -115,21 +128,32 @@ public class FragmentListaContacts extends Fragment  {
     }
 
     private void openCamera() {//este metodo contiene la logica para acceder a la camara tomar foto, crear directorio y guardarla en galeria
-        File file = new File(Environment.getExternalStorageDirectory(), APP_NAME_DIRECTORY);//creamos un objeto de tipo File(archivo), para crear un directorio dentro del directorio de almacenamiento, le pasamos nuestro directorio como segundo parametro
-        boolean isDirectoryCreated=file.exists();//en esta variable booleana guardamos el objeto file que tiene guardado el directorio que se creara en la galeria
-        if (!isDirectoryCreated){//comprobamos si el directorio se a creado en el dispositivo
-            isDirectoryCreated=file.mkdir();//si no esta creado lo creamos
-            Toast.makeText(context, "Directory created ", Toast.LENGTH_SHORT).show();
-        }
-        if (isDirectoryCreated){//si se a creado
-            Long timesTamp=System.currentTimeMillis()/1000;//creamos esta variable de tipo Long la cual genera el nombre de cada foto que se tome
-            imageName=timesTamp.toString() + ".jpg";//la guardamos en una cadena mas una extencion .jpg
-            cPath=Environment.getExternalStorageDirectory() + File.separator + APP_NAME_DIRECTORY + File.separator + imageName;//en esta cadena guardamos el directorio y el nombre de la imagen, separator es un slash(//) que nos indica que esta dentro de
-            File newFile= new File(cPath);//en un nuevo objeto file pasamos la cadena cPath como parametro para mantenerlo como archivo
-            Intent camera=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//con este intent accedemos a la camara, y le mandamos mediante putExtra() el nuevo archivo(newFile,foto tomada)como Uri de tipo archivo, y la guarde en galeria
-            camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(newFile));
-            startActivityForResult(camera, PHOTO_CODE);//con el metodo startActivityForResult(), mandamos el intent y la constante PHOTO_CODE, para llamarlo desde onActivityResult() y saber que hacer
-        }
+
+            File file = new File(Environment.getExternalStorageDirectory(), APP_NAME_DIRECTORY);//creamos un objeto de tipo File(archivo), para crear un directorio dentro del directorio de almacenamiento, le pasamos nuestro directorio como segundo parametro
+            Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);//con este intent accedemos a la camara, y le mandamos mediante putExtra() el nuevo archivo(newFile,foto tomada)como Uri de tipo archivo, y la guarde en galeria
+
+            boolean isDirectoryCreated = file.exists();//en esta variable booleana guardamos el objeto file que tiene guardado el directorio que se creara en la galeria
+
+            if (!isDirectoryCreated) {//comprobamos si el directorio se a creado en el dispositivo
+                isDirectoryCreated = file.mkdir();//si no esta creado lo creamos
+                Toast.makeText(context, "Directory created ", Toast.LENGTH_SHORT).show();
+            }
+            if (isDirectoryCreated) {//si se a creado
+                Long timesTamp = System.currentTimeMillis() / 1000;//creamos esta variable de tipo Long la cual genera el nombre de cada foto que se tome
+                imageName = timesTamp.toString() + ".jpg";//la guardamos en una cadena mas una extencion .jpg
+                cPath = Environment.getExternalStorageDirectory() + File.separator + APP_NAME_DIRECTORY + File.separator + imageName;//en esta cadena guardamos el directorio y el nombre de la imagen, separator es un slash(//) que nos indica que esta dentro de
+                File newFileUri = new File(cPath);//en un nuevo objeto file pasamos la cadena cPath como parametro para mantenerlo como archivo
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //permissions for api 24 nougat a 7
+               String authorities = context.getPackageName() + ".provider";
+               Uri imageCameraUri = FileProvider.getUriForFile(context, authorities, newFileUri);
+               camera.putExtra(MediaStore.EXTRA_OUTPUT, imageCameraUri);
+
+            }else{
+               camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(newFileUri));
+            }
+               startActivityForResult(camera, PHOTO_CODE);//con el metodo startActivityForResult(), mandamos el intent y la constante PHOTO_CODE, para llamarlo desde onActivityResult() y saber que hacer
+         }
     }
 
     //este metodo permite mediante un intent implisito, acceder a la galeria para seleccionar una imagen, y mostrarla en un IV
