@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.Arrays.ArrayInstagramObjects;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickRecyclerInstagram;
 import com.example.angelruiz.cursoandroid.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,11 +20,17 @@ import java.util.ArrayList;
 public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagramApiRest.ViewHolderInstagram> {
     private Context context;
     private ArrayList<ArrayInstagramObjects> dataInstagram;
+    private IOnClickRecyclerInstagram listener;
+
+    public void setOnClickLiatenerItem(IOnClickRecyclerInstagram listener){
+        this.listener = listener;
+    }
 
     public AdapterInstagramApiRest(Context context, ArrayList<ArrayInstagramObjects> dataInstagram) {
         this.context = context;
         this.dataInstagram = dataInstagram;
     }
+
 
     public void passData(ArrayList<ArrayInstagramObjects> coments) {
         dataInstagram.addAll(coments);
@@ -34,10 +41,18 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
         ImageView ivImageInstagram;
         TextView tvLikeInstagram;
 
-        public ViewHolderInstagram(@NonNull View itemView) {
+        public ViewHolderInstagram(@NonNull View itemView, final IOnClickRecyclerInstagram listener1) {
             super(itemView);
             ivImageInstagram = itemView.findViewById(R.id.ivImageInstagram);
             tvLikeInstagram = itemView.findViewById(R.id.tvLikeInstagram);
+
+            ivImageInstagram.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    listener1.onClickItemRvIntagram(position);
+                }
+            });
         }
     }
 
@@ -45,7 +60,7 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
     @Override
     public ViewHolderInstagram onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_inflate_instagram_rv, parent, false);
-        return new ViewHolderInstagram(view);
+        return new ViewHolderInstagram(view, listener);
     }
 
     @Override
@@ -56,12 +71,13 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
                .placeholder(R.drawable.ic_no_image)
                .into(holder.ivImageInstagram);
 
-       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes())); //we show the likes as string
+       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes() + " Likes")); //we show the likes as string
     }
 
     @Override
     public int getItemCount() {
         return dataInstagram.size();
     }
+
 
 }

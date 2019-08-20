@@ -9,18 +9,18 @@ import com.google.gson.GsonBuilder;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class AdapterDeserializerInstagram {//-->rebisar
-    public IEndPointsInstagramApiRest establishConnectionInstagramApiRest(Gson gson){
-        Retrofit retrofit = new Retrofit.Builder()
+public class AdapterDeserializerInstagram { //this class joins the pojo to deserialize and his deserializer
+    public IEndPointsInstagramApiRest establishConnectionInstagramApiRest(Gson gson){ //this method receives the deserializer custom(show objects specific the array json instagram)
+        Retrofit retrofit = new Retrofit.Builder() // we create our object retrofit normal
                 .baseUrl(ConstantesApiRestInstagram.ROOT_URL_BASE)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(GsonConverterFactory.create(gson)) //we pass the deserializer custom for what not deserialize by default
                 .build();
         return retrofit.create(IEndPointsInstagramApiRest.class);
     }
 
-    public Gson buildGsonDeserializerMediaRecent(){
+    public Gson buildGsonDeserializerMediaRecent(){ //build the deserializer gson
         GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(ArrayResponseInstagram.class, new DeserializeArrayResponseInstagram());
+        gsonBuilder.registerTypeAdapter(ArrayResponseInstagram.class, new DeserializeArrayResponseInstagram()); //we build the gson type adapter
         return gsonBuilder.create();
     }
 }

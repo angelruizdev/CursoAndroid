@@ -3,12 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E91E63"
+    android:background="#00BCD4"
     tools:context=".Fragments.FragmentDetailInstagramApiRest">
 
     <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:id="@+id/ivImageDetail"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"/>
+
     <TextView
-        android:id="@+id/tvPrueba"
+        android:id="@+id/tvLikesDetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

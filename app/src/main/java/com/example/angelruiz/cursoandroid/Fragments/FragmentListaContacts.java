@@ -110,16 +110,16 @@ public class FragmentListaContacts extends Fragment  {
     //este metodo nos permite crear un menuDialog con varias opsiones, se ejecuta alpresionar el boton
     public void showOptions(){
       final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-      final CharSequence options[] = {"Tomar foto","Seleccionar foto","Cancelar"};
+        final CharSequence[] options = {"Tomar foto", "Seleccionar foto", "Cancelar"};
       builder.setTitle("Elegir una opción");
       builder.setItems(options, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-             if (options[which]=="Tomar foto"){
+             if (options[which] == "Tomar foto"){
                  openCamera();
-             }else if (options[which]=="Seleccionar foto"){
+             }else if (options[which] == "Seleccionar foto"){
                  cargarImagen();
-             }else if (options[which]=="Cancelar"){
+             }else if (options[which] == "Cancelar"){
                  dialog.dismiss();
              }
           }
@@ -202,7 +202,7 @@ public class FragmentListaContacts extends Fragment  {
                break;
         }
                                                      //si el codigo de solicitud(requestCode) es igual al de del intent que abre la galeria realiza lo siguiente
-        if(data!=null && requestCode==SELECT_PICTURE){//verifica si la data trae una imagen y la clave de solicitud del requestCode es el mismo del startActivityForResult
+        if(data!=null && requestCode == SELECT_PICTURE){//verifica si la data trae una imagen y la clave de solicitud del requestCode es el mismo del startActivityForResult
            Uri path=data.getData();//si se cumple en una Uri guardamos(obtenemos) lo que trae la data
            ivImg.setImageURI(path);//y se lo pasamos al IV con su metodo setImageURI(), el cual recibe como parametro la data(imagen) guardada en la uri path
         }
