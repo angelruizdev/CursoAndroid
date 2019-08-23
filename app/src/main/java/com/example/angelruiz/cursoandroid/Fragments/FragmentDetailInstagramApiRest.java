@@ -1,5 +1,6 @@
 package com.example.angelruiz.cursoandroid.Fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -43,16 +44,18 @@ public class FragmentDetailInstagramApiRest extends Fragment {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_detail_instagram_api_rest, container, false);
         ivImageDetail = view.findViewById(R.id.ivImageDetail);
-        Picasso.with(context)
-                .load(imageUrlUser)
+        Picasso.with(context) //we show the image whit pacasso too
+                .load(imageUrlUser) //we pass the image obtain from FragmentInstagramApiRest
                 .placeholder(R.drawable.ic_no_image)
                 .into(ivImageDetail);
+
         tvLikesDetail = view.findViewById(R.id.tvLikesDetail);
-        tvLikesDetail.setText(imageLikes);
+        tvLikesDetail.setText(imageLikes + " Likes");
         return view;
     }
 

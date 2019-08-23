@@ -19,8 +19,8 @@ import java.util.ArrayList;
 
 public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagramApiRest.ViewHolderInstagram> {
     private Context context;
-    private ArrayList<ArrayInstagramObjects> dataInstagram;
-    private IOnClickRecyclerInstagram listener;
+    private ArrayList<ArrayInstagramObjects> dataInstagram; //save the data obtain form api instagram whit(DeserializeArrayResponseInstagram)
+    private IOnClickRecyclerInstagram listener; //we create a object of the interface for pass him tha position of the item rv
 
     public void setOnClickLiatenerItem(IOnClickRecyclerInstagram listener){
         this.listener = listener;
@@ -46,11 +46,11 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
             ivImageInstagram = itemView.findViewById(R.id.ivImageInstagram);
             tvLikeInstagram = itemView.findViewById(R.id.tvLikeInstagram);
 
-            ivImageInstagram.setOnClickListener(new View.OnClickListener() {
+            ivImageInstagram.setOnClickListener(new View.OnClickListener() { //we obtain the position the item rv through click on the image
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    listener1.onClickItemRvIntagram(position);
+                    listener1.onClickItemRvIntagram(position); //we pass the position to the interface
                 }
             });
         }
@@ -60,24 +60,22 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
     @Override
     public ViewHolderInstagram onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_inflate_instagram_rv, parent, false);
-        return new ViewHolderInstagram(view, listener);
+        return new ViewHolderInstagram(view, listener); //we also return the listener
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderInstagram holder, int position) {
-       final ArrayInstagramObjects arrayInstagramObjects = dataInstagram.get(position); // we obtain the position of array
+       final ArrayInstagramObjects arrayInstagramObjects = dataInstagram.get(position); // we obtain the position of array(pojo)
        Picasso.with(context)
-               .load(arrayInstagramObjects.getImageUrlUser()) //dataInstagram.get(position).getImageUrlUser() - together - we show the image from link inastagram
-               .placeholder(R.drawable.ic_no_image)
+               .load(arrayInstagramObjects.getImageUrlUser()) //dataInstagram.get(position).getImageUrlUser() - together - we show the image from link inastagram from pojo whit method get
+               .placeholder(R.drawable.ic_no_image) //image background if the picture is not shown
                .into(holder.ivImageInstagram);
 
-       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes() + " Likes")); //we show the likes as string
+       holder.tvLikeInstagram.setText(String.valueOf(dataInstagram.get(position).getImageLikes())); //we show the likes as string
     }
 
     @Override
     public int getItemCount() {
         return dataInstagram.size();
     }
-
-
 }

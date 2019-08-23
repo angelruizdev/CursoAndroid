@@ -35,7 +35,7 @@ public class FragmentInstagramApiRest extends Fragment {
     private Context context;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    FragmentDetailInstagramApiRest fragment;
+    FragmentDetailInstagramApiRest fragmentDetailInstagramApiRest;
     ArrayList<ArrayInstagramObjects> dataInstagram;
     AdapterInstagramApiRest adapterInstagramApiRest;
     RecyclerView rvShowInstagram;
@@ -57,40 +57,40 @@ public class FragmentInstagramApiRest extends Fragment {
     view = inflater.inflate(R.layout.fragment_instagram_api_rest, container, false);
 
     rvShowInstagram = view.findViewById(R.id.rvShowInstagram);
-    rvShowInstagram.setLayoutManager(new GridLayoutManager(context, 2));
-    adapterInstagramApiRest = new AdapterInstagramApiRest(context, dataInstagram);
-    rvShowInstagram.setAdapter(adapterInstagramApiRest);
+    rvShowInstagram.setLayoutManager(new GridLayoutManager(context, 2)); //rv type grid whit 2 columns
+    adapterInstagramApiRest = new AdapterInstagramApiRest(context, dataInstagram); //we initialize the adapter
+        rvShowInstagram.setAdapter(adapterInstagramApiRest);
 
-        adapterInstagramApiRest.setOnClickLiatenerItem(new IOnClickRecyclerInstagram() {
-            @Override
-            public void onClickItemRvIntagram(int position) {
-                fragmentManager = getFragmentManager();
+        adapterInstagramApiRest.setOnClickLiatenerItem(new IOnClickRecyclerInstagram() { //we acces the method of the adapter with the adapter
+            @Override                                                                    //para tener onClickListener en el item del rv al pasarle la interface nos traera su metodo y la posision del item traida desde el adapter
+            public void onClickItemRvIntagram(int position) { //we use the position for pass data from here to FragmentDetailInstagramApiRest
+                fragmentManager = getFragmentManager(); //for replace this fmt with FragmentDetailInstagramApiRest
                 if (fragmentManager != null){
                     fragmentTransaction = fragmentManager.beginTransaction();
-                    fragment = new FragmentDetailInstagramApiRest();
+                    fragmentDetailInstagramApiRest = new FragmentDetailInstagramApiRest(); //we instantiate the fmt of replacement
                 }
 
-                String email = "angel@gmail.com";
-                Bundle sendToData = new Bundle();
-                sendToData.putString("imageUrlUser", dataInstagram.get(position).getImageUrlUser());
+                Bundle sendToData = new Bundle(); //with object bundle we pass data to FragmentDetailInstagramApiRest
+                sendToData.putString("imageUrlUser", dataInstagram.get(position).getImageUrlUser()); //here we use the position obtain form adapter
                 sendToData.putString("imageLikes", String.valueOf(dataInstagram.get(position).getImageLikes()));
-                fragment.setArguments(sendToData);
+                fragmentDetailInstagramApiRest.setArguments(sendToData); //we pass the data the fmt destination
 
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragment);
+                fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentDetailInstagramApiRest);
                 fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();            }
+                fragmentTransaction.commit(); //we replace the fmt passing him data
+            }
         });
 
     return view;
     }
 
-    public void getDataApiRest(){
+    public void getDataApiRest(){ //this method manages the rensponse of the api and the deserialization
         AdapterDeserializerInstagram adapterDeserializerInstagram = new AdapterDeserializerInstagram();
         Gson gsonDeserializerCustom = adapterDeserializerInstagram.buildGsonDeserializerMediaRecent();
         IEndPointsInstagramApiRest iEndPointsInstagramApiRest = adapterDeserializerInstagram.establishConnectionInstagramApiRest(gsonDeserializerCustom);
         Call<ArrayResponseInstagram> arrayResponseInstagramCall = iEndPointsInstagramApiRest.getRecentMedia();
-        arrayResponseInstagramCall.enqueue(new Callback<ArrayResponseInstagram>() {
+        arrayResponseInstagramCall.enqueue(new Callback<ArrayResponseInstagram>() { //the method enqueue manages the response of the api instagram
             @Override
             public void onResponse(@NonNull Call<ArrayResponseInstagram> call, @NonNull Response<ArrayResponseInstagram> response) {
                 if (response.isSuccessful()){
@@ -117,7 +117,7 @@ public class FragmentInstagramApiRest extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) { //este método recibe data de la Activity, si le pasamos datos al fmt
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) { //this méthod get data of the Activity, if we pass data to his fmt
         super.onActivityCreated(savedInstanceState);
     }
 
