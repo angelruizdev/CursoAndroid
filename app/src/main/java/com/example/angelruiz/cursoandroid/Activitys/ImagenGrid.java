@@ -18,7 +18,6 @@ import com.example.angelruiz.cursoandroid.Arrays.ArrayImgContacto;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentSpinerBD;
 import com.example.angelruiz.cursoandroid.R;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ImagenGrid extends AppCompatActivity {
@@ -26,34 +25,35 @@ public class ImagenGrid extends AppCompatActivity {
 private GridView gvImgContact;
 public FragmentSpinerBD fragmentSprDB;
 public Spinner sprDB;//declaramos el spr
-//creamos un ArrayList de tipo ArrayImgContacto, para llenarlo con ese tipo de datos
-ArrayList<ArrayImgContacto>nomContactos;
+
+ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo ArrayImgContacto, para llenarlo con ese tipo de datos
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.imagen_grid);
 
-        Toolbar toolbar=(Toolbar)findViewById(R.id.actionBarPersonalizado);
+        Toolbar toolbar = findViewById(R.id.actionBarPersonalizado);
         setSupportActionBar(toolbar);
 
         //getSupportActionBar().setTitle("Angel");//muestra titulo en toolbar
-        gvImgContact= (GridView)findViewById(R.id.gvImgContact);
-        fragmentSprDB=new FragmentSpinerBD();
+        gvImgContact = findViewById(R.id.gvImgContact);
+        fragmentSprDB = new FragmentSpinerBD();
         sprDB = findViewById(R.id.sprBD);//inicializamos el spr
         sprDB.setVisibility(View.GONE);//no se muestra el spiner al iniciar la activity(no ocupa su espacio, Invisible si)
-//arraylist para los nombre
-        nomContactos = new ArrayList<>();
+
+        //arraylist para los nombre
+        nombreContactos = new ArrayList<>();
         final ArrayList<String>nombre=new ArrayList<>();
          nombre.add("Juan");
          nombre.add("Ángel");
          nombre.add("Maia");
-         nombre.add("Prdro");
+         nombre.add("Pedro");
          nombre.add("Sandra");
          nombre.add("Karen");
 
-//arraylist para imagenes
-        final ArrayList<Integer> imgContacto=new ArrayList<>();
+        //arraylist para imagenes
+        final ArrayList<Integer> imgContacto = new ArrayList<>();
          imgContacto.add(R.drawable.ic_touch_app);
          imgContacto.add(R.drawable.email);
          imgContacto.add(R.drawable.phone);
@@ -61,27 +61,35 @@ ArrayList<ArrayImgContacto>nomContactos;
          imgContacto.add(R.drawable.email);
          imgContacto.add(R.drawable.phone);
 
-//recorremos dichos arrayslist y llenamos pasando como parametro los 2 arrays nombre e imagenContacto a nomContactos
+        //recorremos dichos arrayslist y llenamos pasando como parametro los 2 arrays nombre e imagenContacto a nomContactos
         for (int i=0; i<nombre.size(); i++){
-          nomContactos.add(new ArrayImgContacto(1, imgContacto.get(i), nombre.get(i)));//llenamos con constructor
+          nombreContactos.add(new ArrayImgContacto(1, imgContacto.get(i), nombre.get(i)));//llenamos con constructor
         }
-//creamos nuestro objeto adapter tipo(constructor), el cual recibe como parametro el contexto y un array, como lo indica el array de clase AdapterImagenContacto
-        final AdapterImagenContacto adapter = new AdapterImagenContacto(ImagenGrid.this, nomContactos);
+
+        //creamos nuestro objeto adapter tipo(constructor), el cual recibe como parametro el contexto y un array, como lo indica el array de clase AdapterImagenContacto
+        final AdapterImagenContacto adapter = new AdapterImagenContacto(ImagenGrid.this, nombreContactos);
         gvImgContact.setAdapter(adapter);//mostramos lo que trae el adapter en el gridview con el metodo setAdapter()
-        //AdapterImagenContacto adpr=new AdapterImagenContacto(getApplicationContext(),nomContactos);
+        //AdapterImagenContacto adpr = new AdapterImagenContacto(getApplicationContext(),nomContactos);
         //gvImgContact.setAdapter(adpr);
         //final AdapterImagenContacto adapterImgContact = new AdapterImagenContacto(ImagenGrid.this,R.layout.vista_adp_imgcontact,nomContactos,"");
         //gvImgContact.setAdapter(adapterImgContact);
-//creamos el metodo setOnItemClickListener(), para pasar imagen y texto del item seleccionado del gridview a otra activity
+
+        //creamos el metodo setOnItemClickListener(), para pasar imagen y texto del item seleccionado del gridview a otra activity
         gvImgContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                //getSupportActionBar().setTitle(nombre.get(position));//muestra el nombre de la poision seleccionada en la toolbar
+
+                Intent passDataContactDetail = new Intent(getApplicationContext(), DetalleImgContacto.class);
+                passDataContactDetail.putExtra("nombreContactos", nombreContactos.get(position));
+                startActivity(passDataContactDetail);
+
+                /*passing data with interface serializable
                 Intent detalleImgContacto = new Intent(getApplicationContext(),DetalleImgContacto.class);
-//hacemos un cast para guardar en objeto la imagen y texto seleccionado de un item y lo enviamos a DetalleImgContacto con putExtra()
-                 ArrayImgContacto datosDetalle=(ArrayImgContacto)adapterView.getItemAtPosition(position);
-                 detalleImgContacto.putExtra("datosContacto",(Serializable)datosDetalle);
-                 startActivity(detalleImgContacto);
+                //hacemos un cast para guardar en objeto la imagen y texto seleccionado de un item y lo enviamos a DetalleImgContacto con putExtra()
+                ArrayImgContacto datosDetalle = (ArrayImgContacto)adapterView.getItemAtPosition(position);
+                detalleImgContacto.putExtra("datosContacto",(Serializable)datosDetalle);
+                startActivity(detalleImgContacto);*/
+                //getSupportActionBar().setTitle(nombre.get(position));//muestra el nombre de la poision seleccionada en la toolbar
             }
         });
     }

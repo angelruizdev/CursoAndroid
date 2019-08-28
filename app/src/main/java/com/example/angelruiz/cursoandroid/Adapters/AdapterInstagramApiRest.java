@@ -22,7 +22,7 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
     private ArrayList<ArrayInstagramObjects> dataInstagram; //save the data obtain form api instagram whit(DeserializeArrayResponseInstagram)
     private IOnClickRecyclerInstagram listener; //we create a object of the interface for pass him tha position of the item rv
 
-    public void setOnClickLiatenerItem(IOnClickRecyclerInstagram listener){
+    public void setOnClickLiatenerItem(IOnClickRecyclerInstagram listener){ //method for implement the onClickListener in rv the FragmentInstagramApiRest
         this.listener = listener;
     }
 

@@ -20,10 +20,10 @@ public class DeserializeArrayResponseInstagram implements JsonDeserializer<Array
     public ArrayResponseInstagram deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException { //we import this metod
         Gson gson = new Gson(); // we create a object gson to tell you wich class you showld deserializer, here is the who receives the response of instagram api
         ArrayResponseInstagram arrayResponseInstagram = gson.fromJson(json, ArrayResponseInstagram.class); //class for deserializer top line too ^
-        JsonArray dataArrayRespInstagram = json.getAsJsonObject().getAsJsonArray(JsonKeysInstagram.NAME_ARRAY); //in a object of type JsonArray we obtain as object json and array the data of array of instagram passing the name of this as parameter
+        JsonArray dataArrayRespInstagram = json.getAsJsonObject().getAsJsonArray(JsonKeysInstagram.NAME_ARRAY_INSTAGRAM); //in a object of type JsonArray we obtain as object json and array the data of array of instagram passing the name of this as parameter
 
         arrayResponseInstagram.setData(deserializerArrayInstagramObjects(dataArrayRespInstagram)); //this array arrayResponseInstagram requires a colection of type (pojo arrayInstagramObjects), we pass the metod deserializerArrayInstagramObjects
-        //arrayResponseInstagram.setData(arrayInstagramObjects);                                    // why is this type and return a that colection, a su vez este metodo recibe como parametro un array con los datos de la api le pasamos dataArrayRespInstagram, para usarlos como json dentro del metodo
+        //arrayResponseInstagram.setData(arrayInstagramObjects);                                    //why is this type and return a that colection, a su vez este metodo recibe como parametro un array con los datos de la api le pasamos dataArrayRespInstagram, para usarlos como json dentro del metodo
         //deserializerArrayInstagramObjects(dataArrayRespInstagram);
         return arrayResponseInstagram;
     }

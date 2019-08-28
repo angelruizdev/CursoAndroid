@@ -5,8 +5,8 @@ public class ArraySucursales {
     private String nombreSucursal;
 
     public ArraySucursales(Integer imgSucursal, String nombreSucursal){
-        this.imgSucursal=imgSucursal;
-        this.nombreSucursal=nombreSucursal;
+        this.imgSucursal = imgSucursal;
+        this.nombreSucursal = nombreSucursal;
     }
 
     public Integer getImgSucursal() {

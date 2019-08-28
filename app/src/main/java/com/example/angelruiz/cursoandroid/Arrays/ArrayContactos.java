@@ -7,9 +7,9 @@ public class ArrayContactos {
 
  //creamos constructor para validar que existe el objeto, con los 3 atributos.
     public ArrayContactos(String nombre, String telefono, String email){
-        this.nombre=nombre;
-        this.telefono=telefono;
-        this.email=email;
+        this.nombre = nombre;
+        this.telefono = telefono;
+        this.email = email;
     }
 //creamos sus metodos geter y seter de cada atributo
     public String getNombre() {

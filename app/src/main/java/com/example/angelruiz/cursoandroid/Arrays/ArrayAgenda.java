@@ -6,9 +6,9 @@ public class ArrayAgenda {
     private String telefonoPersona;
 
     public ArrayAgenda(Integer imgPersona, String nombrePersona, String telefonoPersona){
-      this.imgPersona=imgPersona;
-      this.nombrePersona=nombrePersona;
-      this.telefonoPersona=telefonoPersona;
+      this.imgPersona = imgPersona;
+      this.nombrePersona = nombrePersona;
+      this.telefonoPersona = telefonoPersona;
     }
 
     public Integer getImgPersona() {

@@ -86,10 +86,12 @@ public class FragmentInstagramApiRest extends Fragment {
     }
 
     public void getDataApiRest(){ //this method manages the rensponse of the api and the deserialization
-        AdapterDeserializerInstagram adapterDeserializerInstagram = new AdapterDeserializerInstagram();
-        Gson gsonDeserializerCustom = adapterDeserializerInstagram.buildGsonDeserializerMediaRecent();
-        IEndPointsInstagramApiRest iEndPointsInstagramApiRest = adapterDeserializerInstagram.establishConnectionInstagramApiRest(gsonDeserializerCustom);
-        Call<ArrayResponseInstagram> arrayResponseInstagramCall = iEndPointsInstagramApiRest.getRecentMedia();
+        AdapterDeserializerInstagram adapterDeserializerInstagram = new AdapterDeserializerInstagram(); //we create a object of AdapterDeserializerInstagram
+
+        Gson gsonDeserializerCustom = adapterDeserializerInstagram.buildGsonDeserializerMediaRecent(); //we save in object Gson the method what build gson deserializer media
+        IEndPointsInstagramApiRest iEndPointsInstagramApiRest = adapterDeserializerInstagram.establishConnectionInstagramApiRest(gsonDeserializerCustom); //we pass as parameter this object Gson and save in a object of IEndPointsInstagramApiRest
+        Call<ArrayResponseInstagram> arrayResponseInstagramCall = iEndPointsInstagramApiRest.getRecentMedia(); //we access the method of the interface, this bring the response
+
         arrayResponseInstagramCall.enqueue(new Callback<ArrayResponseInstagram>() { //the method enqueue manages the response of the api instagram
             @Override
             public void onResponse(@NonNull Call<ArrayResponseInstagram> call, @NonNull Response<ArrayResponseInstagram> response) {
@@ -97,11 +99,11 @@ public class FragmentInstagramApiRest extends Fragment {
 
                     ArrayResponseInstagram arrayResponseInstagram = response.body(); //body bring all the data
                     assert arrayResponseInstagram != null;
-                    dataInstagram = arrayResponseInstagram.getData();
+                    dataInstagram = arrayResponseInstagram.getData(); //we save the data of the rsponse in array dataInstagram
 
                     for (int i = 0; i < dataInstagram.size(); i++) {
-                        adapterInstagramApiRest.passData(dataInstagram);
-                        Log.i("instagram", "response: Successful " + dataInstagram.get(i).getImageLikes());
+                        adapterInstagramApiRest.passData(dataInstagram); //we pass the data to the method passData of the adapterInstagramApiRest
+                        Log.i("instagram", "response: Successful " + dataInstagram.get(i).getImageLikes()); //we show the likes by Log type info
                     }
 
                 }else {
@@ -127,7 +129,7 @@ public class FragmentInstagramApiRest extends Fragment {
     }
 
 }
-  /*data obtain of instagram, code, acces token, data a consume
+  /*data obtain of instagram, code, acces token, data to consume
   https://api.instagram.com/oauth/authorize/?client_id=e329a894184b4d45bacc45b0e20ee39e&redirect_uri=https://www.facebook.com/angeldavid.ruizcruz&response_type=code&scope=basic+comments+likes+public_content  //datos a traer de la api insta
     curl -F 'client_id=e329a894184b4d45bacc45b0e20ee39e' \n
             -F 'client_secret=1a236022510a4d8099ecf0ef0986c9f3' \n

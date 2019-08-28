@@ -1,7 +1,7 @@
 package com.example.angelruiz.cursoandroid.DatosAPI_REST_Instagram;
 
 public final class JsonKeysInstagram { //data of instagram objects and keys to consume
-    public static final String NAME_ARRAY = "data";
+    public static final String NAME_ARRAY_INSTAGRAM = "data";
     public static final String OBJECT_USER = "user"; //this object json contains the id and full name
     public static final String USER_ID = "id";
     public static final String USER_FULLNAME = "full_name";
