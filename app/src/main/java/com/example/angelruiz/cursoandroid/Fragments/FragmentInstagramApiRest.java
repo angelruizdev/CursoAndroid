@@ -39,22 +39,26 @@ public class FragmentInstagramApiRest extends Fragment {
     ArrayList<ArrayInstagramObjects> dataInstagram;
     AdapterInstagramApiRest adapterInstagramApiRest;
     RecyclerView rvShowInstagram;
+    String nameUsuarioLocal;
 
     public FragmentInstagramApiRest() {
         // Required empty public constructor
     }
 
+    //create the fmt and inicializa objs, necessary in fmt
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) { //create the fmt and inicializa objs, necessary in fmt
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
         dataInstagram = new ArrayList<>();
         getDataApiRest();
     }
 
+    //create view of fmt and inicializa their views, necessary in fmt
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { //create view of fmt and inicializa their views, necessary in fmt
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_instagram_api_rest, container, false);
+    nameUsuarioLocal = "Ángel Ruiz";
 
     rvShowInstagram = view.findViewById(R.id.rvShowInstagram);
     rvShowInstagram.setLayoutManager(new GridLayoutManager(context, 2)); //rv type grid whit 2 columns
@@ -70,22 +74,24 @@ public class FragmentInstagramApiRest extends Fragment {
                     fragmentDetailInstagramApiRest = new FragmentDetailInstagramApiRest(); //we instantiate the fmt of replacement
                 }
 
-                Bundle sendToData = new Bundle(); //with object bundle we pass data to FragmentDetailInstagramApiRest
-                sendToData.putString("imageUrlUser", dataInstagram.get(position).getImageUrlUser()); //here we use the position obtain form adapter
-                sendToData.putString("imageLikes", String.valueOf(dataInstagram.get(position).getImageLikes()));
+                //with object bundle and interface Parceable we pass data to FragmentDetailInstagramApiRest
+                Bundle sendToData = new Bundle();
+                sendToData.putParcelable("dataUserInstagram", dataInstagram.get(position)); //we pass whole array with the position obtain form adapter
+                sendToData.putString("nameUsuarioLocal", nameUsuarioLocal); //we pass variable local without parceable
                 fragmentDetailInstagramApiRest.setArguments(sendToData); //we pass the data the fmt destination
 
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentDetailInstagramApiRest);
                 fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit(); //we replace the fmt passing him data
+                fragmentTransaction.commit(); //we replace the fmt passing their data
             }
         });
 
     return view;
     }
 
-    public void getDataApiRest(){ //this method manages the rensponse of the api and the deserialization
+    //this method manages the rensponse of the api and the deserialization
+    public void getDataApiRest(){
         AdapterDeserializerInstagram adapterDeserializerInstagram = new AdapterDeserializerInstagram(); //we create a object of AdapterDeserializerInstagram
 
         Gson gsonDeserializerCustom = adapterDeserializerInstagram.buildGsonDeserializerMediaRecent(); //we save in object Gson the method what build gson deserializer media

@@ -3,22 +3,22 @@ package com.example.angelruiz.cursoandroid.Arrays;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-//podemos implementar la interface Parcelable para pasar datos a otra actividad
+//we implement the interface Parcelable for pass data to detalleimgcontacto, or other activity
 public class ArrayImgContacto implements Parcelable {
 
-    //estos son los datos que se mostraran en el list view
+    //data to show in grid and activity detailimgcontact
     private int id;
     private int imagen;
     private String nombre;
 
-    //los inicializamos con constructor
+    //we start theme with constructor
     public ArrayImgContacto(int id, int imagen, String nombre) {
         this.id = id;
         this.imagen = imagen;
         this.nombre = nombre;
     }
 
-    //creamos sus métodos get y set de cada atributo
+    //we create their methods get and set of each attribute
     public int getId() {
         return id;
     }
@@ -45,10 +45,11 @@ public class ArrayImgContacto implements Parcelable {
 
     //methods implemented by the interface Parceable
     @Override
-    public int describeContents() {
+    public int describeContents() { //this method is not very used
         return 0;
     }
 
+    //write your object's data to the passed-in Parcel
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
@@ -56,12 +57,14 @@ public class ArrayImgContacto implements Parcelable {
         dest.writeString(nombre);
     }
 
+    //constructor save and inicializa the values of entry
     protected ArrayImgContacto(Parcel in) {
         id = in.readInt();
         imagen = in.readInt();
         nombre = in.readString();
     }
 
+    //this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
     public static final Creator<ArrayImgContacto> CREATOR = new Creator<ArrayImgContacto>() {
         @Override
         public ArrayImgContacto createFromParcel(Parcel in) {
@@ -73,4 +76,5 @@ public class ArrayImgContacto implements Parcelable {
             return new ArrayImgContacto[size];
         }
     };
+    //methos implemented for the interface parceable
 }

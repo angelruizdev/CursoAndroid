@@ -24,7 +24,7 @@ public class ImagenGrid extends AppCompatActivity {
 
 private GridView gvImgContact;
 public FragmentSpinerBD fragmentSprDB;
-public Spinner sprDB;//declaramos el spr
+public Spinner sprDB; //declaramos el spr
 
 ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo ArrayImgContacto, para llenarlo con ese tipo de datos
 
@@ -36,11 +36,11 @@ ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo Arra
         Toolbar toolbar = findViewById(R.id.actionBarPersonalizado);
         setSupportActionBar(toolbar);
 
-        //getSupportActionBar().setTitle("Angel");//muestra titulo en toolbar
+        //getSupportActionBar().setTitle("Angel"); //muestra titulo en toolbar
         gvImgContact = findViewById(R.id.gvImgContact);
         fragmentSprDB = new FragmentSpinerBD();
-        sprDB = findViewById(R.id.sprBD);//inicializamos el spr
-        sprDB.setVisibility(View.GONE);//no se muestra el spiner al iniciar la activity(no ocupa su espacio, Invisible si)
+        sprDB = findViewById(R.id.sprBD); //inicializamos el spr
+        sprDB.setVisibility(View.GONE); //no se muestra el spiner al iniciar la activity(no ocupa su espacio, Invisible si)
 
         //arraylist para los nombre
         nombreContactos = new ArrayList<>();
@@ -74,13 +74,13 @@ ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo Arra
         //final AdapterImagenContacto adapterImgContact = new AdapterImagenContacto(ImagenGrid.this,R.layout.vista_adp_imgcontact,nomContactos,"");
         //gvImgContact.setAdapter(adapterImgContact);
 
-        //creamos el metodo setOnItemClickListener(), para pasar imagen y texto del item seleccionado del gridview a otra activity
+        //we pass image and text to the grid to detalleimgcontacto ussing interface Parceable
         gvImgContact.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
                 Intent passDataContactDetail = new Intent(getApplicationContext(), DetalleImgContacto.class);
-                passDataContactDetail.putExtra("nombreContactos", nombreContactos.get(position));
+                passDataContactDetail.putExtra("nombreContactos", nombreContactos.get(position)); //we pass whole the array in the key
                 startActivity(passDataContactDetail);
 
                 /*passing data with interface serializable
@@ -89,20 +89,22 @@ ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo Arra
                 ArrayImgContacto datosDetalle = (ArrayImgContacto)adapterView.getItemAtPosition(position);
                 detalleImgContacto.putExtra("datosContacto",(Serializable)datosDetalle);
                 startActivity(detalleImgContacto);*/
-                //getSupportActionBar().setTitle(nombre.get(position));//muestra el nombre de la poision seleccionada en la toolbar
+                //getSupportActionBar().setTitle(nombre.get(position)); //muestra el nombre de la poision seleccionada en la toolbar
             }
         });
     }
-//sobreescrivimos el metodo:onOptionsContextMenu:el cual perite inflar el menu con el archivo .menu. de res que tiene a los items a mostrar
-//llamado:menu_contexto usando el metodo inflate pasando el recurso y el objeto menu y retornamos true
+
+    //sobreescrivimos el metodo:onOptionsContextMenu:el cual perite inflar el menu con el archivo .menu. de res que tiene a los items a mostrar
+    //llamado:menu_contexto usando el metodo inflate pasando el recurso y el objeto menu y retornamos true
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
          getMenuInflater().inflate(R.menu.menu_opsiones, menu);//inflamos el menú
          return true;
     }
-//sobreescribimos el metodo:onOptionsItemSelected:el cual nos ayuda a manipular la opsion del item seleccionado del menu
-//mediante el parametro item y el metodo:getItemId() y switch buscamos por id el item seleccionado para que realice una accion si se selecciona el item con dicho id
-//en este mismo metodo colocamos el id del item que esta en el app bar para que aga algo si lo presionan
+
+    //sobreescribimos el metodo:onOptionsItemSelected:el cual nos ayuda a manipular la opsion del item seleccionado del menu
+    //mediante el parametro item y el metodo:getItemId() y switch buscamos por id el item seleccionado para que realice una accion si se selecciona el item con dicho id
+    //en este mismo metodo colocamos el id del item que esta en el app bar para que aga algo si lo presionan
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
       FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
