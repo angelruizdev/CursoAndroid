@@ -6,66 +6,66 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.FragmentApiRest">
 
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/srfRVAPI"
-    android:layout_width="match_parent"
-    android:layout_height="350dp"
-    tools:ignore="MissingConstraints">
-
-   <androidx.recyclerview.widget.RecyclerView
-       android:id="@+id/rvDatosApiRest"
+   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+       android:id="@+id/srfRVAPI"
        android:layout_width="match_parent"
-       android:layout_height="350dp"/>
+       android:layout_height="350dp"
+       tools:ignore="MissingConstraints">
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+      <androidx.recyclerview.widget.RecyclerView
+          android:id="@+id/rvDatosApiRest"
+          android:layout_width="match_parent"
+          android:layout_height="350dp"/>
 
-   <ProgressBar
-       android:id="@+id/pbDatosApi"
+   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+      <ProgressBar
+          android:id="@+id/pbDatosApi"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          style="?android:attr/progressBarStyle"
+          android:layout_centerHorizontal="true"
+          android:layout_marginTop="150dp"
+          android:layout_marginBottom="150dp" />
+
+   <com.google.android.material.floatingactionbutton.FloatingActionButton
+       android:id="@+id/fabImagenApi"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       style="?android:attr/progressBarStyle"
-       android:layout_centerHorizontal="true"
-       android:layout_marginTop="150dp"
-       android:layout_marginBottom="150dp" />
+       android:layout_alignParentBottom="true"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentEnd="true"
+       android:layout_gravity="bottom|end"
+       android:layout_margin="@dimen/fab_margin"
+       app:srcCompat="@android:drawable/ic_menu_camera"/>
 
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/fabImagenApi"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="@dimen/fab_margin"
-    app:srcCompat="@android:drawable/ic_menu_camera"/>
-
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:layout_alignParentBottom="true">
-   <EditText
-       android:id="@+id/etNumeroFolio"
+   <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:inputType="number"
-       android:hint="Número folio"/>
-   <EditText
-       android:id="@+id/etNombre"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:inputType="text"
-       android:hint="Nombre"/>
-   <EditText
-       android:id="@+id/etProfesion"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:inputType="text"
-       android:hint="Profesión"/>
-   <Button
-       android:id="@+id/btRegistraApi"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:text="@string/enviar"/>
-</LinearLayout>
+       android:orientation="vertical"
+       android:layout_alignParentBottom="true">
+      <EditText
+          android:id="@+id/etNumeroFolio"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="number"
+          android:hint="Número folio"/>
+      <EditText
+          android:id="@+id/etNombre"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="text"
+          android:hint="Nombre"/>
+      <EditText
+          android:id="@+id/etProfesion"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="text"
+          android:hint="Profesión"/>
+      <Button
+          android:id="@+id/btRegistraApi"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:text="@string/enviar"/>
+   </LinearLayout>
 </RelativeLayout>
