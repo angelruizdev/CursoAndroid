@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -44,7 +43,7 @@ public class FragmentInstagramApiRest extends Fragment {
     AdapterInstagramApiRest adapterInstagramApiRest;
     private RecyclerView rvShowDataInstagram;
     private String nameUsuarioLocal;
-    private ProgressBar pbLoudDataInstagram;
+    ProgressBar pbLoudDataInstagram;
 
     public FragmentInstagramApiRest() {
         // Required empty public constructor
@@ -56,10 +55,6 @@ public class FragmentInstagramApiRest extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         dataInstagram = new ArrayList<>();
-
-        //instanciamos la clase padre del AsyncTask para ejecutar la tarea en segundo plano
-        GetDataInstagramApiRest asynckGetDataInstagram = new GetDataInstagramApiRest();
-        asynckGetDataInstagram.execute();
     }
 
     //create view of fmt and inicializa their views, necessary in fmt
@@ -68,7 +63,10 @@ public class FragmentInstagramApiRest extends Fragment {
     view = inflater.inflate(R.layout.fragment_instagram_api_rest, container, false);
     nameUsuarioLocal = "Ángel Ruiz";
     pbLoudDataInstagram = view.findViewById(R.id.pbLoudDataInstagram);
-    pbLoudDataInstagram.setVisibility(View.VISIBLE);
+
+    //instanciamos la clase padre del AsyncTask para ejecutar la tarea en segundo plano
+    GetDataInstagramApiRest asynckGetDataInstagram = new GetDataInstagramApiRest();
+    asynckGetDataInstagram.execute();
 
     rvShowDataInstagram = view.findViewById(R.id.rvShowDataInstagram);
     rvShowDataInstagram.setLayoutManager(new GridLayoutManager(context, 2)); //rv type grid whit 2 columns
@@ -92,31 +90,41 @@ public class FragmentInstagramApiRest extends Fragment {
 
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentDetailInstagramApiRest);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit(); //we replace the fmt passing their data
+                fragmentTransaction.addToBackStack(null); //mantains the state current of the fmt
+                fragmentTransaction.commit(); //we apply changes, we replace the fmt passing their data
             }
         });
 
     return view;
     }
 
-   //creamos una clase y extendemos de AsyncTask para realizar tareas en segundo plano(otro hilo paralelo), sin interumpir el hilo principal(de la vista)
+    //this méthod get data of the Activity, if we pass data to his fmt
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        //terminar de ver --->
+    }
+
+    //creamos una clase y extendemos de AsyncTask para realizar tareas en segundo plano(otro hilo paralelo), sin interumpir el hilo principal(de la vista)
    @SuppressLint("StaticFieldLeak")
-   public class GetDataInstagramApiRest extends AsyncTask <Void, Integer, Void> { //es util para tareas que tardan poco en ejecutarce 5 seconds max
+   public class GetDataInstagramApiRest extends AsyncTask <Void, Integer, Boolean> { //es util para tareas que tardan poco en ejecutarce 5 seconds max
 
        //se ejecuta junto con el hilo principal
        @Override
        protected void onPreExecute() {
            super.onPreExecute();
-           //pbLoudDataInstagram.setMax(10);
-           //pbLoudDataInstagram.setProgress(0);
+           pbLoudDataInstagram.setVisibility(View.VISIBLE);
        }
 
        //ejecuta la tarea en segundo plano sin obtruir el hilo principal de la interface
        @Override
-       protected Void doInBackground(Void... voids) {
+       protected Boolean doInBackground(Void... voids) {
            getDataApiRest();
-           return null;
+           if(isCancelled()){
+               Log.i("Cancel: ", "Task canceled");
+           }
+           return true;
        }
 
        //se ejeuta durante la tarea, en hilo principal
@@ -128,16 +136,20 @@ public class FragmentInstagramApiRest extends Fragment {
 
        //se ejecuta cuando termina la tarea en segundo plano
        @Override
-       protected void onPostExecute(Void aVoid) {
-           super.onPostExecute(aVoid);
+       protected void onPostExecute(Boolean result) {
+           super.onPostExecute(result);
            pbLoudDataInstagram.setVisibility(View.INVISIBLE);
+           if(result){
+              Log.i("Result: ", "Task completed");
+           }
        }
 
        //cancela la tarea en segundo plano(no es conveniente)
        @Override
        protected void onCancelled() {
            super.onCancelled();
-           Toast.makeText(context, "canceled", Toast.LENGTH_SHORT).show();
+           pbLoudDataInstagram.setVisibility(View.INVISIBLE);
+           Log.i("Cancel: ", "Task canceled");
        }
    }
 
@@ -175,17 +187,13 @@ public class FragmentInstagramApiRest extends Fragment {
         });
     }
 
+    //save state of fmt, necessary in fmt
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) { //this méthod get data of the Activity, if we pass data to his fmt
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onPause() { //save state of fmt, necessary in fmt
+    public void onPause() {
         super.onPause();
     }
-
 }
+
   /*data obtain of instagram, code, acces token, data to consume
   https://api.instagram.com/oauth/authorize/?client_id=e329a894184b4d45bacc45b0e20ee39e&redirect_uri=https://www.facebook.com/angeldavid.ruizcruz&response_type=code&scope=basic+comments+likes+public_content  //datos a traer de la api insta
     curl -F 'client_id=e329a894184b4d45bacc45b0e20ee39e' \n

@@ -56,22 +56,29 @@ public class FragmentDetailInstagramApiRest extends Fragment {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_detail_instagram_api_rest, container, false);
+
         ivImageDetail = view.findViewById(R.id.ivImageDetail);
+        tvLikesDetail = view.findViewById(R.id.tvLikesDetail);
+
+        return view;
+    }
+
+    @SuppressLint("SetTextI18n")
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         Picasso.with(context) //we show the image whit pacasso too
                 .load(imageUrlUser) //we pass the image obtain from FragmentInstagramApiRest
                 .placeholder(R.drawable.ic_no_image)
                 .into(ivImageDetail);
 
-        tvLikesDetail = view.findViewById(R.id.tvLikesDetail);
         tvLikesDetail.setText(imageLikes + " Likes");
 
         Toast.makeText(context, "" + nameUsuarioLocal, Toast.LENGTH_SHORT).show(); //we show local variable
-        return view;
     }
 
     @Override
