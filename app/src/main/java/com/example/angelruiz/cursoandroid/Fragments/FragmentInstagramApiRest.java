@@ -61,16 +61,25 @@ public class FragmentInstagramApiRest extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     view = inflater.inflate(R.layout.fragment_instagram_api_rest, container, false);
-    nameUsuarioLocal = "Ángel Ruiz";
+
     pbLoudDataInstagram = view.findViewById(R.id.pbLoudDataInstagram);
-
-    //instanciamos la clase padre del AsyncTask para ejecutar la tarea en segundo plano
-    GetDataInstagramApiRest asynckGetDataInstagram = new GetDataInstagramApiRest();
-    asynckGetDataInstagram.execute();
-
     rvShowDataInstagram = view.findViewById(R.id.rvShowDataInstagram);
-    rvShowDataInstagram.setLayoutManager(new GridLayoutManager(context, 2)); //rv type grid whit 2 columns
-    adapterInstagramApiRest = new AdapterInstagramApiRest(context, dataInstagram); //we initialize the adapter
+
+    return view;
+    }
+
+    //this méthod do the initialization final of the components and get data of the Activity, if we pass data to his fmt
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        nameUsuarioLocal = "Ángel Ruiz";
+
+        //instanciamos la clase padre del AsyncTask para ejecutar la tarea en segundo plano
+        GetDataInstagramApiRest asynckGetDataInstagram = new GetDataInstagramApiRest();
+        asynckGetDataInstagram.execute();
+
+        rvShowDataInstagram.setLayoutManager(new GridLayoutManager(context, 2)); //rv type grid whit 2 columns
+        adapterInstagramApiRest = new AdapterInstagramApiRest(context, dataInstagram); //we initialize the adapter
         rvShowDataInstagram.setAdapter(adapterInstagramApiRest);
 
         adapterInstagramApiRest.setOnClickLiatenerItem(new IOnClickRecyclerInstagram() { //we acces the method of the adapter with the adapter
@@ -94,19 +103,9 @@ public class FragmentInstagramApiRest extends Fragment {
                 fragmentTransaction.commit(); //we apply changes, we replace the fmt passing their data
             }
         });
-
-    return view;
     }
 
-    //this méthod get data of the Activity, if we pass data to his fmt
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        //terminar de ver --->
-    }
-
-    //creamos una clase y extendemos de AsyncTask para realizar tareas en segundo plano(otro hilo paralelo), sin interumpir el hilo principal(de la vista)
+   //creamos una clase y extendemos de AsyncTask para realizar tareas en segundo plano(otro hilo paralelo), sin interumpir el hilo principal(de la vista)
    @SuppressLint("StaticFieldLeak")
    public class GetDataInstagramApiRest extends AsyncTask <Void, Integer, Boolean> { //es util para tareas que tardan poco en ejecutarce 5 seconds max
 
@@ -120,7 +119,7 @@ public class FragmentInstagramApiRest extends Fragment {
        //ejecuta la tarea en segundo plano sin obtruir el hilo principal de la interface
        @Override
        protected Boolean doInBackground(Void... voids) {
-           getDataApiRest();
+           getDataInstagramApiRest();
            if(isCancelled()){
                Log.i("Cancel: ", "Task canceled");
            }
@@ -154,7 +153,7 @@ public class FragmentInstagramApiRest extends Fragment {
    }
 
     //this method manages the rensponse of the api and the deserialization
-    private void getDataApiRest(){
+    private void getDataInstagramApiRest(){
         AdapterDeserializerInstagram adapterDeserializerInstagram = new AdapterDeserializerInstagram(); //we create a object of AdapterDeserializerInstagram
 
         Gson gsonDeserializerCustom = adapterDeserializerInstagram.buildGsonDeserializerMediaRecent(); //we save in object Gson the method what build gson deserializer media
@@ -171,9 +170,10 @@ public class FragmentInstagramApiRest extends Fragment {
                         dataInstagram = arrayResponseInstagram.getData(); //we save the data of the rsponse in array dataInstagram
 
                         for (int i = 0; i < dataInstagram.size(); i++) {
-                            adapterInstagramApiRest.passData(dataInstagram); //we pass the data to the method passData of the adapterInstagramApiRest
                             Log.i("instagram", "response: Successful " + dataInstagram.get(i).getImageLikes()); //we show the likes by Log type info
                         }
+
+                        adapterInstagramApiRest.passData(dataInstagram); //we pass the data to the method passData of the adapterInstagramApiRest
                     }
                 }else {
                         Log.i("instagram", "response: Failure");

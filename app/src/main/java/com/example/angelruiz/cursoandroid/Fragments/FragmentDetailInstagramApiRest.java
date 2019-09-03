@@ -66,6 +66,7 @@ public class FragmentDetailInstagramApiRest extends Fragment {
         return view;
     }
 
+    //this méthod do the initialization final of the components and get data of the Activity, if we pass data to his fmt
     @SuppressLint("SetTextI18n")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -81,8 +82,9 @@ public class FragmentDetailInstagramApiRest extends Fragment {
         Toast.makeText(context, "" + nameUsuarioLocal, Toast.LENGTH_SHORT).show(); //we show local variable
     }
 
+    //save state of fmt, necessary in fmt
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onPause() {
+        super.onPause();
     }
 }

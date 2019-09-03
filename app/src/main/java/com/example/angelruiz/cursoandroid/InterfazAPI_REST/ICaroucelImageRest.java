@@ -4,8 +4,9 @@ import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayCaroucelResponc
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 
 public interface ICaroucelImageRest {
     @GET("pokemon")
-    Call<ArrayCaroucelResponceRest> obtenerImagesRest();
+    Call<ArrayCaroucelResponceRest> obtenerImagesRest(@Query("limit") int limit, @Query("offset") int offset);
 }

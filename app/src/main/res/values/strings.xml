@@ -14,13 +14,9 @@
     <string name="menu_appbar_tocar">tocar</string>
     <string name="menu_popup_detalle">Detalles</string>
 
-    <string-array name="nombres">
-        <item>Ángel</item>
-        <item>Manuel</item>
-    </string-array>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="rbdesactivado">Desactivado</string>
     <string name="rbactivado">Activado</string>
     <string name="title_activity_prueba">Prueba</string>
@@ -37,7 +33,11 @@
     <string name="ws_mysql_menu">Eliga una opsion del menú</string>
     <string name="buscarFolio">Buscar</string>
     <string name="title_activity_maps">Map</string>
-    <string name="mi_mensaje">Hola <b>mundo</b>, me llamo <b>Pepe</b></string> <!-- pone en negritas <b> -->
-    <string name="bttext_next_instruction">Finalizar</string>
-    <string name="tvtext_description_instruction">Eneyda es una exelente persona. \nMuy inteligente</string> <!-- pone un salto de linea \n -->
+    <string name="mi_mensaje">Hola <b>mundo</b>, me llamo <b>Pepe</b></string>
+    <string name="bttext_next_instruction">Finalizar</string> <!-- pone en negritas <b> -->
+    <string name="tvtext_description_instruction">Eneyda es una exelente persona. \nMuy inteligente</string>
+    <string-array name="nombres">
+        <item>Ángel</item>
+        <item>Manuel</item>
+    </string-array> <!-- pone un salto de linea \n -->
 </resources>

@@ -31,10 +31,10 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
         this.dataInstagram = dataInstagram;
     }
 
-
+    //we fill the array
     public void passData(ArrayList<ArrayInstagramObjects> coments) {
         dataInstagram.addAll(coments);
-        notifyDataSetChanged();
+        notifyDataSetChanged(); //join the information of the arrays
     }
 
     public class ViewHolderInstagram extends RecyclerView.ViewHolder {

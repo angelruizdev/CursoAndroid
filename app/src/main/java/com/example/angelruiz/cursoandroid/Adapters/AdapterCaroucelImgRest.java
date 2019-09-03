@@ -40,6 +40,7 @@ public class AdapterCaroucelImgRest extends RecyclerView.Adapter<AdapterCaroucel
             tvNameCaroucel = itemView.findViewById(R.id.tvNameCaroucel);
         }
     }
+
     @NonNull
     @Override
     public ViewHolderCaroucel onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {

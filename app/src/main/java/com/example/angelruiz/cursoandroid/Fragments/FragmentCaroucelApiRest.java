@@ -40,6 +40,7 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
     RecyclerView rvImageCaroucel;
     private static final String TAG = "SALIDA";
     FloatingActionButton fabPrevius, fabNext;
+    int offset;
 
     public FragmentCaroucelApiRest() {
         // Required empty public constructor
@@ -50,13 +51,14 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
         super.onCreate(savedInstanceState);
         context = getContext();
         imgCaroucel = new ArrayList<>();
+        offset = 0;
 
         retrofit = new Retrofit.Builder() //instanceamos obj retrofit
                 .baseUrl("http://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        obtenerDatosApiRest();
+        obtenerDatosApiRest(offset);
     }
 
     @Override
@@ -65,7 +67,7 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
         cmpCarouselImage = vista.findViewById(R.id.ivCaroucelCmp);
 
         rvImageCaroucel = vista.findViewById(R.id.rvImageCaroucel);
-        rvImageCaroucel.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
+        rvImageCaroucel.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         adapterCaroucelImgRest = new AdapterCaroucelImgRest(context);
         rvImageCaroucel.setAdapter(adapterCaroucelImgRest);
         //cmpCarouselImage.carrucelAnimation(imagesCaroucel);
@@ -79,9 +81,10 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
         return vista;
     }
 
-    private void obtenerDatosApiRest() { //obtenemos los datos de la api con retrofit
+    //obtenemos los datos de la api con retrofit
+    private void obtenerDatosApiRest(int offset) {
         ICaroucelImageRest iCaroucelImageRest = retrofit.create(ICaroucelImageRest.class);
-        Call<ArrayCaroucelResponceRest> caroucelResponseCall = iCaroucelImageRest.obtenerImagesRest();
+        Call<ArrayCaroucelResponceRest> caroucelResponseCall = iCaroucelImageRest.obtenerImagesRest(5, offset);
         caroucelResponseCall.enqueue(new Callback<ArrayCaroucelResponceRest>() {
             @Override
             public void onResponse(@NonNull Call<ArrayCaroucelResponceRest> call, @NonNull Response<ArrayCaroucelResponceRest> response) {
@@ -89,12 +92,13 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
                     ArrayCaroucelResponceRest arrayCaroucelResponceRest = response.body();
                     assert arrayCaroucelResponceRest != null;
                     ArrayList<ArrayImgCaroucelRest> names = arrayCaroucelResponceRest.getResults();
+
                     for (int i = 0; i < names.size(); i++) { //show names by console
 
                        ArrayImgCaroucelRest arrayImgCaroucelRest = names.get(i);
                         Log.i(TAG, "NAMES:" + arrayImgCaroucelRest.getName());
-                         adapterCaroucelImgRest.listImagesCaroucel(names);
                     }
+                    adapterCaroucelImgRest.listImagesCaroucel(names);
                 }else {
                     Log.e(TAG, "onResponse:" + response.errorBody());
                     Toast.makeText(context, "Server error:", Toast.LENGTH_SHORT).show();
@@ -107,8 +111,9 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
         });
     }
 
+    //controls previous and next for caroucel image
     @Override
-    public void onClick(View v) { //controls previous and next for caroucel image
+    public void onClick(View v) {
        switch (v.getId()){
          case R.id.fabPrevius:
              //cmpCarouselImage.touchRight(imagesCaroucel);
@@ -119,14 +124,16 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
        }
     }
 
+    //if exit of fmt its stop the animacion
     @Override
-    public void onPause() { //if exit of fmt its stop the animacion
+    public void onPause() {
         this.cmpCarouselImage.cancelAnimation();
         super.onPause();
     }
 
+    //if exit of app its stop the animacion
     @Override
-    public void onDestroy() { //if exit of app its stop the animacion
+    public void onDestroy() {
         this.cmpCarouselImage.cancelAnimation();
         super.onDestroy();
     }
