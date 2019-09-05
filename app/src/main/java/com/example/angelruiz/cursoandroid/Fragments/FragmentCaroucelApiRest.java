@@ -11,15 +11,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.angelruiz.cursoandroid.Adapters.AdapterCaroucelImgRest;
-import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayCaroucelResponceRest;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.Components.CmpCarouselImage;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.ICaroucelImageRest;
 import com.example.angelruiz.cursoandroid.R;
+import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayCaroucelResponceRest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -36,24 +33,24 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
     ArrayList<ArrayImgCaroucelRest> imgCaroucel;
     CmpCarouselImage cmpCarouselImage;
     Retrofit retrofit;
-    AdapterCaroucelImgRest adapterCaroucelImgRest;
-    RecyclerView rvImageCaroucel;
     private static final String TAG = "SALIDA";
-    FloatingActionButton fabPrevius, fabNext;
-    int offset;
+    FloatingActionButton fabPreviusImage, fabNextImage;
+    private int offset;
 
     public FragmentCaroucelApiRest() {
         // Required empty public constructor
     }
 
+    //crea el fmt e inicializa todo menos vistas
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) { //crea el fmt e inicializa todo menos vistas
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
         imgCaroucel = new ArrayList<>();
         offset = 0;
 
-        retrofit = new Retrofit.Builder() //instanceamos obj retrofit
+        //instanceamos obj retrofit
+        retrofit = new Retrofit.Builder()
                 .baseUrl("http://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -64,46 +61,55 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { //crea vista de fmt e inicializa vistas
         vista = inflater.inflate(R.layout.fragment_caroucel_api_rest, container, false);
+
         cmpCarouselImage = vista.findViewById(R.id.ivCaroucelCmp);
-
-        rvImageCaroucel = vista.findViewById(R.id.rvImageCaroucel);
-        rvImageCaroucel.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        adapterCaroucelImgRest = new AdapterCaroucelImgRest(context);
-        rvImageCaroucel.setAdapter(adapterCaroucelImgRest);
-        //cmpCarouselImage.carrucelAnimation(imagesCaroucel);
-        cmpCarouselImage.setCurrentCaroucel(0);
-
-        fabPrevius = vista.findViewById(R.id.fabPrevius);
-        fabPrevius.setOnClickListener(this);
-        fabNext = vista.findViewById(R.id.fabNext);
-        fabNext.setOnClickListener(this);
+        fabPreviusImage = vista.findViewById(R.id.fabPreviusImage);
+        fabNextImage = vista.findViewById(R.id.fabNextImage);
 
         return vista;
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        cmpCarouselImage.setCurrentCaroucel(0);
+
+        fabPreviusImage.setOnClickListener(this);
+        fabNextImage.setOnClickListener(this);
+    }
+
     //obtenemos los datos de la api con retrofit
     private void obtenerDatosApiRest(int offset) {
+
         ICaroucelImageRest iCaroucelImageRest = retrofit.create(ICaroucelImageRest.class);
         Call<ArrayCaroucelResponceRest> caroucelResponseCall = iCaroucelImageRest.obtenerImagesRest(5, offset);
         caroucelResponseCall.enqueue(new Callback<ArrayCaroucelResponceRest>() {
             @Override
             public void onResponse(@NonNull Call<ArrayCaroucelResponceRest> call, @NonNull Response<ArrayCaroucelResponceRest> response) {
+
                 if(response.isSuccessful()){
                     ArrayCaroucelResponceRest arrayCaroucelResponceRest = response.body();
-                    assert arrayCaroucelResponceRest != null;
-                    ArrayList<ArrayImgCaroucelRest> names = arrayCaroucelResponceRest.getResults();
+                    if(arrayCaroucelResponceRest != null) {
 
-                    for (int i = 0; i < names.size(); i++) { //show names by console
+                        //we save the values of the response in array pojo
+                        ArrayList<ArrayImgCaroucelRest> names = arrayCaroucelResponceRest.getResults();
+                        imgCaroucel.addAll(names);
+                        cmpCarouselImage.carrucelAnimation(names);
 
-                       ArrayImgCaroucelRest arrayImgCaroucelRest = names.get(i);
-                        Log.i(TAG, "NAMES:" + arrayImgCaroucelRest.getName());
+                        //testing response, show names by console
+                        for (int i = 0; i < names.size(); i++) {
+
+                            ArrayImgCaroucelRest arrayImgCaroucelRest = names.get(i);
+                            Log.i(TAG, "NAMES: " + arrayImgCaroucelRest.getName());
+                        }
                     }
-                    adapterCaroucelImgRest.listImagesCaroucel(names);
                 }else {
                     Log.e(TAG, "onResponse:" + response.errorBody());
                     Toast.makeText(context, "Server error:", Toast.LENGTH_SHORT).show();
                 }
             }
+
             @Override
             public void onFailure(@NonNull Call<ArrayCaroucelResponceRest> call, @NonNull Throwable t) {
                     Log.e(TAG, "onFailure:" + t.getMessage());
@@ -115,12 +121,13 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View v) {
        switch (v.getId()){
-         case R.id.fabPrevius:
-             //cmpCarouselImage.touchRight(imagesCaroucel);
+         case R.id.fabPreviusImage:
+             cmpCarouselImage.touchRight(imgCaroucel);
          break;
-         case R.id.fabNext:
-             //cmpCarouselImage.touchLeft(imagesCaroucel);
-             break;
+         case R.id.fabNextImage:
+             cmpCarouselImage.touchLeft(imgCaroucel);
+
+         break;
        }
     }
 

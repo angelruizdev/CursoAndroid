@@ -8,22 +8,27 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class CmpCarouselImage extends FrameLayout {
     Context context;
     View view;
     ImageView ivCaroucel;
+    FloatingActionButton fabPreviusImage, fabNextImage;
+    TextView tvNameCaroucel;
     Handler handler;
-    int current, index;
-    Timer timer;
+    int count, index;
+    int position;
     int timerSeconds;
-    ArrayList<Integer> imagesCaroucel;
+    ArrayList<ArrayImgCaroucelRest> imagesCaroucel;
+    ArrayImgCaroucelRest x;
 
     public CmpCarouselImage(Context context) {
         super(context);
@@ -40,13 +45,18 @@ public class CmpCarouselImage extends FrameLayout {
     public void init() {
         view = inflate(context, R.layout.view_cmp_inflate_caroucel, null);
         this.ivCaroucel = view.findViewById(R.id.ivCaroucel);
+        this.fabPreviusImage = view.findViewById(R.id.fabPreviusImage);
+        this.fabNextImage = view.findViewById(R.id.fabNextImage);
+        this.tvNameCaroucel = view.findViewById(R.id.tvNameCaroucel);
+
         view.setOnTouchListener(new OnSwipeTouchListener(context));
         imagesCaroucel = new ArrayList<>();
         handler = new Handler();
-        current = 0;
+        position = 0;
+        count = 0;
         index = 0;
-        timerSeconds = 2000;
-        timer = new Timer();
+        timerSeconds = 4000;
+
         this.addView(view);
     }
 
@@ -59,11 +69,11 @@ public class CmpCarouselImage extends FrameLayout {
         }
 
         public void onSwipeLeft() {
-            touchLeft(imagesCaroucel);
+            //touchLeft(imagesCaroucel);
         }
 
         public void onSwipeRight() {
-            touchRight(imagesCaroucel);
+            //touchRight(imagesCaroucel);
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -96,33 +106,36 @@ public class CmpCarouselImage extends FrameLayout {
         }
     }
 
-    public void carrucelAnimation(final ArrayList<Integer> imagesCaroucel) {
+    public void carrucelAnimation(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+         handler.postDelayed(new Runnable() {
+             @Override
+             public void run() {
 
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        animation(current++, imagesCaroucel);
-                    }
-                });
-            }
-        };
-        timer.schedule(timerTask, 0, timerSeconds);
+                 if(count < 5) {
+                     position = count++;
+                     animation(position, imagesCaroucel);
+                 }else {
+                     handler.removeCallbacksAndMessages(null);
+                     count = 0;
+                 }
+                 handler.postDelayed(this, timerSeconds);
+             }
+         }, 0);
     }
 
-    public void animation(int crnt, final ArrayList<Integer> imagesCaroucel) {
-        if (current <= imagesCaroucel.size()) {
-            ivCaroucel.setImageResource(imagesCaroucel.get(current -1));
-        } else {
-            current = 0;
-       }
+    public void animation(int position, final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+
+        x = imagesCaroucel.get(position);
+        Picasso.with(context)
+                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/" + x.getNumberImage() + ".png")
+                .into(ivCaroucel);
+
+        tvNameCaroucel.setText(x.getName());
     }
 
     public void cancelAnimation(){
         if(this.handler != null){
-            this.timer.cancel();
+            this.handler.removeCallbacksAndMessages(null);
             this.handler = null;
         }
     }
@@ -130,12 +143,12 @@ public class CmpCarouselImage extends FrameLayout {
     public void setCurrentCaroucel(int index) { // continuar checar logica
     }
 
-    public void touchLeft(ArrayList<Integer> imagesCaroucel) {
-        animation(current++, imagesCaroucel);
+    public void touchLeft(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+        carrucelAnimation(imagesCaroucel);
     }
 
-    public void touchRight(ArrayList<Integer> imagesCaroucel) {
-        animation(current--, imagesCaroucel);
+    public void touchRight(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+        carrucelAnimation(imagesCaroucel);
     }
 }
 

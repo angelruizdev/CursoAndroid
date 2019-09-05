@@ -14,7 +14,8 @@ import com.example.angelruiz.cursoandroid.Arrays.ArrayVPagerInstruction;
 import com.example.angelruiz.cursoandroid.R;
 import java.util.List;
 
-public class CmpPointIndicatorIntruction extends FrameLayout { //extendemos de esta clase para inflar e inicializar los componentes de la vista personalizada, nos crea 2 métodos constructores
+//extendemos de esta clase para inflar e inicializar los componentes de la vista personalizada, nos crea 2 métodos constructores
+public class CmpPointIndicatorIntruction extends FrameLayout {
     LinearLayout llcontentPointsIntruction; //aqui se mostraran los puntos
     TextView[] pointsSlideIntro; //array de tipo tv para mostrar puntos
     Context context;
@@ -32,14 +33,16 @@ public class CmpPointIndicatorIntruction extends FrameLayout { //extendemos de e
         init();
     }
 
-    public void init(){ //inicializa la vista y sus componentes que inflan al adapter
+    //inicializa la vista y sus componentes que inflan al adapter
+    public void init(){
         View view = inflate(context, R.layout.view_cmp_point_instruction, null);
         llcontentPointsIntruction = view.findViewById(R.id.llcontentPointsIntruction);
         btExitInstruction = view.findViewById(R.id.btExitInstruction);
         this.addView(view);
     }
 
-    public void showPointInstruction( int position, List<ArrayVPagerInstruction> informacion){ //creamos y mostramos puntos
+    //creamos y mostramos puntos
+    public void showPointInstruction( int position, List<ArrayVPagerInstruction> informacion){
         pointsSlideIntro = new TextView[informacion.size()]; //el tamaño del array sera el numero de vistas slide instruction, por si se agraga otra vista al viewPager en automatico se crea otro punto
         llcontentPointsIntruction.removeAllViews();
 
