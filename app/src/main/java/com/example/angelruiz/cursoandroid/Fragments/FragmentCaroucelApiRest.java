@@ -123,22 +123,21 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
        switch (v.getId()){
          case R.id.fabPreviusImage:
              cmpCarouselImage.touchRight(imgCaroucel);
-         break;
+             break;
          case R.id.fabNextImage:
              cmpCarouselImage.touchLeft(imgCaroucel);
-
-         break;
-       }
+             break;
+         }
     }
 
     //if exit of fmt its stop the animacion
     @Override
     public void onPause() {
-        this.cmpCarouselImage.cancelAnimation();
+        //this.cmpCarouselImage.cancelAnimation();
         super.onPause();
     }
 
-    //if exit of app its stop the animacion
+    //if destroy of app its stop the animacion
     @Override
     public void onDestroy() {
         this.cmpCarouselImage.cancelAnimation();

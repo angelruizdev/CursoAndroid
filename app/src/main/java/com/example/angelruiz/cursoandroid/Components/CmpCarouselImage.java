@@ -24,11 +24,12 @@ public class CmpCarouselImage extends FrameLayout {
     FloatingActionButton fabPreviusImage, fabNextImage;
     TextView tvNameCaroucel;
     Handler handler;
-    int count, index;
+    int count, count1, index;
     int position;
     int timerSeconds;
     ArrayList<ArrayImgCaroucelRest> imagesCaroucel;
     ArrayImgCaroucelRest x;
+    boolean b;
 
     public CmpCarouselImage(Context context) {
         super(context);
@@ -54,6 +55,7 @@ public class CmpCarouselImage extends FrameLayout {
         handler = new Handler();
         position = 0;
         count = 0;
+        count1 = 5;
         index = 0;
         timerSeconds = 4000;
 
@@ -114,6 +116,7 @@ public class CmpCarouselImage extends FrameLayout {
                  if(count < 5) {
                      position = count++;
                      animation(position, imagesCaroucel);
+
                  }else {
                      handler.removeCallbacksAndMessages(null);
                      count = 0;
@@ -147,7 +150,7 @@ public class CmpCarouselImage extends FrameLayout {
         carrucelAnimation(imagesCaroucel);
     }
 
-    public void touchRight(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+    public void touchRight(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) { //do manual previus
         carrucelAnimation(imagesCaroucel);
     }
 }
