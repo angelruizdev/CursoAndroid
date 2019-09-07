@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +36,8 @@ import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,10 +70,17 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        context = getContext();
+        listaJson = new ArrayList<>();
+    }
+
+    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vista = inflater.inflate(R.layout.fragment_fragment_api_rest, container, false);
 
-        context = getContext();
         fabImagenApi = vista.findViewById(R.id.fabImagenApi);
         etNumeroFolio = vista.findViewById(R.id.etNumeroFolio);
         etNombre = vista.findViewById(R.id.etNombre);
@@ -78,20 +88,31 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         btRegistraApi = vista.findViewById(R.id.btRegistraApi);
 
         pb = vista.findViewById(R.id.pbDatosApi);
-        pb.setVisibility(View.VISIBLE);
-
         srfRVAPI = vista.findViewById(R.id.srfRVAPI);
-        btRegistraApi.setOnClickListener(this);
         rvDatosApiRest = vista.findViewById(R.id.rvDatosApiRest);
+
+        return vista;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        pb.setVisibility(View.VISIBLE);
+        btRegistraApi.setOnClickListener(this);
+
         rvDatosApiRest.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
 
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
         //rvDatosApiRest.setLayoutManager(gridLayoutManager);
 
+        Gson gson = new GsonBuilder().setLenient().create();
+
         retrofit = new Retrofit.Builder() //inicializamos nuestro obj retrofit
                 .baseUrl("https://proyectosangelito.000webhostapp.com/webServiceMysql/") //url de la API, debe terminar con slash(/)rft2
-                .addConverterFactory(GsonConverterFactory.create()).build(); //GsonConverterFactory, nos permite decerealizar los datos Json
+                .addConverterFactory(GsonConverterFactory.create(gson)).build(); //GsonConverterFactory, nos permite decerealizar los datos Json
         offset = 0;
+
         new DatosApiRest().execute(); //mostramos los datos, con una instancia de la clase que extiende de AsynckTask ejecutamos dicha clase en segundo plano, para ejecutar un AsynckTask creamos un objeto de la clase que lo extiende y accedemos a su metodo execute(), puede recibir parametros
 
         srfRVAPI.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -107,7 +128,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
                 cargarImagenGaleria();
             }
         });
-        return vista;
     }
 
     @Override
@@ -147,7 +167,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         final String nombre = etNombre.getText().toString();
         String profesion = etProfesion.getText().toString();
 
-        Call<ArrayRespuestaApiRest> registrarUusario = service.registroAPIRest(numeroFolio, nombre, profesion); //mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
+        Call<ArrayRespuestaApiRest> registrarUusario = service.registroAPIRest(Integer.parseInt(numeroFolio), nombre, profesion); //mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
         registrarUusario.enqueue(new Callback<ArrayRespuestaApiRest>() { //con el objeto Call, llamamos al metodo equeue, para crear los metodos onResponse, onFilure, el primero gestiona la respuesta debuelta por el server, el segundo cacha si hay error de malformacion de JSON o wx
             @Override
             public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//gestiona respuesta de datos de server
@@ -161,7 +181,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
 
             @Override
             public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {//gestiona si ocurren fallos al traer datos del server
-                Toast.makeText(context, "Error" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Error : " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.i("api rest full", t.getMessage());
                 notificacionNvoUsuario(nombre);
             }
         });
@@ -170,7 +191,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     private void notificacionNvoUsuario(String nombre) {
 
         Intent i = new Intent(context, WebServiceMysql.class);
-        PendingIntent pendingIntent =  PendingIntent.getActivity(context,0,i,PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent =  PendingIntent.getActivity(context,0, i, PendingIntent.FLAG_ONE_SHOT);
         Uri sonidoNotification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificacion = new NotificationCompat.Builder(context, "N")
                 .setSmallIcon(R.drawable.ic_menu_camera)
@@ -224,6 +245,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
                                 for (ArrayWSMysqlApi x : listaJson) {
                                     Log.e(TAG, "noms: " + x.getNombre());
                                 }
+
                                 for (int i = 0; i < listaJson.size(); i++) {
                                     ArrayWSMysqlApi api = listaJson.get(i);
                                     Log.e(TAG, "nombres: " + api.getNombre());

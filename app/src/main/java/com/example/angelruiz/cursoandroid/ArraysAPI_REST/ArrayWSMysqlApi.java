@@ -12,6 +12,14 @@ public class ArrayWSMysqlApi {//este array de clase, tiene los mismos campos del
     @SerializedName("imagen")//permite cargar archivos, doc, img etc.., si bienen con otro nombre desde el ws
     private Integer imagen;
 
+    public ArrayWSMysqlApi(int idPersona, int numeroFolio, String nombre, String profesion, Integer imagen) {
+        this.idPersona = idPersona;
+        this.numeroFolio = numeroFolio;
+        this.nombre = nombre;
+        this.profesion = profesion;
+        this.imagen = imagen;
+    }
+
     public int getIdPersona() {
         return idPersona;
     }

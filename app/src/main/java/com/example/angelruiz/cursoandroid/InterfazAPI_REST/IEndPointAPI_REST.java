@@ -16,7 +16,7 @@ public interface IEndPointAPI_REST {//esta interface nos permite acceder al list
 
     @FormUrlEncoded//esta notacion permite mandar los datos
     @POST("wsJSONRegistro.php")
-    Call<ArrayRespuestaApiRest> registroAPIRest(@Field("numeroFolio") String numeroFolio, @Field("nombre") String nombre,
+    Call<ArrayRespuestaApiRest> registroAPIRest(@Field("numeroFolio") int numeroFolio, @Field("nombre") String nombre,
                                                 @Field("profesion") String profesion);
     @POST("wsJSONRegistro.php")
     Call<ArrayRespuestaApiRest> registroAPIRest1(@Body ArrayRespuestaApiRest parametos);//con body podemos mandar varios parametros sin especificar cada uno

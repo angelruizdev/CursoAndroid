@@ -28,8 +28,7 @@ public class CmpCarouselImage extends FrameLayout {
     int position;
     int timerSeconds;
     ArrayList<ArrayImgCaroucelRest> imagesCaroucel;
-    ArrayImgCaroucelRest x;
-    boolean b;
+    ArrayImgCaroucelRest arrayImgCaroucelRest;
 
     public CmpCarouselImage(Context context) {
         super(context);
@@ -70,7 +69,7 @@ public class CmpCarouselImage extends FrameLayout {
             gestureDetector = new GestureDetector(context, new GestureListener());
         }
 
-        public void onSwipeLeft() {
+        public void onSwipeLeft() { //finish slide automatic
             //touchLeft(imagesCaroucel);
         }
 
@@ -128,12 +127,12 @@ public class CmpCarouselImage extends FrameLayout {
 
     public void animation(int position, final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
 
-        x = imagesCaroucel.get(position);
+        arrayImgCaroucelRest = imagesCaroucel.get(position);
         Picasso.with(context)
-                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/" + x.getNumberImage() + ".png")
+                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/" + arrayImgCaroucelRest.getNumberImage() + ".png")
                 .into(ivCaroucel);
 
-        tvNameCaroucel.setText(x.getName());
+        tvNameCaroucel.setText(arrayImgCaroucelRest.getName());
     }
 
     public void cancelAnimation(){
