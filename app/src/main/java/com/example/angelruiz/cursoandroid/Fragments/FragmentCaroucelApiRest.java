@@ -73,7 +73,7 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        cmpCarouselImage.setCurrentCaroucel(0);
+        cmpCarouselImage.currentCaroucelImage(0);
 
         fabPreviusImage.setOnClickListener(this);
         fabNextImage.setOnClickListener(this);

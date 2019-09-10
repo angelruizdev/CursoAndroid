@@ -52,6 +52,7 @@ private static final String TAG = "API_REST";
     public void onBindViewHolder(@NonNull final ViewHolderAdapterApiRest viewHolderAdapterApiRest, @SuppressLint("RecyclerView") final int pos) {
         //String urlImage = "https://source.unsplash.com/random/"+pokemon.get(i).getImagenPokemon()+".png";
         String urlImage = "https://source.unsplash.com/random/";
+
         Picasso.with(context).load(urlImage).into(viewHolderAdapterApiRest.ivImgProducto);
         //viewHolderAdapterApiRest.ivImgProducto.setImageResource(pokemon.get(pos).getImagenPokemon());
         viewHolderAdapterApiRest.tvDetalleProducto.setText(String.valueOf(pokemon.get(pos).getNombre()+" - "+pokemon.get(pos).getProfesion()));
@@ -64,6 +65,7 @@ private static final String TAG = "API_REST";
                 eliminarUsuario.enqueue(new Callback<ArrayRespuestaApiRest>() {
                     @Override
                     public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
+
                         if (response.isSuccessful()) {
                             Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
                         } else {
@@ -88,6 +90,7 @@ private static final String TAG = "API_REST";
     public class ViewHolderAdapterApiRest extends RecyclerView.ViewHolder {
         TextView tvDetalleProducto;
         ImageView ivImgProducto, ivElimProducto;
+
         public ViewHolderAdapterApiRest(@NonNull View itemView) {
             super(itemView);
             tvDetalleProducto = itemView.findViewById(R.id.tvDetalleProducto);

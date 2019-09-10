@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.R;
@@ -112,7 +113,7 @@ public class CmpCarouselImage extends FrameLayout {
              @Override
              public void run() {
 
-                 if(count < 5) {
+                 if(count < imagesCaroucel.size()) {
                      position = count++;
                      animation(position, imagesCaroucel);
 
@@ -133,6 +134,21 @@ public class CmpCarouselImage extends FrameLayout {
                 .into(ivCaroucel);
 
         tvNameCaroucel.setText(arrayImgCaroucelRest.getName());
+        currentCaroucelImage(position);
+    }
+
+    public void currentCaroucelImage(int current){
+        Toast.makeText(context, "current" + current,  Toast.LENGTH_SHORT).show(); //pos actual de la img
+    }
+
+    public void touchLeft(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+        //cancelAnimation(); permite que no se adelante el timpo si avanzamos una imagen
+        //carrucelAnimation(imagesCaroucel);
+        carrucelAnimation(imagesCaroucel);
+    }
+
+    public void touchRight(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) { //do manual previus
+        carrucelAnimation(imagesCaroucel);
     }
 
     public void cancelAnimation(){
@@ -140,17 +156,6 @@ public class CmpCarouselImage extends FrameLayout {
             this.handler.removeCallbacksAndMessages(null);
             this.handler = null;
         }
-    }
-
-    public void setCurrentCaroucel(int index) { // continuar checar logica
-    }
-
-    public void touchLeft(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
-        carrucelAnimation(imagesCaroucel);
-    }
-
-    public void touchRight(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) { //do manual previus
-        carrucelAnimation(imagesCaroucel);
     }
 }
 

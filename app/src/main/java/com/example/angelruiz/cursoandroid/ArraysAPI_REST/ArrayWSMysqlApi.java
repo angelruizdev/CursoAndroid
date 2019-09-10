@@ -2,14 +2,21 @@ package com.example.angelruiz.cursoandroid.ArraysAPI_REST;
 
 import com.google.gson.annotations.SerializedName;
 
-public class ArrayWSMysqlApi {//este array de clase, tiene los mismos campos del JSON que devuelve la API, ya que aqui los guardara para mostrarlos en el RV
+//este array de clase, tiene los mismos campos del JSON que devuelve la API, ya que aqui los guardara para mostrarlos en el RV
+public class ArrayWSMysqlApi {
 
     private int idPersona;
+
+    @SerializedName("numeroFolio") //permite cargar archivos, doc, img etc.., si bienen con otro nombre desde el ws
     private int numeroFolio;
+
+    @SerializedName("nombre")
     private String nombre;
+
     @SerializedName("profesion")
     private String profesion;
-    @SerializedName("imagen")//permite cargar archivos, doc, img etc.., si bienen con otro nombre desde el ws
+
+    @SerializedName("imagen")
     private Integer imagen;
 
     public ArrayWSMysqlApi(int idPersona, int numeroFolio, String nombre, String profesion, Integer imagen) {
