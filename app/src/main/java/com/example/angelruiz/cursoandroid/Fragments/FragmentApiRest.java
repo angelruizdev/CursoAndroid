@@ -33,6 +33,7 @@ import com.example.angelruiz.cursoandroid.Activitys.WebServiceMysql;
 import com.example.angelruiz.cursoandroid.Adapters.AdapterApiRest;
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickApiRest;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -60,6 +61,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     Button btRegistraApi;
     private Retrofit retrofit;
     ArrayList<ArrayWSMysqlApi> listaJson;
+    IEndPointAPI_REST service;
+    private AdapterApiRest adapterApiRest;
     private static final String TAG = "API_REST_LOG_E";
     private int offset;
     RecyclerView rvDatosApiRest;
@@ -111,6 +114,9 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         retrofit = new Retrofit.Builder() //inicializamos nuestro obj retrofit
                 .baseUrl("https://proyectosangelito.000webhostapp.com/webServiceMysql/") //url de la API, debe terminar con slash(/)rft2
                 .addConverterFactory(GsonConverterFactory.create()).build(); //GsonConverterFactory, nos permite decerealizar los datos Json
+
+        service = retrofit.create(IEndPointAPI_REST.class); //unimos nuestra interfaz mediante el obj retrofit
+
         offset = 0;
 
         new DatosApiRest().execute(); //mostramos los datos, con una instancia de la clase que extiende de AsynckTask ejecutamos dicha clase en segundo plano, para ejecutar un AsynckTask creamos un objeto de la clase que lo extiende y accedemos a su metodo execute(), puede recibir parametros
@@ -150,7 +156,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         }
     }
 
-    //parametros a guardar en bd mediante ws en interfaz
+    //parametros a guardar en bd(api rest) mediante ws en interfaz
     @Override
     public void onClick(View v) {
 
@@ -167,12 +173,11 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         }
     }
 
+    //register user in bd Api Rest
     private void registrarUsuarioApi(int numberFolio, final String name, String profetion) {
 
-        IEndPointAPI_REST service = retrofit.create(IEndPointAPI_REST.class); //unimos nuestra interfaz mediante el obj retrofit
-
-        Call<ArrayRespuestaApiRest> registrarUusario = service.registroAPIRest(numberFolio, name, profetion); //mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
-        registrarUusario.enqueue(new Callback<ArrayRespuestaApiRest>() { //con el objeto Call, llamamos al metodo equeue, para crear los metodos onResponse, onFilure, el primero gestiona la respuesta debuelta por el server, el segundo cacha si hay error de malformacion de JSON o wx
+        Call<ArrayRespuestaApiRest> registerUserApiRest = service.registroAPIRest(numberFolio, name, profetion); //mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
+        registerUserApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() { //con el objeto Call, llamamos al metodo equeue, para crear los metodos onResponse, onFilure, el primero gestiona la respuesta debuelta por el server, el segundo cacha si hay error de malformacion de JSON o wx
             @Override
             public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//gestiona respuesta de datos de server
 
@@ -192,6 +197,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         });
     }
 
+    //notification push to register new user
     private void notificacionNvoUsuario(String name) {
 
         Intent i = new Intent(context, WebServiceMysql.class);
@@ -229,54 +235,87 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         //colocamos la logica en su metodo, doInBackground, lo que hara el AnsyckTask
         @Override
         protected Void doInBackground(Void... voids) {
-            IEndPointAPI_REST service = retrofit.create(IEndPointAPI_REST.class);
-            Call<ArrayRespuestaApiRest> llamarRespuesta = service.obtenerListadoJson(); //el metodo para traer datos del server no pide parametros
-
-            llamarRespuesta.enqueue(new Callback<ArrayRespuestaApiRest>() {
-                @Override
-                public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//el metodo response recibe,ArrayRespuestaApiRest, que guarda los datos de la API
-                    if (response.isSuccessful()) { //verificamos que la respuesta del servidor sea = 200 a 300 satisfactoria
-                        ArrayRespuestaApiRest respuestaApiRest = response.body(); //creamos un obj de ArrayRespuestaApiRest, para que guarde los datos del ws,Body() trae la data, los datos del arreglo json a consumir del ws ApRst
-
-                        if (respuestaApiRest != null) {
-                            listaJson = respuestaApiRest.getResults(); //con un obj de tipo ArrayWSMysqlApi guardamos los datos para pasarcelos al adapter del RV
-
-                            if (listaJson != null) { //checamos si el array trae los datos de la API
-
-                                final AdapterApiRest adapterApiRest = new AdapterApiRest(listaJson, context);//si es asi los mostramos en el RV, ya que recibe un array desde eladapter
-                                rvDatosApiRest.setAdapter(adapterApiRest);
-                                pb.setVisibility(View.GONE); //ocultamos el progressBar cuando se muestren los datos en el RV,publishProgress(n);este metodo recibe un entero y mostrara el estado de progreso en en progressBar
-                                srfRVAPI.setRefreshing(false);
-
-                                //mostramos los valores desde el ws por consla
-                                for (ArrayWSMysqlApi x : listaJson) {
-                                    Log.e(TAG, "noms: " + x.getNombre());
-                                }
-
-                                for (int i = 0; i < listaJson.size(); i++) {
-                                    ArrayWSMysqlApi api = listaJson.get(i);
-                                    Log.e(TAG, "nombres: " + api.getNombre());
-                                }
-                            } else {
-                                Toast.makeText(context, "vacio", Toast.LENGTH_SHORT).show();
-                            }
-
-                        } else {
-                            Toast.makeText(context, "sin respuesta", Toast.LENGTH_SHORT).show();
-                            Log.e(TAG, "onResponse: "+ response.errorBody());
-                        }
-                    } else {
-                        Log.e(TAG, "onResponse: "+ response.errorBody());
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {//este metodo cacha si hay un error al conectar al servidor API
-                    Log.e(TAG, "onFailure: " + t.getMessage());
-                }
-            });
+            showRegisterApiRest();
             return null;
         }
+    }
+
+    //show data consumed of Api Rest
+    private void showRegisterApiRest(){
+
+        Call<ArrayRespuestaApiRest> callRegisterResponse = service.obtenerListadoJson(); //el metodo para traer datos del server no pide parametros
+
+        callRegisterResponse.enqueue(new Callback<ArrayRespuestaApiRest>() {
+            @Override
+            public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//el metodo response recibe,ArrayRespuestaApiRest, que guarda los datos de la API
+                if (response.isSuccessful()) { //verificamos que la respuesta del servidor sea = 200 a 300 satisfactoria
+                    ArrayRespuestaApiRest respuestaApiRest = response.body(); //creamos un obj de ArrayRespuestaApiRest, para que guarde los datos del ws,Body() trae la data, los datos del arreglo json a consumir del ws ApRst
+
+                    if (respuestaApiRest != null) {
+                        listaJson = respuestaApiRest.getResults(); //con un obj de tipo ArrayWSMysqlApi guardamos los datos para pasarcelos al adapter del RV
+
+                        if (listaJson != null) { //checamos si el array trae los datos de la API
+
+                            adapterApiRest = new AdapterApiRest(context, listaJson);//si es asi los mostramos en el RV, ya que recibe un array desde eladapter
+                            rvDatosApiRest.setAdapter(adapterApiRest);
+
+                            pb.setVisibility(View.GONE); //ocultamos el progressBar cuando se muestren los datos en el RV,publishProgress(n);este metodo recibe un entero y mostrara el estado de progreso en en progressBar
+                            srfRVAPI.setRefreshing(false);
+
+                            //mostramos los valores desde el ws por consola
+                            for (ArrayWSMysqlApi x : listaJson) {
+                                Log.e(TAG, "noms: " + x.getNombre());
+                            }
+
+                            for (int i = 0; i < listaJson.size(); i++) {
+                                ArrayWSMysqlApi api = listaJson.get(i);
+                                Log.e(TAG, "nombres: " + api.getNombre());
+                            }
+                        } else {
+                            Toast.makeText(context, "vacio", Toast.LENGTH_SHORT).show();
+                        }
+
+                    } else {
+                        Toast.makeText(context, "sin respuesta", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "onResponse: "+ response.errorBody());
+                    }
+                } else {
+                    Log.e(TAG, "onResponse: "+ response.errorBody());
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) { //este metodo cacha si hay un error al conectar al servidor API
+                Log.e(TAG, "onFailure: " + t.getMessage());
+                Toast.makeText(context, ""+ t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void deleteRegisterApiRest(){
+
+      adapterApiRest.setOnClickListenerDelete(new IOnClickApiRest() {
+         @Override
+         public void onClickImageDelete(int position) {
+
+            Call<ArrayRespuestaApiRest> deleteRegisterApiRest = service.eliminarRegApiRest(listaJson.get(position).getIdPersona());
+            deleteRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
+               @Override
+               public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
+                    if (response.isSuccessful()){
+                        Log.i("response", "succesfull");
+                    }else {
+                        Log.i("response", "no succesfull");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
+                        Log.i("filure", t.getMessage());
+                    }
+                });
+            }
+        });
     }
 }
 

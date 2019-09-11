@@ -139,7 +139,7 @@ ListView lvContactos;
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:layout_gravity="center"
-        android:onClick="OnClick"
+        android:onClick="IOnClickApiRest"
         android:text="Calcular"/>
 
     <TextView

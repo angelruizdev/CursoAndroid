@@ -22,13 +22,13 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
     private ArrayList<ArrayInstagramObjects> dataInstagram; //save the data obtain form api instagram whit(DeserializeArrayResponseInstagram)
     private IOnClickRecyclerInstagram listener; //we create a object of the interface for pass him tha position of the item rv
 
-    public void setOnClickLiatenerItem(IOnClickRecyclerInstagram listener){ //method for implement the onClickListener in rv the FragmentInstagramApiRest
-        this.listener = listener;
-    }
-
     public AdapterInstagramApiRest(Context context, ArrayList<ArrayInstagramObjects> dataInstagram) {
         this.context = context;
         this.dataInstagram = dataInstagram;
+    }
+
+    public void setOnClickLiatenerItem(IOnClickRecyclerInstagram listener){ //method for implement the onClickListener in rv the FragmentInstagramApiRest
+        this.listener = listener;
     }
 
     //we fill the array
@@ -65,6 +65,7 @@ public class AdapterInstagramApiRest extends RecyclerView.Adapter<AdapterInstagr
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderInstagram holder, int position) {
+
        final ArrayInstagramObjects arrayInstagramObjects = dataInstagram.get(position); // we obtain the position of array(pojo)
        Picasso.with(context)
                .load(arrayInstagramObjects.getImageUrlUser()) //dataInstagram.get(position).getImageUrlUser() - together - we show the image from link inastagram from pojo whit method get

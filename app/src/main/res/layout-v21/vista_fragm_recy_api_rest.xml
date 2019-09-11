@@ -14,6 +14,7 @@
             android:id="@+id/ivImgProducto"
             android:layout_width="80dp"
             android:layout_height="80dp"/>
+
         <TextView
             android:id="@+id/tvDetalleProducto"
             android:layout_width="0dp"
@@ -21,11 +22,12 @@
             android:layout_weight="1"
             android:layout_gravity="center"
             android:padding="10dp"/>
-        <ImageView
-            android:id="@+id/ivElimProducto"
+
+        <ImageButton
+            android:id="@+id/ibElimProducto"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center"
-            android:src="@drawable/ic_delete"/>
+            android:background="@drawable/ic_delete"/>
     </LinearLayout>
 </RelativeLayout>

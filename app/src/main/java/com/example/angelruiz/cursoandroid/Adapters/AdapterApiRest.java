@@ -2,84 +2,62 @@ package com.example.angelruiz.cursoandroid.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
-import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickApiRest;
 import com.example.angelruiz.cursoandroid.R;
-import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AdapterApiRest extends RecyclerView.Adapter<AdapterApiRest.ViewHolderAdapterApiRest> {
-private ArrayList<ArrayWSMysqlApi> pokemon;
+
 public Context context;
+private ArrayList<ArrayWSMysqlApi> pokemon;
+private IOnClickApiRest listener;
 private Retrofit retrofit;
 private static final String TAG = "API_REST";
 
-    public  AdapterApiRest(ArrayList<ArrayWSMysqlApi> pokemon, Context context){
-       this.pokemon = pokemon;
+    public  AdapterApiRest(Context context, ArrayList<ArrayWSMysqlApi> pokemon){
        this.context = context;
+       this.pokemon = pokemon;
+    }
+
+    public void setOnClickListenerDelete(IOnClickApiRest listener){
+        this.listener = listener;
     }
 
     @NonNull
     @Override
     public ViewHolderAdapterApiRest onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View vista = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vista_fragm_recy_api_rest, viewGroup, false);
-        retrofit = new Retrofit.Builder()
-                .baseUrl("https://proyectosangelito.000webhostapp.com/webServiceMysql/")//url de la API, debe terminar con slash(/)rft2
-                .addConverterFactory(GsonConverterFactory.create()).build();
-        return new ViewHolderAdapterApiRest(vista);
+
+        return new ViewHolderAdapterApiRest(vista, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderAdapterApiRest viewHolderAdapterApiRest, @SuppressLint("RecyclerView") final int pos) {
-        //String urlImage = "https://source.unsplash.com/random/"+pokemon.get(i).getImagenPokemon()+".png";
         String urlImage = "https://source.unsplash.com/random/";
 
-        Picasso.with(context).load(urlImage).into(viewHolderAdapterApiRest.ivImgProducto);
-        //viewHolderAdapterApiRest.ivImgProducto.setImageResource(pokemon.get(pos).getImagenPokemon());
+        Picasso.with(context)
+                .load(urlImage)
+                .placeholder(R.drawable.ic_no_image)
+                .into(viewHolderAdapterApiRest.ivImgProducto);
+
         viewHolderAdapterApiRest.tvDetalleProducto.setText(String.valueOf(pokemon.get(pos).getNombre()+" - "+pokemon.get(pos).getProfesion()));
-        viewHolderAdapterApiRest.ivElimProducto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                IEndPointAPI_REST service = retrofit.create(IEndPointAPI_REST.class);
 
-                Call<ArrayRespuestaApiRest> eliminarUsuario = service.eliminarRegApiRest(pokemon.get(pos).getIdPersona());
-                eliminarUsuario.enqueue(new Callback<ArrayRespuestaApiRest>() {
-                    @Override
-                    public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
-
-                        if (response.isSuccessful()) {
-                            Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(context, "No eliminado", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
-                        Log.e(TAG, "onFailure" + t.getMessage());
-                    }
-                });
-            }
-        });
+        viewHolderAdapterApiRest.ibElimProducto.setImageResource(R.drawable.ic_delete);
     }
 
     @Override
@@ -88,14 +66,22 @@ private static final String TAG = "API_REST";
     }
 
     public class ViewHolderAdapterApiRest extends RecyclerView.ViewHolder {
+        ImageView ivImgProducto;
         TextView tvDetalleProducto;
-        ImageView ivImgProducto, ivElimProducto;
+        ImageButton ibElimProducto;
 
-        public ViewHolderAdapterApiRest(@NonNull View itemView) {
+        public ViewHolderAdapterApiRest(@NonNull View itemView, final IOnClickApiRest listener) {
             super(itemView);
             tvDetalleProducto = itemView.findViewById(R.id.tvDetalleProducto);
             ivImgProducto = itemView.findViewById(R.id.ivImgProducto);
-            ivElimProducto = itemView.findViewById(R.id.ivElimProducto);
+            ibElimProducto = itemView.findViewById(R.id.ibElimProducto);
+            ibElimProducto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    listener.onClickImageDelete(position);
+                }
+            });
         }
     }
 }

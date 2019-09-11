@@ -2,7 +2,6 @@ package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.angelruiz.cursoandroid.R;
 
@@ -60,9 +61,9 @@ public class Bienvenido extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
-//este metodo mostrara el menu si presionan la imagen, de igual forma mediante un objeto de la clase PopMenu
-//inflamos el menu pasandole el nombre del archivo menu, este menu tiene su propio metodo escuchador:setOnMenuItemClickListener:
-//con el cual mediante su parametro:menuItem:podemos saber cual item se selecciona del menu utilizando switch mediante el id del item
+    //este metodo mostrara el menu si presionan la imagen, de igual forma mediante un objeto de la clase PopMenu
+    //inflamos el menu pasandole el nombre del archivo menu, este menu tiene su propio metodo escuchador:setOnMenuItemClickListener:
+    //con el cual mediante su parametro:menuItem:podemos saber cual item se selecciona del menu utilizando switch mediante el id del item
     public void menuPopup(View v){
         ImageView ivMenuPopDetalle=(ImageView)findViewById(R.id.menuPopDetalle);
         PopupMenu popupMenu = new PopupMenu(this, ivMenuPopDetalle);//el objeto recibe al control en el constructor

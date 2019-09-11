@@ -17,7 +17,7 @@ import com.example.angelruiz.cursoandroid.Arrays.ArrayFragmentListaRecycler;
 import com.example.angelruiz.cursoandroid.R;
 
 import java.util.ArrayList;
-//para crear metodo OnClick en el RV, impelementamos la interface: View.OnClickListener y su metodo
+//para crear metodo IOnClickApiRest en el RV, impelementamos la interface: View.OnClickListener y su metodo
 public class AdapterFragmentListaRecycler extends
         RecyclerView.Adapter<AdapterFragmentListaRecycler.ViewHolderFragmentListRecycler> implements View.OnClickListener {
 
@@ -25,7 +25,7 @@ public class AdapterFragmentListaRecycler extends
     private Activity activity;
     private Context context;//(menu),necesitamos un contexto para el menuPopUp
     private int position;//esta variable recivira la posision del adapterRV que tenga cada item
-    private View.OnClickListener listener;//declaramos un objeto de tipo View.OnClick,para el (menú) y el OnClick en el RV
+    private View.OnClickListener listener;//declaramos un objeto de tipo View.IOnClickApiRest,para el (menú) y el IOnClickApiRest en el RV
 
     public AdapterFragmentListaRecycler(ArrayList<ArrayFragmentListaRecycler> personas, Activity activity, Context context){
         this.personas=personas;
