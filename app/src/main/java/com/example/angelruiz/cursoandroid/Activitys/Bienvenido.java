@@ -65,14 +65,14 @@ public class Bienvenido extends AppCompatActivity {
     //inflamos el menu pasandole el nombre del archivo menu, este menu tiene su propio metodo escuchador:setOnMenuItemClickListener:
     //con el cual mediante su parametro:menuItem:podemos saber cual item se selecciona del menu utilizando switch mediante el id del item
     public void menuPopup(View v){
-        ImageView ivMenuPopDetalle=(ImageView)findViewById(R.id.menuPopDetalle);
+        ImageView ivMenuPopDetalle = findViewById(R.id.menuPopDetalle);
         PopupMenu popupMenu = new PopupMenu(this, ivMenuPopDetalle);//el objeto recibe al control en el constructor
         popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());//inflamo el menu
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 switch (menuItem.getItemId()){
-                    case R.id.mDetalle:
+                    case R.id.mDelete:
                       Toast.makeText(getBaseContext(), "Facebook", Toast.LENGTH_SHORT).show();//recibe un contexto diferente:getBaseContext:al estar dentro de un metodo
                     break;
                 }

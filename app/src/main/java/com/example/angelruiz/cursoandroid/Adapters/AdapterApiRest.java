@@ -79,7 +79,7 @@ private static final String TAG = "API_REST";
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    listener.onClickImageDelete(position);
+                    listener.onClickImageDelete(v, position);
                 }
             });
         }

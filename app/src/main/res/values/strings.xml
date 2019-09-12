@@ -13,6 +13,7 @@
     <string name="menu_contexto_telefono">Teléfono</string>
     <string name="menu_appbar_tocar">tocar</string>
     <string name="menu_popup_detalle">Detalles</string>
+    <string name="menu_popup_delete">Eliminar</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

@@ -6,22 +6,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragments.FragmentApiRest">
 
-   <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-       android:id="@+id/srfRVAPI"
-       android:layout_width="match_parent"
-       android:layout_height="350dp"
-       android:orientation="vertical"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintTop_toTopOf="parent"
-       app:layout_constraintVertical_bias="0"
-       tools:ignore="MissingConstraints">
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/srfRVAPI"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="MissingConstraints">
 
-      <androidx.recyclerview.widget.RecyclerView
-          android:id="@+id/rvDatosApiRest"
-          android:layout_width="match_parent"
-          android:layout_height="350dp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDatosApiRest"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
 
-   </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
    <ProgressBar
        android:id="@+id/pbDatosApi"

@@ -2,8 +2,6 @@ package com.example.angelruiz.cursoandroid.Adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import androidx.appcompat.widget.PopupMenu;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.Arrays.ArrayFragmentListaRecycler;
 import com.example.angelruiz.cursoandroid.R;
@@ -69,7 +70,7 @@ public class AdapterFragmentListaRecycler extends
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
                         switch (item.getItemId()){
-                            case R.id.mDetalle:
+                            case R.id.mDelete:
                                 personas.remove(holder.getAdapterPosition());//del arreglo personas borramos la posision sleccionada desde el item del RV, con el metodo remove(), el cual recibe dicha posision
                                 notifyItemRemoved(position);//notificamos con el metodo:notifyItemRemoved(), que dicha posision se a removido, recibe como parametro la position que se removio
                                 break;

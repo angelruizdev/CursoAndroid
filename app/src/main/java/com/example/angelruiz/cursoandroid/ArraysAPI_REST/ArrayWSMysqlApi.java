@@ -19,7 +19,7 @@ public class ArrayWSMysqlApi {
     @SerializedName("imagen")
     private Integer imagen;
 
-    public ArrayWSMysqlApi(int idPersona, int numeroFolio, String nombre, String profesion, Integer imagen) {
+    public ArrayWSMysqlApi(int idPersona, int numeroFolio, String nombre, String profesion) {
         this.idPersona = idPersona;
         this.numeroFolio = numeroFolio;
         this.nombre = nombre;

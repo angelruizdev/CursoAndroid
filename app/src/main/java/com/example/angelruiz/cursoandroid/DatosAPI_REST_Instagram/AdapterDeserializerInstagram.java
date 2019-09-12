@@ -11,8 +11,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 //here we can create more deserializers customs
 
 public class AdapterDeserializerInstagram { //this class joins the pojo to deserialize and his deserializer
+
     public IEndPointsInstagramApiRest establishConnectionInstagramApiRest(Gson gson){ //this method receives the deserializer custom(show objects specific the array json instagram)
-        Retrofit retrofit = new Retrofit.Builder() // we create our object retrofit normal
+        Retrofit retrofit = new Retrofit.Builder() //we create our object retrofit normal
                 .baseUrl(ConstantesApiRestInstagram.ROOT_URL_BASE)
                 .addConverterFactory(GsonConverterFactory.create(gson)) //we pass the deserializer custom for what not deserialize by default
                 .build();
