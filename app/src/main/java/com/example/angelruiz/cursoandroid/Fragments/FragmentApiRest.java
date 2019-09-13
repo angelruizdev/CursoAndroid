@@ -38,10 +38,7 @@ import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickApiRest;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
-import com.example.angelruiz.cursoandroid.SerializerAPI_REST.SerializerArrayWSMysqlApi;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -69,6 +66,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     private static final String TAG = "API_REST_LOG_E";
     RecyclerView rvDatosApiRest;
     SwipeRefreshLayout srfRVAPI;
+    String name;
 
     public FragmentApiRest() {
         // Required empty public constructor
@@ -80,6 +78,14 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
 
         context = getContext();
         listaJson = new ArrayList<>();
+
+        Bundle getData = this.getArguments(); //finish no receive data
+        if (getData != null){
+            name = getArguments().getString("name");
+        }else {
+            Log.i("No_arguments", "No_arguments");
+        }
+        Toast.makeText(context, "" + name, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -110,10 +116,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
 
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
         //rvDatosApiRest.setLayoutManager(gridLayoutManager);
-        GsonBuilder gsonBuilder = new GsonBuilder();
-
-        gsonBuilder.registerTypeAdapter(ArrayWSMysqlApi.class, new SerializerArrayWSMysqlApi());
-        Gson gson = gsonBuilder.create();
 
         retrofit = new Retrofit.Builder() //inicializamos nuestro obj retrofit
                 .baseUrl("https://proyectosangelito.000webhostapp.com/webServiceMysql/") //url de la API, debe terminar con slash(/)rft2
@@ -316,6 +318,15 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
                  @Override
                  public boolean onMenuItemClick(MenuItem menuItem) {
                      switch (menuItem.getItemId()){
+
+                       case R.id.mEdit:
+                        DialogFragmentEditApiRest dialogFragmentEditApiRest = new DialogFragmentEditApiRest();
+                        if (getFragmentManager() != null){
+                            dialogFragmentEditApiRest.show(getFragmentManager(), "ShowDialogFragment");
+                            //call ws update
+                        }
+                       break;
+
                        case R.id.mDelete:
 
                          //we pass as parameter the position of the idPersona RV to delete, asks IEndPointAPI_REST
@@ -346,7 +357,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
                  }
              });
              popupMenu.show();
-
             }
         });
     }

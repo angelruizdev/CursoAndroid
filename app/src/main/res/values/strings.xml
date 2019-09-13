@@ -37,6 +37,7 @@
     <string name="mi_mensaje">Hola <b>mundo</b>, me llamo <b>Pepe</b></string>
     <string name="bttext_next_instruction">Finalizar</string> <!-- pone en negritas <b> -->
     <string name="tvtext_description_instruction">Eneyda es una exelente persona. \nMuy inteligente</string>
+    <string name="menu_popup_edit">Editar</string>
     <string-array name="nombres">
         <item>Ángel</item>
         <item>Manuel</item>

@@ -43,6 +43,7 @@ public class FragmentDetailInstagramApiRest extends Fragment {
             nameUsuarioLocal = getArguments().getString("nameUsuarioLocal");     //we obtain variable local without pojo neither parceable
 
             dataUserInstagram = receiveData.getParcelable("dataUserInstagram"); //we obtain and save the key with the data with parceable
+
             if(dataUserInstagram != null) {
                 imageUrlUser = dataUserInstagram.getImageUrlUser();                //we save and extract the data to the array with parceable
                 imageLikes = String.valueOf(dataUserInstagram.getImageLikes());
