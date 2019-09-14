@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
-import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickApiRest;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickMenuItemRecyclerApiRest;
 import com.example.angelruiz.cursoandroid.R;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +25,7 @@ public class AdapterApiRest extends RecyclerView.Adapter<AdapterApiRest.ViewHold
 
 public Context context;
 private ArrayList<ArrayWSMysqlApi> pokemon;
-private IOnClickApiRest listener;
+private IOnClickMenuItemRecyclerApiRest listener;
 private Retrofit retrofit;
 private static final String TAG = "API_REST";
 
@@ -34,7 +34,7 @@ private static final String TAG = "API_REST";
        this.pokemon = pokemon;
     }
 
-    public void setOnClickListenerDelete(IOnClickApiRest listener){
+    public void setOnClickListenerDelete(IOnClickMenuItemRecyclerApiRest listener){
         this.listener = listener;
     }
 
@@ -70,7 +70,7 @@ private static final String TAG = "API_REST";
         TextView tvDetalleProducto;
         ImageButton ibElimProducto;
 
-        public ViewHolderAdapterApiRest(@NonNull View itemView, final IOnClickApiRest listener) {
+        public ViewHolderAdapterApiRest(@NonNull View itemView, final IOnClickMenuItemRecyclerApiRest listener) {
             super(itemView);
             tvDetalleProducto = itemView.findViewById(R.id.tvDetalleProducto);
             ivImgProducto = itemView.findViewById(R.id.ivImgProducto);

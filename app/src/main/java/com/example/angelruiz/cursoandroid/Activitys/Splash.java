@@ -3,31 +3,33 @@ package com.example.angelruiz.cursoandroid.Activitys;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.angelruiz.cursoandroid.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class Splash extends Activity {
-Button btnMsg;
-FloatingActionButton btnFlota;//declaramos el fab
-EditText edtNombre;
-String nombre;
-    //crea la Activity
+
+ Button btnMsg;
+ FloatingActionButton btnFlota;//declaramos el fab
+ EditText edtNombre;
+ String nombre;
+
+    //crea la Activity por primera vez o despues de destruirce
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
-        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Act onCreate", Toast.LENGTH_SHORT).show();
 
-        edtNombre = (EditText) findViewById(R.id.edtNombres);
+        edtNombre = findViewById(R.id.edtNombres);
         //nombre = edtNombre.getText().toString();
-        btnMsg = (Button)findViewById(R.id.btnMsg);
+        btnMsg = findViewById(R.id.btnMsg);
         btnMsg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -38,7 +40,7 @@ String nombre;
             }
         });
         //lo inicializamos como cualquier componente
-        btnFlota = (FloatingActionButton)findViewById(R.id.btnFloat);
+        btnFlota = findViewById(R.id.btnFloat);
         //nos brinda un escuchador setOnClickListener, para ejecutar una accion
         btnFlota.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,40 +69,46 @@ String nombre;
             }
         });
     }
-    //Inicia la Activity
+
+    //Inicia la Activity por primera vez o despues de destruirce
     @Override
     protected void onStart() {
         super.onStart();
-        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Act onStart", Toast.LENGTH_SHORT).show();
     }
-    //Reinicia la Activity si se vuelve a acceder a ella
+
+    //Reinicia la Activity si se vuelve a acceder a ella, si se salio de ella con home y se vuelve a entrar (save his state)
     @Override
     protected void onRestart() {
         super.onRestart();
-        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Act onRestart", Toast.LENGTH_SHORT).show();
     }
-    //Corre la Activity, la muestra
+
+    //Muestra el activity al ser creada, o si se salio de ella con home y se vuelve a entrar (save his state)
     @Override
     protected void onResume() {
         super.onResume();
-        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Act onResume", Toast.LENGTH_SHORT).show();
     }
-    //Pausa la Activity si se sale de ella con Home o se pasa a otra Activity o app
+
+    //Pausa la Activity si se sale de ella con Home o se pasa a otra Activity o app (save his state)
     @Override
     protected void onPause() {
         super.onPause();
-        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Act onPause", Toast.LENGTH_SHORT).show();
     }
-    //Detiene la Activity si se sale de ella con Home o se pasa a otra Activity o app
+
+    //Detiene la Activity si se sale de ella con Home o se pasa a otra Activity o app (save his state)
     @Override
     protected void onStop() {
         super.onStop();
-        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Act onStop", Toast.LENGTH_SHORT).show();
     }
+
     //Destrulle la Activity, si se presiona el boton back, o se libera estpacio
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Act onDestroy", Toast.LENGTH_SHORT).show();
     }
 }

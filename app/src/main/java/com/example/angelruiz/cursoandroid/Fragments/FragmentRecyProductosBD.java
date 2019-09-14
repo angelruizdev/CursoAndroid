@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,22 +38,47 @@ import java.util.ArrayList;
             // Required empty public constructor
         }
 
+   //este metodo es propio del ciclo de vida de fragment, permite comunicarce con la activity padre que contiene ambos frgmnts
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        if (context instanceof  Activity){
+           this.activity = (Activity)context;
+           comunicador = (InterfComunicaFgmtDetBDyProBD) this.activity; //casteamos el context de la activity a la interface
+        }
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getContext();
+        conn = new SQLiteOpnHpr(context, ConstantesSqlite.NOMBRE_BD, null, 1);
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       vista = inflater.inflate(R.layout.fragment_recy_productos_bd, container, false);
-       context = getContext();
-       conn = new SQLiteOpnHpr(context, ConstantesSqlite.NOMBRE_BD, null, 1);
+
+
        rvProductosBD = vista.findViewById(R.id.rvProductosBD);
        rvProductosBD.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
        DividerItemDecoration did = new DividerItemDecoration(context, LinearLayoutManager.VERTICAL);//linea divisora de items
        rvProductosBD.addItemDecoration(did);
-       llenarRecyclerBD();
+
+      return vista;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        llenarRecyclerBD();
 
         final AdapterFragmentRecyProdBd adapter = new AdapterFragmentRecyProdBd(listaProductosBD, context);
         adapter.setOnCliclListener(new View.OnClickListener() {//este metodo proviene deladapter para poder dar click en el item del RV
             @Override
             public void onClick(View v) {//si damos click en un item del RV envia los datos del RV a la interface y activity padre
-            comunicador.enviarDatos(listaProductosBD.get(rvProductosBD.getChildAdapterPosition(v)));//accedemos al metodo de la interfaz el cual recibe un Array de clase, le pasamos el array,listaProductosBD el cual tiene todas las posisones del RV
+                comunicador.enviarDatos(listaProductosBD.get(rvProductosBD.getChildAdapterPosition(v)));//accedemos al metodo de la interfaz el cual recibe un Array de clase, le pasamos el array,listaProductosBD el cual tiene todas las posisones del RV
 
             /*int pos = rvProductosBD.getChildAdapterPosition(v);//nos permite pasar valores del RV mas especifico no todo
             comunicador.enviarDatos(String.valueOf(listaProductosBD.get(pos).getPrecioProducto()));*/
@@ -60,16 +86,16 @@ import java.util.ArrayList;
         });
         rvProductosBD.setAdapter(adapter);
 
-               //comunicador.enviarDatos(nombre);//con el objeto interface accedemos a su metodo y le pasamos la cadena a enviar al otro fragment//sirbe para pasar datos de un frgmnt a otro
+        //comunicador.enviarDatos(nombre);//con el objeto interface accedemos a su metodo y le pasamos la cadena a enviar al otro fragment//sirbe para pasar datos de un frgmnt a otro
                /*FragmentRecyDetalleBD enviar = new FragmentRecyDetalleBD();//pasa datos a un fragment, funciona en un activity
                 Bundle bundle = new Bundle();
                 bundle.putString("nombre", nombre);
                 enviar.setArguments(bundle);*/
 
-      return vista;
     }
 
-    public void llenarRecyclerBD(){//llenamos el RV con datos de SQLite
+    //llenamos el RV con datos de SQLite
+    private void llenarRecyclerBD(){
         SQLiteDatabase db = conn.getReadableDatabase();
         ArrayProductosBD productosBD;
         listaProductosBD = new ArrayList<>();
@@ -86,15 +112,5 @@ import java.util.ArrayList;
            listaProductosBD.add(productosBD);
          }
          fila.close();
-    }
-
-    @Override
-    public void onAttach(Context context) {//este metodo es propio del ciclo de vida de fragment, permite comunicarce con la activity padre que contiene ambos frgmnts
-        super.onAttach(context);
-
-        if (context instanceof  Activity){
-            this.activity = (Activity)context;
-            comunicador = (InterfComunicaFgmtDetBDyProBD) this.activity; //casteamos el context de la activity a la interface
-        }
     }
 }

@@ -15,8 +15,8 @@ import com.example.angelruiz.cursoandroid.Arrays.ArrayProductosBD;
 import com.example.angelruiz.cursoandroid.R;
   public class FragmentRecyDetalleBD extends Fragment {
   View vista;
-  ImageView ivImgDetalle; //componentes donde se mostrara el detalle del item seleccionado del RV
-  TextView tvDetalleProducto;
+  private ImageView ivImgDetalle; //componentes donde se mostrara el detalle del item seleccionado del RV
+  private TextView tvDetalleProducto;
 
     public FragmentRecyDetalleBD() {
         // Required empty public constructor
@@ -34,21 +34,28 @@ import com.example.angelruiz.cursoandroid.R;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vista = inflater.inflate(R.layout.fragment_recy_detalle_bd, container, false);
-         ivImgDetalle = vista.findViewById(R.id.ivImgDetalle);
-         tvDetalleProducto = vista.findViewById(R.id.tvDetalleProducto);
 
-         Bundle datosObtenidos = getArguments();//recibimos los datos desde la activity padre al FragmentRecyDetalleBD//si pasamos los datos de activity a frgmnt
-         ArrayProductosBD aProductosBD;//objeto del pojo de la BD para traer todos sus datos
-         if (datosObtenidos!= null){
-             aProductosBD = (ArrayProductosBD) datosObtenidos.getSerializable("objeto");//en este objeto guardamos los datos recibidos desde activity padre con la key "objeto"
-             if (aProductosBD != null) {//si el objeto tiene datos jala al metodo para que los pinte en los componentes correspondientes
-               recibirDatos(aProductosBD);
-             }
-         }
-        return vista;
+        ivImgDetalle = vista.findViewById(R.id.ivImgDetalle);
+        tvDetalleProducto = vista.findViewById(R.id.tvDetalleProducto);
+
+    return vista;
     }
 
-    public void recibirDatos(ArrayProductosBD aProductosBD) {//este metodo recibe al objetoa,aProductosBD que trae los datos para poder mostrarlos
+      @Override
+      public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+          super.onActivityCreated(savedInstanceState);
+
+          Bundle datosObtenidos = getArguments(); //recibimos los datos desde la activity padre al FragmentRecyDetalleBD//si pasamos los datos de activity a frgmnt
+          ArrayProductosBD aProductosBD; //objeto del pojo de la BD para traer todos sus datos
+          if (datosObtenidos!= null){
+              aProductosBD = (ArrayProductosBD) datosObtenidos.getSerializable("objeto");//en este objeto guardamos los datos recibidos desde activity padre con la key "objeto"
+              if (aProductosBD != null) { //si el objeto tiene datos jala al metodo para que los pinte en los componentes correspondientes
+                  recibirDatos(aProductosBD);
+              }
+          }
+      }
+
+      public void recibirDatos(ArrayProductosBD aProductosBD) {//este metodo recibe al objetoa,aProductosBD que trae los datos para poder mostrarlos
         ivImgDetalle.setImageResource(aProductosBD.getFotoProducto());//mediante el objeto aProductosBD, mostramos los recursos correspondientes
         tvDetalleProducto.setText(String.valueOf(aProductosBD.getPrecioProducto()+" - $"+aProductosBD.getNombreProducto()));
     }

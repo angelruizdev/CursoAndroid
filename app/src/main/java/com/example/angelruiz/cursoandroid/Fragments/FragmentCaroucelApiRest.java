@@ -41,6 +41,11 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
         // Required empty public constructor
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+    }
+
     //crea el fmt e inicializa todo menos vistas
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

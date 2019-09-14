@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -34,8 +35,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.angelruiz.cursoandroid.Activitys.WebServiceMysql;
 import com.example.angelruiz.cursoandroid.Adapters.AdapterApiRest;
 import com.example.angelruiz.cursoandroid.ArraysAPI_REST.ArrayWSMysqlApi;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.ICommunicateDialogFmtWithFragmentApiRest;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
-import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickApiRest;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickMenuItemRecyclerApiRest;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,27 +51,35 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class FragmentApiRest extends Fragment implements View.OnClickListener {
+//we implements ifz ICommunicateDialogFmtWithFragmentApiRest for receive the data of daialogfragmenteditapirest
+public class FragmentApiRest extends Fragment implements View.OnClickListener, ICommunicateDialogFmtWithFragmentApiRest {
     private static final int SELECT_PIKTURE = 100;
     private ProgressBar pb;
-    Bitmap uriPath;
-    Uri path;
+    private Bitmap uriPath;
+    private Uri path;
     View vista;
     Context context;
-    FloatingActionButton fabImagenApi;
-    EditText etNumeroFolio, etNombre, etProfesion;
-    Button btRegistraApi;
+    private FloatingActionButton fabImagenApi;
+    private EditText etNumeroFolio, etNombre, etProfesion;
+    private Button btRegistraApi;
     private Retrofit retrofit;
     ArrayList<ArrayWSMysqlApi> listaJson;
     IEndPointAPI_REST service;
     private AdapterApiRest adapterApiRest;
     private static final String TAG = "API_REST_LOG_E";
-    RecyclerView rvDatosApiRest;
-    SwipeRefreshLayout srfRVAPI;
-    String name;
+    private RecyclerView rvDatosApiRest;
+    private SwipeRefreshLayout srfRVAPI;
+    private String nameRceive;
 
     public FragmentApiRest() {
         // Required empty public constructor
+    }
+
+    //the fmt its join to activity content, is useful for communicate o pass data between fmts with one interface
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        Toast.makeText(context, "fmt joined to activity - onAttach", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -78,14 +88,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
 
         context = getContext();
         listaJson = new ArrayList<>();
-
-        Bundle getData = this.getArguments(); //finish no receive data
-        if (getData != null){
-            name = getArguments().getString("name");
-        }else {
-            Log.i("No_arguments", "No_arguments");
-        }
-        Toast.makeText(context, "" + name, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -140,6 +142,19 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
         });
     }
 
+    //the fmt this created, in use for the user
+    @Override
+    public void onResume() {
+        super.onResume();
+        Toast.makeText(context, "fmt in use - onResume", Toast.LENGTH_SHORT).show();
+    }
+
+    //method genered to implement interface, bring the data to the dialogfragmenteditapirest
+    @Override
+    public void passDataDialogFragment(String name) {
+        nameRceive = name;
+    }
+
     @SuppressLint("IntentReset")
     private void cargarImagenGaleria() {
         Intent imagenGaleria = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -150,6 +165,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         if (data != null && requestCode == SELECT_PIKTURE) {
             path = data.getData();
             try {
@@ -308,7 +324,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
     //delete register of the item RV through menu popup
     private void deleteRegisterApiRest(){
 
-      adapterApiRest.setOnClickListenerDelete(new IOnClickApiRest() {
+      adapterApiRest.setOnClickListenerDelete(new IOnClickMenuItemRecyclerApiRest() {
          @Override
          public void onClickImageDelete(View v, final int position) {
 
@@ -319,16 +335,26 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
                  public boolean onMenuItemClick(MenuItem menuItem) {
                      switch (menuItem.getItemId()){
 
+                       //we receive and show the dialogfragment
                        case R.id.mEdit:
+
+                        //we receive the data to the DialogFragmentEditApiRest through his objects
                         DialogFragmentEditApiRest dialogFragmentEditApiRest = new DialogFragmentEditApiRest();
-                        if (getFragmentManager() != null){
-                            dialogFragmentEditApiRest.show(getFragmentManager(), "ShowDialogFragment");
+                        dialogFragmentEditApiRest.setTargetFragment(FragmentApiRest.this, 1); //we receive the fmt target
+
+                        //we show the dialogfragment
+                        FragmentManager fragmentManager = getFragmentManager();
+
+                        if (fragmentManager != null){
+                            dialogFragmentEditApiRest.show(fragmentManager, "ShowDialogFragment");
                             //call ws update
                         }
                        break;
 
+                       //delete item of RV throug his id
                        case R.id.mDelete:
 
+                         Toast.makeText(context, "" + nameRceive, Toast.LENGTH_SHORT).show();
                          //we pass as parameter the position of the idPersona RV to delete, asks IEndPointAPI_REST
                          Call<ArrayRespuestaApiRest> deleteRegisterApiRest = service.eliminarRegApiRest(listaJson.get(position).getIdPersona());
                          deleteRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
@@ -359,6 +385,21 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener {
              popupMenu.show();
             }
         });
+    }
+
+    //if we press home its pause the fmt, save his state current
+    @Override
+    public void onPause() {
+        super.onPause();
+        Toast.makeText(context, "fmt in pause - onPause", Toast.LENGTH_SHORT).show();
+
+    }
+
+    //if we press back its destroy the fmt, no save his state current
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        Toast.makeText(context, "fmt destroid - onDetach", Toast.LENGTH_SHORT).show();
     }
 }
 
