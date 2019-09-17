@@ -23,6 +23,11 @@ public interface IEndPointAPI_REST { //esta interface nos permite acceder al lis
     @GET("wsJSONMysql.php") //la peticion es de tipo @GET("") ya traeremos informacion de la API, en las comillas va la parte final de la url(que hace la peticion)
     Call<ArrayRespuestaApiRest> obtenerListadoJson(); //como solo muestra datos de la API, no recibe parametros este metodo
 
+    @FormUrlEncoded
+    @POST("wsJSONActualizar.php")
+    Call<ArrayRespuestaApiRest> actualizarRegistroApiRest(@Field("idPersona") int idPersona,
+                                                          @Field("nombre") String nombre);
+
     @POST("wsJSONEliminar.php")
     Call<ArrayRespuestaApiRest> eliminarRegApiRest(@Query("idPersona") int idPersona); //@Query permite buscar datos en el ws
     //@Multipart//permite cargar archivos, video, docs etc..

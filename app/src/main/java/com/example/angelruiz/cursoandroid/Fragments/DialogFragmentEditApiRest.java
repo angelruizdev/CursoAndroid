@@ -74,7 +74,8 @@ public class DialogFragmentEditApiRest extends DialogFragment {
                     //we verific if exist interface for pass data to fragmentapirest
                     if (iCommunicateDialogFmtWithFragmentApiRest != null){
                          iCommunicateDialogFmtWithFragmentApiRest.passDataDialogFragment(input);
-                     }
+                    }
+
                     getDialog().dismiss();
                 }
             }

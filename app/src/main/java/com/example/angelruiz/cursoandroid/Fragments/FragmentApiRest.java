@@ -69,6 +69,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     private static final String TAG = "API_REST_LOG_E";
     private RecyclerView rvDatosApiRest;
     private SwipeRefreshLayout srfRVAPI;
+    private int pos;
     private String nameRceive;
 
     public FragmentApiRest() {
@@ -147,12 +148,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     public void onResume() {
         super.onResume();
         Toast.makeText(context, "fmt in use - onResume", Toast.LENGTH_SHORT).show();
-    }
-
-    //method genered to implement interface, bring the data to the dialogfragmenteditapirest
-    @Override
-    public void passDataDialogFragment(String name) {
-        nameRceive = name;
     }
 
     @SuppressLint("IntentReset")
@@ -263,60 +258,86 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     //show data consumed of Api Rest
     private void showRegisterApiRest(){
 
-        Call<ArrayRespuestaApiRest> callRegisterResponse = service.obtenerListadoJson();
-        callRegisterResponse.enqueue(new Callback<ArrayRespuestaApiRest>() {
+      Call<ArrayRespuestaApiRest> callRegisterResponse = service.obtenerListadoJson();
+      callRegisterResponse.enqueue(new Callback<ArrayRespuestaApiRest>() {
 
-            //verificamos que la respuesta del servidor sea = 200 a 300 satisfactoria
+        //verificamos que la respuesta del servidor sea = 200 a 300 satisfactoria
+        @Override
+        public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//el metodo response recibe,ArrayRespuestaApiRest, que guarda los datos de la API
+          if (response.isSuccessful()) {
+
+              //we save the response with the data in the object and we save in array listaJson (Body() trae la data)
+              ArrayRespuestaApiRest respuestaApiRest = response.body();
+
+              //we check if they are saved the data cunsumed of the api
+              if (respuestaApiRest != null) {
+                  listaJson = respuestaApiRest.getResults();
+
+                  if (listaJson != null) {
+
+                      //if there is data we set the params to adapter and we pass to the RV
+                      adapterApiRest = new AdapterApiRest(context, listaJson);
+                      rvDatosApiRest.setAdapter(adapterApiRest);
+
+                      //we hide pb, refresh when is displayed the data in RV
+                      pb.setVisibility(View.GONE);
+                      srfRVAPI.setRefreshing(false);
+
+                      //if already have data the adapter we can delete registers
+                      deleteRegisterApiRest();
+
+                      //mostramos los valores desde el ws por consola
+                      for (ArrayWSMysqlApi x : listaJson) {
+                          Log.e(TAG, "noms: " + x.getNombre());
+                      }
+
+                      for (int i = 0; i < listaJson.size(); i++) {
+                          ArrayWSMysqlApi api = listaJson.get(i);
+                          Log.e(TAG, "nombres: " + api.getNombre());
+                      }
+                  } else {
+                      Toast.makeText(context, "vacio", Toast.LENGTH_SHORT).show();
+                  }
+
+              } else {
+                  Toast.makeText(context, "sin respuesta", Toast.LENGTH_SHORT).show();
+                  Log.e(TAG, "onResponse: "+ response.errorBody());
+              }
+          } else {
+                Log.e(TAG, "onResponse: "+ response.errorBody());
+            }
+        }
+
+        @Override
+        public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) { //este metodo cacha si hay un error al conectar al servidor API
+            Log.e(TAG, "onFailure: " + t.getMessage());
+            Toast.makeText(context, ""+ t.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+      });
+    }
+
+    //method genered to implement interface, bring the data to the dialogfragmenteditapirest
+    @Override
+    public void passDataDialogFragment(String name) {
+        nameRceive = name;
+        Toast.makeText(context, "x" + pos, Toast.LENGTH_SHORT).show();
+        Call<ArrayRespuestaApiRest> editRegisterApiRest = service.actualizarRegistroApiRest(listaJson.get(pos).getIdPersona(), nameRceive);
+        editRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
             @Override
-            public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//el metodo response recibe,ArrayRespuestaApiRest, que guarda los datos de la API
-                if (response.isSuccessful()) {
+            public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
 
-                    //we save the response with the data in the object and we save in array listaJson (Body() trae la data)
-                    ArrayRespuestaApiRest respuestaApiRest = response.body();
-
-                    //we check if they are saved the data cunsumed of the api
-                    if (respuestaApiRest != null) {
-                        listaJson = respuestaApiRest.getResults();
-
-                        if (listaJson != null) {
-
-                            //if there is data we set the params to adapter and we pass to the RV
-                            adapterApiRest = new AdapterApiRest(context, listaJson);
-                            rvDatosApiRest.setAdapter(adapterApiRest);
-
-                            //we hide pb, refresh when is displayed the data in RV
-                            pb.setVisibility(View.GONE);
-                            srfRVAPI.setRefreshing(false);
-
-                            //if already have data the adapter we can delete registers
-                            deleteRegisterApiRest();
-
-                            //mostramos los valores desde el ws por consola
-                            for (ArrayWSMysqlApi x : listaJson) {
-                                Log.e(TAG, "noms: " + x.getNombre());
-                            }
-
-                            for (int i = 0; i < listaJson.size(); i++) {
-                                ArrayWSMysqlApi api = listaJson.get(i);
-                                Log.e(TAG, "nombres: " + api.getNombre());
-                            }
-                        } else {
-                            Toast.makeText(context, "vacio", Toast.LENGTH_SHORT).show();
-                        }
-
-                    } else {
-                        Toast.makeText(context, "sin respuesta", Toast.LENGTH_SHORT).show();
-                        Log.e(TAG, "onResponse: "+ response.errorBody());
-                    }
-                } else {
-                    Log.e(TAG, "onResponse: "+ response.errorBody());
+                if (response.isSuccessful()){
+                    Log.i("response", "succesfull");
+                }else {
+                    Log.i("response", "no succesfull");
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) { //este metodo cacha si hay un error al conectar al servidor API
-                Log.e(TAG, "onFailure: " + t.getMessage());
-                Toast.makeText(context, ""+ t.getMessage(), Toast.LENGTH_SHORT).show();
+            public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
+                Log.i("filure", t.getMessage());
+                /*UPDATE PRUEBA SET NOMBRE = "PANCARSIO" WHERE NOMBRE = "ANGEL";
+                UPDATE PRUEBA SET NOMBRE = "PANCARSIO" WHERE idPersona = item;*/
             }
         });
     }
@@ -328,59 +349,59 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
          @Override
          public void onClickImageDelete(View v, final int position) {
 
-             PopupMenu popupMenu = new PopupMenu(context, v); //v is the control to will show the menu
-             popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
-             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                 @Override
-                 public boolean onMenuItemClick(MenuItem menuItem) {
-                     switch (menuItem.getItemId()){
+           PopupMenu popupMenu = new PopupMenu(context, v); //v is the control to will show the menu
+           popupMenu.getMenuInflater().inflate(R.menu.menu_popup, popupMenu.getMenu());
+           popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+             @Override
+             public boolean onMenuItemClick(MenuItem menuItem) {
+               switch (menuItem.getItemId()){
 
-                       //we receive and show the dialogfragment
-                       case R.id.mEdit:
+                 //we receive and show the dialogfragment
+                 case R.id.mEdit:
 
-                        //we receive the data to the DialogFragmentEditApiRest through his objects
-                        DialogFragmentEditApiRest dialogFragmentEditApiRest = new DialogFragmentEditApiRest();
-                        dialogFragmentEditApiRest.setTargetFragment(FragmentApiRest.this, 1); //we receive the fmt target
+                  pos = position;
+                  //we receive the data to the DialogFragmentEditApiRest through his objects
+                  DialogFragmentEditApiRest dialogFragmentEditApiRest = new DialogFragmentEditApiRest();
+                  dialogFragmentEditApiRest.setTargetFragment(FragmentApiRest.this, 1); //we receive the fmt target
 
-                        //we show the dialogfragment
-                        FragmentManager fragmentManager = getFragmentManager();
+                  //we show the dialogfragment
+                  FragmentManager fragmentManager = getFragmentManager();
 
-                        if (fragmentManager != null){
-                            dialogFragmentEditApiRest.show(fragmentManager, "ShowDialogFragment");
-                            //call ws update
-                        }
-                       break;
+                  if (fragmentManager != null){
+                      dialogFragmentEditApiRest.show(fragmentManager, "ShowDialogFragment");
+                  }
+                 break;
 
-                       //delete item of RV throug his id
-                       case R.id.mDelete:
+                 //delete item of RV throug his id
+                 case R.id.mDelete:
 
-                         Toast.makeText(context, "" + nameRceive, Toast.LENGTH_SHORT).show();
-                         //we pass as parameter the position of the idPersona RV to delete, asks IEndPointAPI_REST
-                         Call<ArrayRespuestaApiRest> deleteRegisterApiRest = service.eliminarRegApiRest(listaJson.get(position).getIdPersona());
-                         deleteRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
-                             @Override
-                             public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
+                   Toast.makeText(context, "" + nameRceive, Toast.LENGTH_SHORT).show();
+                   //we pass as parameter the position of the idPersona RV to delete, asks IEndPointAPI_REST
+                   Call<ArrayRespuestaApiRest> deleteRegisterApiRest = service.eliminarRegApiRest(listaJson.get(position).getIdPersona());
+                   deleteRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
+                       @Override
+                       public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
 
-                                 if (response.isSuccessful()){
-                                     Log.i("response", "succesfull");
-                                   }else {
-                                     Log.i("response", "no succesfull");
-                                     }
-                                 }
+                           if (response.isSuccessful()){
+                               Log.i("response", "succesfull");
+                             }else {
+                               Log.i("response", "no succesfull");
+                               }
+                           }
 
-                                 @Override
-                                 public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
-                                     Log.i("filure", t.getMessage());
-                                 }
-                             });
+                           @Override
+                           public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
+                               Log.i("filure", t.getMessage());
+                           }
+                       });
 
-                           //show the items actualized when deleting 1 register
-                           new DatosApiRest().execute();
+                     //show the items actualized when deleting 1 register
+                     new DatosApiRest().execute();
 
-                       break;
-                     }
-                     return true; //we return true
-                 }
+                 break;
+               }
+                 return true; //we return true
+             }
              });
              popupMenu.show();
             }
