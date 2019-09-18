@@ -65,18 +65,18 @@
            android:inputType="number" />
 
        <EditText
-          android:id="@+id/etProfesion"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:hint="Profesión"
-          android:inputType="text" />
-
-       <EditText
            android:id="@+id/etNombre"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:hint="Nombre"
            android:inputType="text" />
+
+       <EditText
+          android:id="@+id/etProfesion"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:hint="Profesión"
+          android:inputType="text" />
 
        <Button
           android:id="@+id/btRegistraApi"

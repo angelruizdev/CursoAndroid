@@ -69,7 +69,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     private static final String TAG = "API_REST_LOG_E";
     private RecyclerView rvDatosApiRest;
     private SwipeRefreshLayout srfRVAPI;
-    private int pos;
+    private int positionPass;
     private String nameRceive;
 
     public FragmentApiRest() {
@@ -283,8 +283,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
                       pb.setVisibility(View.GONE);
                       srfRVAPI.setRefreshing(false);
 
-                      //if already have data the adapter we can delete registers
-                      deleteRegisterApiRest();
+                      //if already have data the adapter we can we call the menu popup
+                      showMenuPopUpItemRV();
 
                       //mostramos los valores desde el ws por consola
                       for (ArrayWSMysqlApi x : listaJson) {
@@ -318,32 +318,31 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
 
     //method genered to implement interface, bring the data to the dialogfragmenteditapirest
     @Override
-    public void passDataDialogFragment(String name) {
-        nameRceive = name;
-        Toast.makeText(context, "x" + pos, Toast.LENGTH_SHORT).show();
-        Call<ArrayRespuestaApiRest> editRegisterApiRest = service.actualizarRegistroApiRest(listaJson.get(pos).getIdPersona(), nameRceive);
-        editRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
-            @Override
-            public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
+    public void passDataDialogFragmentEdit(String name) {
+      nameRceive = name;
 
-                if (response.isSuccessful()){
-                    Log.i("response", "succesfull");
-                }else {
-                    Log.i("response", "no succesfull");
-                }
-            }
+      //this method receive two parameters, the idPersona and the name to update
+      Call<ArrayRespuestaApiRest> editRegisterApiRest = service.actualizarRegistroApiRest(listaJson.get(positionPass).getIdPersona(), nameRceive);
+      editRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
+          @Override
+          public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {
 
-            @Override
-            public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
-                Log.i("filure", t.getMessage());
-                /*UPDATE PRUEBA SET NOMBRE = "PANCARSIO" WHERE NOMBRE = "ANGEL";
-                UPDATE PRUEBA SET NOMBRE = "PANCARSIO" WHERE idPersona = item;*/
-            }
-        });
+              if (response.isSuccessful()){
+                  Log.i("response", "succesfull");
+              }else {
+                  Log.i("response", "no succesfull");
+              }
+          }
+
+          @Override
+          public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {
+              Log.i("filure", t.getMessage());
+          }
+      });
     }
 
-    //delete register of the item RV through menu popup
-    private void deleteRegisterApiRest(){
+    //update, delete register of the RV through item menu popup
+    private void showMenuPopUpItemRV(){
 
       adapterApiRest.setOnClickListenerDelete(new IOnClickMenuItemRecyclerApiRest() {
          @Override
@@ -359,7 +358,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
                  //we receive and show the dialogfragment
                  case R.id.mEdit:
 
-                  pos = position;
+                  positionPass = position; //we save position global for use in passDataDialogFragmentEdit
+
                   //we receive the data to the DialogFragmentEditApiRest through his objects
                   DialogFragmentEditApiRest dialogFragmentEditApiRest = new DialogFragmentEditApiRest();
                   dialogFragmentEditApiRest.setTargetFragment(FragmentApiRest.this, 1); //we receive the fmt target
@@ -370,12 +370,12 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
                   if (fragmentManager != null){
                       dialogFragmentEditApiRest.show(fragmentManager, "ShowDialogFragment");
                   }
+
                  break;
 
                  //delete item of RV throug his id
                  case R.id.mDelete:
 
-                   Toast.makeText(context, "" + nameRceive, Toast.LENGTH_SHORT).show();
                    //we pass as parameter the position of the idPersona RV to delete, asks IEndPointAPI_REST
                    Call<ArrayRespuestaApiRest> deleteRegisterApiRest = service.eliminarRegApiRest(listaJson.get(position).getIdPersona());
                    deleteRegisterApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() {
@@ -424,5 +424,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     }
 }
 
+/*UPDATE PRUEBA SET NOMBRE = "PANCARSIO" WHERE NOMBRE = "ANGEL";
+UPDATE PRUEBA SET NOMBRE = "PANCARSIO" WHERE idPersona = 20;*/
 
 
