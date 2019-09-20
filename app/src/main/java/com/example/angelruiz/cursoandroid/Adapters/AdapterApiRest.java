@@ -19,14 +19,11 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import retrofit2.Retrofit;
-
 public class AdapterApiRest extends RecyclerView.Adapter<AdapterApiRest.ViewHolderAdapterApiRest> {
 
 public Context context;
 private ArrayList<ArrayWSMysqlApi> pokemon;
 private IOnClickMenuItemRecyclerApiRest listener;
-private Retrofit retrofit;
 private static final String TAG = "API_REST";
 
     public  AdapterApiRest(Context context, ArrayList<ArrayWSMysqlApi> pokemon){
@@ -48,10 +45,11 @@ private static final String TAG = "API_REST";
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolderAdapterApiRest viewHolderAdapterApiRest, @SuppressLint("RecyclerView") final int pos) {
-        String urlImage = "https://source.unsplash.com/random/";
+        String urlImage = "https://proyectosangelito.000webhostapp.com/webServiceMysql/angel.jpg";
+        ArrayWSMysqlApi imagen = pokemon.get(pos);
 
         Picasso.with(context)
-                .load(urlImage)
+                .load(imagen.getImagen())
                 .placeholder(R.drawable.ic_no_image)
                 .into(viewHolderAdapterApiRest.ivImgProducto);
 

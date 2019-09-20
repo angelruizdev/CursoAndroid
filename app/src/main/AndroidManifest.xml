@@ -8,21 +8,6 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality.
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED" /> <!-- agregamos permisos para hacer llamadas de telefono -->
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -30,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activitys.ActivityVPagerInstruction"></activity>
+        <activity android:name=".Activitys.ActivityVPagerInstruction" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -39,20 +24,17 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
-
         <activity
             android:name=".Activitys.MapsActivity"
             android:label="@string/title_activity_maps" />
+
         <activity android:name=".Activitys.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-
                 <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
@@ -64,11 +46,6 @@
         </activity>
         <activity android:name=".Activitys.Lista" />
         <activity android:name=".Activitys.ListaContacto" />
-        <!--
-        parentActivityName,permite regresar a la activity anterior con el boton de subir en la actionBar,
-        funciona con una clase padre y una hija, la padre sera ala que va a regresar, aqui sera:.ListaContacto,
-        clase padre es la primera , clase hija la segunda por asi decirlo
-        -->
         <activity
             android:name=".Activitys.DetalleContacto"
             android:parentActivityName=".Activitys.ListaContacto"
@@ -79,6 +56,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Activitys.ListaContacto" />
         </activity>
+        <!--
+        parentActivityName,permite regresar a la activity anterior con el boton de subir en la actionBar,
+        funciona con una clase padre y una hija, la padre sera ala que va a regresar, aqui sera:.ListaContacto,
+        clase padre es la primera , clase hija la segunda por asi decirlo
+        -->
         <activity android:name=".Activitys.ImagenGrid" />
         <activity android:name=".Activitys.DetalleImgContacto" />
         <activity android:name=".Activitys.ListaAgenda" />
@@ -90,16 +72,17 @@
             android:name=".Activitys.WebServiceMysql"
             android:label="@string/title_activity_web_service_mysql"
             android:theme="@style/AppTheme" />
-
-        <!-- permissions api 24 a 7 -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" /> <!-- permissions api 24 a 7 -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/provider_paths"/>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
         </provider>
 
         <service android:name=".FireBaseNotification.Notification">
@@ -108,5 +91,20 @@
             </intent-filter>
         </service>
     </application>
+    <protected-broadcast android:name="android.intent.action.MEDIA_MOUNTED" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- agregamos permisos para hacer llamadas de telefono -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>

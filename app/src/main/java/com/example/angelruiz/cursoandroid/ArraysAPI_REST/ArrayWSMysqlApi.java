@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 //este array de clase, tiene los mismos campos del JSON que devuelve la API, ya que aqui los guardara para mostrarlos en el RV
 public class ArrayWSMysqlApi {
 
-    @SerializedName("idPersona") //permite cargar archivos, doc, img etc.., si bienen con otro nombre desde el ws
+    @SerializedName("idPersona") //esta notacion permite cargar archivos, doc, img etc.., si bienen con otro nombre desde el ws
     private int idPersona;
 
     @SerializedName("numeroFolio")
@@ -18,9 +18,9 @@ public class ArrayWSMysqlApi {
     private String profesion;
 
     @SerializedName("imagen")
-    private Integer imagen;
+    private String imagen;
 
-    public ArrayWSMysqlApi(int idPersona, int numeroFolio, String nombre, String profesion) {
+    public ArrayWSMysqlApi(int idPersona, int numeroFolio, String nombre, String profesion, String imagen) {
         this.idPersona = idPersona;
         this.numeroFolio = numeroFolio;
         this.nombre = nombre;
@@ -60,11 +60,11 @@ public class ArrayWSMysqlApi {
         this.profesion = profesion;
     }
 
-    public Integer getImagen() {
+    public String getImagen() {
         return imagen;
     }
 
-    public void setImagen(Integer imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 }

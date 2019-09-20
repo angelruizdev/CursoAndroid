@@ -6,7 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.loader.content.CursorLoader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -40,11 +41,15 @@ import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IEndPointAPI_REST;
 import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickMenuItemRecyclerApiRest;
 import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
+import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.FileInformationUploadImage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.ArrayList;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,7 +60,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentApiRest extends Fragment implements View.OnClickListener, ICommunicateDialogFmtWithFragmentApiRest {
     private static final int SELECT_PIKTURE = 100;
     private ProgressBar pb;
-    private Bitmap uriPath;
+    private String uriPath;
     private Uri path;
     View vista;
     Context context;
@@ -150,27 +155,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         Toast.makeText(context, "fmt in use - onResume", Toast.LENGTH_SHORT).show();
     }
 
-    @SuppressLint("IntentReset")
-    private void cargarImagenGaleria() {
-        Intent imagenGaleria = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        imagenGaleria.setType("image/*");
-        startActivityForResult(Intent.createChooser(imagenGaleria, "Seleccione"), SELECT_PIKTURE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (data != null && requestCode == SELECT_PIKTURE) {
-            path = data.getData();
-            try {
-                uriPath = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), path); //para mandar la imagen a server
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     //parametros a guardar en bd(api rest) mediante ws en interfaz
     @Override
     public void onClick(View v) {
@@ -182,6 +166,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         if (v.getId() == R.id.btRegistraApi) {
 
             registrarUsuarioApi(numberFolio, name, profetion);
+            uploadImageDataBase();
+
             etNumeroFolio.setText("");
             etNombre.setText("");
             etProfesion.setText("");
@@ -210,6 +196,71 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
                 notificacionNvoUsuario(name);
             }
         });
+    }
+
+    //upload image to server
+    private void uploadImageDataBase(){
+
+        File file = new File(uriPath);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+
+        Call<FileInformationUploadImage> uploadImage = service.uploadImageServer(body);
+        uploadImage.enqueue(new Callback<FileInformationUploadImage>() {
+            @Override
+            public void onResponse(@NonNull Call<FileInformationUploadImage> call, @NonNull Response<FileInformationUploadImage> response) {
+
+                if (response.isSuccessful()){
+                    Toast.makeText(context, "¡Imagen subio con exito!", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(context, "¡Error a subir imagen!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<FileInformationUploadImage> call, @NonNull Throwable t) {
+                Toast.makeText(context, "Error intente más tarde", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @SuppressLint("IntentReset")
+    private void cargarImagenGaleria() {
+        Intent imagenGaleria = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        imagenGaleria.setType("image/*");
+        startActivityForResult(Intent.createChooser(imagenGaleria, "Seleccione."), SELECT_PIKTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null && requestCode == SELECT_PIKTURE) {
+            path = data.getData();
+            //try {
+            //uriPath = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path); //para mandar la imagen a server
+            uriPath = getRealPathFromUri(path);
+            //} catch (IOException e) {
+            //e.printStackTrace();
+            //}
+        }else{
+            Toast.makeText(context, "¡Error al elegir imagen!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private String getRealPathFromUri(Uri uri){
+
+        String[] projection = {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(context, uri, projection, null, null, null);
+        Cursor cursor = cursorLoader.loadInBackground();
+        assert cursor != null;
+        int columnIdx = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String result = cursor.getString(columnIdx);
+        cursor.close();
+
+        return result;
     }
 
     //notification push to register new user
