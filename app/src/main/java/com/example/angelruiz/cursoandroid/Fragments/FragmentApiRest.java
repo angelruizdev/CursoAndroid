@@ -76,6 +76,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     private SwipeRefreshLayout srfRVAPI;
     private int positionPass;
     private String nameRceive;
+    private String imageName;
 
     public FragmentApiRest() {
         // Required empty public constructor
@@ -162,11 +163,13 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         int numberFolio = Integer.parseInt(etNumeroFolio.getText().toString());
         String name = etNombre.getText().toString();
         String profetion = etProfesion.getText().toString();
+        String imageNameUrl = "https://proyectosangelito.000webhostapp.com/webServiceMysql/imagenes/" + imageName;
 
         if (v.getId() == R.id.btRegistraApi) {
 
-            registrarUsuarioApi(numberFolio, name, profetion);
             uploadImageDataBase();
+            registrarUsuarioApi(numberFolio, name, profetion, imageNameUrl);
+            Toast.makeText(context, "img :" + imageNameUrl, Toast.LENGTH_SHORT).show();
 
             etNumeroFolio.setText("");
             etNombre.setText("");
@@ -175,9 +178,9 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     }
 
     //register user in bd Api Rest
-    private void registrarUsuarioApi(int numberFolio, final String name, String profetion) {
+    private void registrarUsuarioApi(int numberFolio, final String name, String profetion, String image) {
 
-        Call<ArrayRespuestaApiRest> registerUserApiRest = service.registroAPIRest(numberFolio, name, profetion); //mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
+        Call<ArrayRespuestaApiRest> registerUserApiRest = service.registroAPIRest(numberFolio, name, profetion, image); //mediante el obj de la interfaz accedemos a su metodo y le pasamos los parametros que pide
         registerUserApiRest.enqueue(new Callback<ArrayRespuestaApiRest>() { //con el objeto Call, llamamos al metodo equeue, para crear los metodos onResponse, onFilure, el primero gestiona la respuesta debuelta por el server, el segundo cacha si hay error de malformacion de JSON o wx
             @Override
             public void onResponse(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Response<ArrayRespuestaApiRest> response) {//gestiona respuesta de datos de server
@@ -204,6 +207,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         File file = new File(uriPath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+        imageName = file.getName(); //obtain the name of the file ----->
 
         Call<FileInformationUploadImage> uploadImage = service.uploadImageServer(body);
         uploadImage.enqueue(new Callback<FileInformationUploadImage>() {
@@ -214,7 +218,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
                     Toast.makeText(context, "¡Imagen subio con exito!", Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(context, "¡Error a subir imagen!", Toast.LENGTH_SHORT).show();
-
                 }
             }
 

@@ -44,16 +44,18 @@ private static final String TAG = "API_REST";
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolderAdapterApiRest viewHolderAdapterApiRest, @SuppressLint("RecyclerView") final int pos) {
+    public void onBindViewHolder(@NonNull final ViewHolderAdapterApiRest viewHolderAdapterApiRest, @SuppressLint("RecyclerView") final int position) {
         String urlImage = "https://proyectosangelito.000webhostapp.com/webServiceMysql/angel.jpg";
-        ArrayWSMysqlApi imagen = pokemon.get(pos);
+
+        ArrayWSMysqlApi imagen = pokemon.get(position);
 
         Picasso.with(context)
                 .load(imagen.getImagen())
                 .placeholder(R.drawable.ic_no_image)
                 .into(viewHolderAdapterApiRest.ivImgProducto);
 
-        viewHolderAdapterApiRest.tvDetalleProducto.setText(String.valueOf(pokemon.get(pos).getNombre()+" - "+pokemon.get(pos).getProfesion()));
+        viewHolderAdapterApiRest.tvDetalleProducto.setText(String.valueOf(
+                                           pokemon.get(position).getNombre()+" - "+pokemon.get(position).getProfesion()));
 
         viewHolderAdapterApiRest.ibElimProducto.setImageResource(R.drawable.ic_delete);
     }
@@ -64,8 +66,8 @@ private static final String TAG = "API_REST";
     }
 
     public class ViewHolderAdapterApiRest extends RecyclerView.ViewHolder {
-        ImageView ivImgProducto;
-        TextView tvDetalleProducto;
+        ImageView ivImgProducto;TextView tvDetalleProducto;
+
         ImageButton ibElimProducto;
 
         public ViewHolderAdapterApiRest(@NonNull View itemView, final IOnClickMenuItemRecyclerApiRest listener) {

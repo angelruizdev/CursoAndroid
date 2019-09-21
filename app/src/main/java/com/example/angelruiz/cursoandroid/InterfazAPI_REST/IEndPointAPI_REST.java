@@ -22,7 +22,8 @@ public interface IEndPointAPI_REST {
     @POST("wsJSONRegistro.php") //this method receive 4 parameters for send to bd
     Call<ArrayRespuestaApiRest> registroAPIRest(@Field("numeroFolio") int numeroFolio,
                                                 @Field("nombre") String nombre,
-                                                @Field("profesion") String profesion);
+                                                @Field("profesion") String profesion,
+                                                @Field("imagen") String imagen);
     //service save register in bd
     @POST("wsJSONRegistro.php")
     Call<ArrayRespuestaApiRest> registroAPIRest1(@Body ArrayRespuestaApiRest parameters);
