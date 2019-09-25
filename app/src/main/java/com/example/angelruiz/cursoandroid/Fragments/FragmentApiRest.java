@@ -76,7 +76,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     private SwipeRefreshLayout srfRVAPI;
     private int positionPass;
     private String nameRceive;
-    private String imageName;
+    private String imageNameUrl;
 
     public FragmentApiRest() {
         // Required empty public constructor
@@ -163,17 +163,17 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         int numberFolio = Integer.parseInt(etNumeroFolio.getText().toString());
         String name = etNombre.getText().toString();
         String profetion = etProfesion.getText().toString();
-        String imageNameUrl = "https://proyectosangelito.000webhostapp.com/webServiceMysql/imagenes/" + imageName;
 
         if (v.getId() == R.id.btRegistraApi) {
 
             uploadImageDataBase();
             registrarUsuarioApi(numberFolio, name, profetion, imageNameUrl);
-            Toast.makeText(context, "img :" + imageNameUrl, Toast.LENGTH_SHORT).show();
 
             etNumeroFolio.setText("");
             etNombre.setText("");
             etProfesion.setText("");
+
+            showRegisterApiRest();
         }
     }
 
@@ -207,7 +207,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         File file = new File(uriPath);
         RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
-        imageName = file.getName(); //obtain the name of the file ----->
+
+        imageNameUrl = "https://proyectosangelito.000webhostapp.com/webServiceMysql/imagenes/" + file.getName();
 
         Call<FileInformationUploadImage> uploadImage = service.uploadImageServer(body);
         uploadImage.enqueue(new Callback<FileInformationUploadImage>() {
@@ -241,9 +242,9 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
 
         if (data != null && requestCode == SELECT_PIKTURE) {
             path = data.getData();
+            uriPath = getRealPathFromUri(path);
             //try {
             //uriPath = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path); //para mandar la imagen a server
-            uriPath = getRealPathFromUri(path);
             //} catch (IOException e) {
             //e.printStackTrace();
             //}
