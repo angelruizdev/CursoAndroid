@@ -13,8 +13,8 @@ public class Calculadora {
         int i;
         int array[]= {a = 0, b = 1, c = 0 , d = 0};
         String let[]= {"a","b","c","d"};
-//variables
 
+        //variables
         for (i = 0; i < 4; i++){
             System.out.println("ingrese operación: "+let[i]);
             array[i] = ent.nextInt();
@@ -23,6 +23,7 @@ public class Calculadora {
             System.out.println(array[0] + array[1] - (array[2] * array[3]) / array[1]);
 
         }*/
+
 
         System.out.println("ingrese operación: ");
         op = ent.next();
@@ -45,5 +46,6 @@ public class Calculadora {
 //podemos imprimir la lista
         }
         System.out.println(resultado);
+
     }
 }

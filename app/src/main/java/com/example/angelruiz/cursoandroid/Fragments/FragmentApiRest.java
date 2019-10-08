@@ -43,6 +43,8 @@ import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.ArrayRespuestaApiRest;
 import com.example.angelruiz.cursoandroid.RespuestaAPI_REST.FileInformationUploadImage;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,7 +62,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentApiRest extends Fragment implements View.OnClickListener, ICommunicateDialogFmtWithFragmentApiRest {
     private static final int SELECT_PIKTURE = 100;
     private ProgressBar pb;
-    private String uriPath;
+    private String uriPathImage;
     private Uri path;
     View vista;
     Context context;
@@ -126,9 +128,11 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(context, 3);
         //rvDatosApiRest.setLayoutManager(gridLayoutManager);
 
+        Gson gson = new GsonBuilder().setLenient().create();
+
         retrofit = new Retrofit.Builder() //inicializamos nuestro obj retrofit
                 .baseUrl("https://proyectosangelito.000webhostapp.com/webServiceMysql/") //url de la API, debe terminar con slash(/)rft2
-                .addConverterFactory(GsonConverterFactory.create()).build(); //GsonConverterFactory, nos permite decerealizar los datos Json
+                .addConverterFactory(GsonConverterFactory.create(gson)).build(); //GsonConverterFactory, nos permite decerealizar los datos Json
 
         service = retrofit.create(IEndPointAPI_REST.class); //unimos nuestra interfaz mediante el obj retrofit
 
@@ -144,7 +148,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         fabImagenApi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cargarImagenGaleria();
+               cargarImagenGaleria();
             }
         });
     }
@@ -196,7 +200,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
             public void onFailure(@NonNull Call<ArrayRespuestaApiRest> call, @NonNull Throwable t) {//gestiona si ocurren fallos al traer datos del server
                 Toast.makeText(context, "Error server : " + t.getMessage(), Toast.LENGTH_SHORT).show();
                 Log.i("apirest", t.getMessage());
-                notificacionNvoUsuario(name);
+                notificationNewUser(name);
             }
         });
     }
@@ -204,11 +208,11 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     //upload image to server
     private void uploadImageDataBase(){
 
-        File file = new File(uriPath);
-        RequestBody requestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestBody);
+        File fileImage = new File(uriPathImage);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("image/*"), fileImage);
+        MultipartBody.Part body = MultipartBody.Part.createFormData("file", fileImage.getName(), requestBody);
 
-        imageNameUrl = "https://proyectosangelito.000webhostapp.com/webServiceMysql/imagenes/" + file.getName();
+        imageNameUrl = "https://proyectosangelito.000webhostapp.com/webServiceMysql/imagenes/" + fileImage.getName();
 
         Call<FileInformationUploadImage> uploadImage = service.uploadImageServer(body);
         uploadImage.enqueue(new Callback<FileInformationUploadImage>() {
@@ -218,7 +222,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
                 if (response.isSuccessful()){
                     Toast.makeText(context, "¡Imagen subio con exito!", Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(context, "¡Error a subir imagen!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "¡Error al subir imagen!", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -229,10 +233,13 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         });
     }
 
+    //we access to the galeri for select image to upload
     @SuppressLint("IntentReset")
     private void cargarImagenGaleria() {
         Intent imagenGaleria = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         imagenGaleria.setType("image/*");
+        /*String [] typeImage = {"image/jpeg" , "image/png"};
+        imagenGaleria.putExtra(Intent.EXTRA_MIME_TYPES, typeImage);*/
         startActivityForResult(Intent.createChooser(imagenGaleria, "Seleccione."), SELECT_PIKTURE);
     }
 
@@ -242,7 +249,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
 
         if (data != null && requestCode == SELECT_PIKTURE) {
             path = data.getData();
-            uriPath = getRealPathFromUri(path);
+            uriPathImage = getRealPathFromUri(path);
             //try {
             //uriPath = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path); //para mandar la imagen a server
             //} catch (IOException e) {
@@ -268,7 +275,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     }
 
     //notification push to register new user
-    private void notificacionNvoUsuario(String name) {
+    private void notificationNewUser(String name) {
 
         Intent i = new Intent(context, WebServiceMysql.class);
         PendingIntent pendingIntent =  PendingIntent.getActivity(context,0, i, PendingIntent.FLAG_ONE_SHOT);
