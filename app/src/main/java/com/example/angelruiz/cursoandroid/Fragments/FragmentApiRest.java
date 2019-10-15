@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Matrix;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -47,6 +50,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -79,6 +83,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     private int positionPass;
     private String nameRceive;
     private String imageNameUrl;
+    private ImageView ivTesting;
 
     public FragmentApiRest() {
         // Required empty public constructor
@@ -112,6 +117,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         pb = vista.findViewById(R.id.pbDatosApi);
         srfRVAPI = vista.findViewById(R.id.srfRVAPI);
         rvDatosApiRest = vista.findViewById(R.id.rvDatosApiRest);
+        ivTesting = vista.findViewById(R.id.ivTesting);
 
         return vista;
     }
@@ -250,14 +256,37 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         if (data != null && requestCode == SELECT_PIKTURE) {
             path = data.getData();
             uriPathImage = getRealPathFromUri(path);
-            //try {
-            //uriPath = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path); //para mandar la imagen a server
-            //} catch (IOException e) {
-            //e.printStackTrace();
-            //}
+
+            try {
+             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path); //para mandar la imagen a server
+             bitmap = resizeImage(bitmap, 300, 300);
+             ivTesting.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+             e.printStackTrace();
+            }
+
         }else{
             Toast.makeText(context, "¡Error al elegir imagen!", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    //resize image
+    private Bitmap resizeImage(Bitmap bitmap, float newWidth, float newHeight) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+         if (width > newWidth || height > newHeight){
+            float scaleWidth = newWidth / width;
+            float scaleHeight = newHeight / height;
+
+             Matrix matrix = new Matrix();
+             matrix.postScale(scaleWidth, scaleHeight);
+
+             return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+         }else {
+             return bitmap;
+         }
     }
 
     private String getRealPathFromUri(Uri uri){
