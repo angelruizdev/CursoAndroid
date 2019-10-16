@@ -8,17 +8,18 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.example.angelruiz.cursoandroid.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import static android.Manifest.permission.CALL_PHONE;
 import static android.content.Intent.ACTION_CALL;
@@ -36,20 +37,24 @@ public class DetalleContacto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detalle_contacto);
+
         //damos soporte al actionBar personalizado
-        Toolbar actionBar=(Toolbar)findViewById(R.id.actionBarPersonalizado);//v7.widget
+        Toolbar actionBar = findViewById(R.id.actionBarPersonalizado);//v7.widget
         setSupportActionBar(actionBar);
+
         //mostramos la flechita de regreso en el actionBar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         nombre = getIntent().getStringExtra("nombre");
         telefono = getIntent().getStringExtra("telefono");
         email = getIntent().getStringExtra("email");
 
-        tvNombre = (TextView) findViewById(R.id.tvNombre);
-        tvTelefono = (TextView) findViewById(R.id.tvTelefono);
-        tvEmail = (TextView) findViewById(R.id.tvEmail);
-        fabGrid = (FloatingActionButton)findViewById(R.id.fabGrid);
+        tvNombre = findViewById(R.id.tvNombre);
+        tvTelefono = findViewById(R.id.tvTelefono);
+        tvEmail = findViewById(R.id.tvEmail);
+        fabGrid = findViewById(R.id.fabGrid);
 
         tvNombre.setText(nombre);
         tvTelefono.setText(telefono);
@@ -111,15 +116,15 @@ public class DetalleContacto extends AppCompatActivity {
     }
 
     //metodo para mandar correo con intent implicito
-        @SuppressLint("IntentReset")
-        public void correo(View v){
-            //Toast.makeText(this, "em"+email, Toast.LENGTH_SHORT).show();
-            //guardamos el email que esta en el TV, en un array string y ese se lo pasamos al EXTRA_EMAIL, para mandarle un email
-            String[] to = {tvEmail.getText().toString()};
-            Intent mail=new Intent((Intent.ACTION_SEND));
-            mail.setData(Uri.parse("mailto:"));
-            mail.putExtra(Intent.EXTRA_EMAIL, to);//recibimos el array que guarda el correo
-            mail.setType("text/plain");//le decimos que es texto plano con metodo .setType()
-            startActivity(Intent.createChooser(mail,"Email"));//esta linea nos permite abrir las apps disponibles para enviar un mail
-        }
+    @SuppressLint("IntentReset")
+    public void correo(View v){
+
+        //guardamos el email que esta en el TV, en un array string y ese se lo pasamos al EXTRA_EMAIL, para mandarle un email
+        String[] to = {tvEmail.getText().toString()};
+        Intent mail=new Intent((Intent.ACTION_SEND));
+        mail.setData(Uri.parse("mailto:"));
+        mail.putExtra(Intent.EXTRA_EMAIL, to);//recibimos el array que guarda el correo
+        mail.setType("text/plain");//le decimos que es texto plano con metodo .setType()
+        startActivity(Intent.createChooser(mail,"Email"));//esta linea nos permite abrir las apps disponibles para enviar un mail
+    }
 }

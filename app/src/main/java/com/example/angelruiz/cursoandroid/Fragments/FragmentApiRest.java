@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -50,7 +51,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import okhttp3.MediaType;
@@ -66,8 +66,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentApiRest extends Fragment implements View.OnClickListener, ICommunicateDialogFmtWithFragmentApiRest {
     private static final int SELECT_PIKTURE = 100;
     private ProgressBar pb;
-    private String uriPathImage;
-    private Uri path;
+    private Uri pathImageSelected;
     View vista;
     Context context;
     private FloatingActionButton fabImagenApi;
@@ -81,8 +80,7 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
     private RecyclerView rvDatosApiRest;
     private SwipeRefreshLayout srfRVAPI;
     private int positionPass;
-    private String nameRceive;
-    private String imageNameUrl;
+    private String nameRceive, uriPathImage, imageNameUrl, mediaPath, result, encodedImage;
     private ImageView ivTesting;
 
     public FragmentApiRest() {
@@ -211,6 +209,89 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         });
     }
 
+    //we access to the galeri for select image to upload
+    @SuppressLint("IntentReset")
+    private void cargarImagenGaleria() {
+        Intent imagenGaleria = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        imagenGaleria.setType("image/*");
+        /*String [] typeImage = {"image/jpeg" , "image/png"};
+        imagenGaleria.putExtra(Intent.EXTRA_MIME_TYPES, typeImage);*/
+        startActivityForResult(Intent.createChooser(imagenGaleria, "Seleccione."), SELECT_PIKTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null && requestCode == SELECT_PIKTURE) {
+            pathImageSelected = data.getData();
+            uriPathImage = getRealPathFromUri(pathImageSelected);
+
+            ivTesting.setImageBitmap(BitmapFactory.decodeFile(uriPathImage));
+
+            /*
+            select image of galery, using cursor for retrofit
+            String [] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = context.getContentResolver().query(pathImageSelected, filePathColumn, null, null, null);
+
+            if (cursor != null){
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                mediaPath = cursor.getString(columnIndex);
+                ivTesting.setImageBitmap(BitmapFactory.decodeFile(uriPathImage));
+                cursor.close();
+            }*/
+
+            /*
+            select image of galery, using Bitmap for retrofit
+            try {
+             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), pathImageSelected); //para mandar la imagen a server
+             bitmap = resizeImage(bitmap, 300, 300);
+             ivTesting.setImageBitmap(bitmap);
+
+            } catch (IOException e) {
+             e.printStackTrace();
+            }*/
+
+        }else{
+            Toast.makeText(context, "¡Error al elegir imagen!", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //resize image
+    private Bitmap resizeImage(Bitmap bitmap, float newWidth, float newHeight) {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        if (width > newWidth || height > newHeight){
+            float scaleWidth = newWidth / width;
+            float scaleHeight = newHeight / height;
+
+            Matrix matrix = new Matrix();
+            matrix.postScale(scaleWidth, scaleHeight);
+
+            return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
+        }else {
+            return bitmap;
+        }
+    }
+
+    private String getRealPathFromUri(Uri uri){
+
+        String[] projection = {MediaStore.Images.Media.DATA};
+        CursorLoader cursorLoader = new CursorLoader(context, uri, projection, null, null, null);
+        Cursor cursor = cursorLoader.loadInBackground();
+
+        if (cursor != null){
+            int columnIdx = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            result = cursor.getString(columnIdx);
+
+            cursor.close();
+        }
+        return result;
+    }
+
     //upload image to server
     private void uploadImageDataBase(){
 
@@ -237,70 +318,6 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
                 Toast.makeText(context, "Error intente más tarde", Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    //we access to the galeri for select image to upload
-    @SuppressLint("IntentReset")
-    private void cargarImagenGaleria() {
-        Intent imagenGaleria = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-        imagenGaleria.setType("image/*");
-        /*String [] typeImage = {"image/jpeg" , "image/png"};
-        imagenGaleria.putExtra(Intent.EXTRA_MIME_TYPES, typeImage);*/
-        startActivityForResult(Intent.createChooser(imagenGaleria, "Seleccione."), SELECT_PIKTURE);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (data != null && requestCode == SELECT_PIKTURE) {
-            path = data.getData();
-            uriPathImage = getRealPathFromUri(path);
-
-            try {
-             Bitmap bitmap = MediaStore.Images.Media.getBitmap(context.getContentResolver(), path); //para mandar la imagen a server
-             bitmap = resizeImage(bitmap, 300, 300);
-             ivTesting.setImageBitmap(bitmap);
-
-            } catch (IOException e) {
-             e.printStackTrace();
-            }
-
-        }else{
-            Toast.makeText(context, "¡Error al elegir imagen!", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //resize image
-    private Bitmap resizeImage(Bitmap bitmap, float newWidth, float newHeight) {
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
-
-         if (width > newWidth || height > newHeight){
-            float scaleWidth = newWidth / width;
-            float scaleHeight = newHeight / height;
-
-             Matrix matrix = new Matrix();
-             matrix.postScale(scaleWidth, scaleHeight);
-
-             return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, false);
-         }else {
-             return bitmap;
-         }
-    }
-
-    private String getRealPathFromUri(Uri uri){
-
-        String[] projection = {MediaStore.Images.Media.DATA};
-        CursorLoader cursorLoader = new CursorLoader(context, uri, projection, null, null, null);
-        Cursor cursor = cursorLoader.loadInBackground();
-        assert cursor != null;
-        int columnIdx = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String result = cursor.getString(columnIdx);
-        cursor.close();
-
-        return result;
     }
 
     //notification push to register new user
