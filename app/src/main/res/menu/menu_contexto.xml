@@ -2,19 +2,19 @@
 <!--creamos este archivo xml de tipo menu en res -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 <!--cada item sera una opsion para nuestro menú, aquí hay dos opsiones-->
-<item
-    android:id="@+id/lvNombre"
-    android:title="@string/menu_contexto_nombre"
-    android:orderInCategory="100">
-</item>
-<item
-    android:id="@+id/lvTelefono"
-    android:title="@string/menu_contexto_telefono"
-    android:orderInCategory="101">
-</item>
-<item
-    android:id="@+id/lvImagen"
-    android:title="@string/menu_contexto_telefono"
-    android:orderInCategory="102">
-</item>
+    <item
+        android:id="@+id/lvNombre"
+        android:title="@string/menu_contexto_nombre"
+        android:orderInCategory="100">
+    </item>
+    <item
+        android:id="@+id/lvTelefono"
+        android:title="@string/menu_contexto_telefono"
+        android:orderInCategory="101">
+    </item>
+    <item
+        android:id="@+id/lvImagen"
+        android:title="@string/menu_contexto_telefono"
+        android:orderInCategory="102">
+    </item>
 </menu>

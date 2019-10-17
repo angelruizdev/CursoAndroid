@@ -41,19 +41,19 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         fragmentCalculator = new FragmentCalculator();
         fragmentInstagramApiRest = new FragmentInstagramApiRest();
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);//pide un toolbar le pasamos null
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -102,9 +102,11 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentCalculator);
         } else if(id == R.id.nav_instagram){
             fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentInstagramApiRest);
+        }else if(id == R.id.nav_content_provider){
+            startActivity(new Intent(getApplicationContext(), BottomNavegationViewCP.class));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         fragmentTransaction.commit();
         return true;

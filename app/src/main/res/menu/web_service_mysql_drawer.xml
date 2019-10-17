@@ -36,6 +36,10 @@
                 android:id="@+id/nav_instagram"
                 android:icon="@drawable/ic_menu_camera"
                 android:title="Consume API Instagram"/>
+            <item
+                android:id="@+id/nav_content_provider"
+                android:icon="@drawable/ic_menu_camera"
+                android:title="Content provider BNV"/>
         </menu>
     </item>
 

@@ -1,17 +1,18 @@
 package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.os.Bundle;
-import com.google.android.material.tabs.TabLayout;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.angelruiz.cursoandroid.Adapters.ViewPagerAdapter;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentListaContacts;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentListaRecycler;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentSqliteRecycler;
 import com.example.angelruiz.cursoandroid.R;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,7 @@ private ViewPager viewPager;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_pager_tabs);
+
         //inicializamos controles
         Toolbar toolBar = findViewById(R.id.toolBar);//declaramos el toolbar de forma local
         tabLayout=findViewById(R.id.tabLayout);

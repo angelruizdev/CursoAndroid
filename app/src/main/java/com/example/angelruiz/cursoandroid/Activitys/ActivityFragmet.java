@@ -1,10 +1,11 @@
 package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.os.Bundle;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.angelruiz.cursoandroid.Fragments.FragmentButton;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCheck;
@@ -19,21 +20,22 @@ Button btnFmtButton,btnFmtCheck;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragmet);
-        btnFmtButton=findViewById(R.id.btnFmtButton);
-        btnFmtCheck=findViewById(R.id.btnFmtCheck);
-        fragmentButton=new FragmentButton();//creamos un objeto del fragment de su clase fragmentButton, para llamarlo y mostrarlo
-        fragmentCheck=new FragmentCheck();
+
+        btnFmtButton = findViewById(R.id.btnFmtButton);
+        btnFmtCheck = findViewById(R.id.btnFmtCheck);
+        fragmentButton = new FragmentButton();//creamos un objeto del fragment de su clase fragmentButton, para llamarlo y mostrarlo
+        fragmentCheck = new FragmentCheck();
         //con estos metodos damos vida y agregamos nuestro fragment dentro de la activity, commit para aplicar
-        getSupportFragmentManager().beginTransaction().add(R.id.contentFmt,fragmentButton).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.contentFmt, fragmentButton).commit();
     }
     public void opsion(View v){
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();//creamos objeto tranaction para hacer tranzacciones(cambiar fragments, add, replace etc...)
         switch (v.getId()){
             case R.id.btnFmtButton:
-                transaction.replace(R.id.contentFmt,fragmentButton);//mediante el objeto transaction y el metodo replace(), cambiamos un fragment por otro
+                transaction.replace(R.id.contentFmt, fragmentButton);//mediante el objeto transaction y el metodo replace(), cambiamos un fragment por otro
                 break;
             case R.id.btnFmtCheck:
-                transaction.replace(R.id.contentFmt,fragmentCheck);
+                transaction.replace(R.id.contentFmt, fragmentCheck);
                 break;
         }
         transaction.commit();

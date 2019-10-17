@@ -9,10 +9,11 @@
     tools:context=".Activitys.ActivityFragmet"
     android:baselineAligned="false">
 
-<LinearLayout
+ <LinearLayout
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <Button
         android:id="@+id/btnFmtButton"
         android:layout_width="wrap_content"
@@ -20,6 +21,7 @@
         android:layout_weight="1"
         android:onClick="opsion"
         android:text="B"/>
+
     <Button
         android:id="@+id/btnFmtCheck"
         android:layout_width="wrap_content"
@@ -28,12 +30,13 @@
         android:onClick="opsion"
         android:text="C"/>
 
-</LinearLayout>
+ </LinearLayout>
 <!--esta etiqueta funciona como un contenedor, para mostrar los fragments en la activity estatica o dinamicamente-->
     <FrameLayout
         android:id="@+id/contentFmt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
+
 </LinearLayout>
 
 
