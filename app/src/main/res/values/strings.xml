@@ -39,6 +39,9 @@
     <string name="tvtext_description_instruction">Eneyda es una exelente persona. \nMuy inteligente</string>
     <string name="menu_popup_edit">Editar</string>
     <string name="ic_cp_contacts">Contactos</string>
+    <string name="title_fmt_cp_contacts">Content Provider Contacts</string>
+    <string name="txt_btn_fmt_cp_contacts">Registro de llamadas</string>
+    <string name="tv_hint_cp_contacts">Log de llamadas</string>
     <string-array name="nombres">
         <item>Ángel</item>
         <item>Manuel</item>

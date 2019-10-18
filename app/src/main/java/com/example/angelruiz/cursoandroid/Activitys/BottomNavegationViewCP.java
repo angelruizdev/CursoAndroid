@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentButton;
-import com.example.angelruiz.cursoandroid.Fragments.FragmentCalculator;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentContactsCPBNV;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,11 +21,15 @@ BottomNavigationView bnvContentProvider;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bottom_navegation_view_cp);
 
+        //control for listen the item selected to the bnv
         bnvContentProvider = findViewById(R.id.bnvContentProvider);
         bnvContentProvider.setOnNavigationItemSelectedListener(navListener);
-        getSupportFragmentManager().beginTransaction().add(R.id.contentCPFragments, new FragmentCalculator()).commit();
+
+        //show this fragment at the beginning
+        getSupportFragmentManager().beginTransaction().add(R.id.contentCPFragments, new FragmentContactsCPBNV()).commit();
     }
 
+    //method for control the icons to the menu bnv
     private BottomNavigationView.OnNavigationItemSelectedListener navListener
                                                           = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
@@ -35,7 +39,7 @@ BottomNavigationView bnvContentProvider;
 
             switch (menuItem.getItemId()){
                 case R.id.opt_cp_contacts:
-                   selectFragmnt = new FragmentCalculator();
+                   selectFragmnt = new FragmentContactsCPBNV();
                 break;
 
                 case R.id.opt_cp_query:
