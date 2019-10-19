@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,9 +20,14 @@ import androidx.fragment.app.Fragment;
 
 import com.example.angelruiz.cursoandroid.R;
 
+import static android.Manifest.permission.READ_CALL_LOG;
+import static android.Manifest.permission.WRITE_CALL_LOG;
+import static androidx.core.content.ContextCompat.checkSelfPermission;
+
+
 public class FragmentContactsCPBNV extends Fragment {
-    private static final int CODE_REQUEST_PERMISSION = 1;
-    //CP: content provider
+ private static final int CODE_REQUEST_PERMISSION = 1;
+ //CP: content provider
  Context context;
  View view;
  Button btShowRegisterCall;
@@ -57,30 +63,55 @@ public class FragmentContactsCPBNV extends Fragment {
         btShowRegisterCall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tvShowLogRegisters.setText("");
+
+                if (checkStatusPermission()){
+                    tvShowLogRegisters.setText("muy bien");
+                    consultCPCalls();
+                }else {
+                    tvShowLogRegisters.setText("muy mal");
+                    requestPermissions();
+                }
             }
         });
     }
 
     //request permission for read and write calls
-    public void requestPermission(){
+    private void requestPermissions1(){
 
-        boolean permissionReadLogCalls = ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.READ_CALL_LOG);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) != PackageManager.PERMISSION_GRANTED
+               && checkSelfPermission(context, Manifest.permission.WRITE_CALL_LOG) != PackageManager.PERMISSION_GRANTED){
+
+                if (shouldShowRequestPermissionRationale(READ_CALL_LOG) || shouldShowRequestPermissionRationale(WRITE_CALL_LOG)){
+
+                }
+            }else {
+                Toast.makeText(context, "¡Permisos ya aceptados!", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    //---->pending finish...
+
+    //request permission for read and write calls
+    private void requestPermissions(){
+
+        boolean permissionReadLogCalls = ActivityCompat.shouldShowRequestPermissionRationale(activity, READ_CALL_LOG);
         boolean permissionWriteLogCalls = ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_CALL_LOG);
 
         if (permissionReadLogCalls && permissionWriteLogCalls){
             Toast.makeText(context, "Permisos aceptados", Toast.LENGTH_SHORT).show();
         }else {
             //if the permissions are not accepted again ask for
-            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG}, CODE_REQUEST_PERMISSION);
+            ActivityCompat.requestPermissions(activity, new String[]{READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG}, CODE_REQUEST_PERMISSION);
         }
     }
 
-    //check if permission sre accepted
-    public boolean checkStatusPermission(){
+    //check if permission are accepted
+    private boolean checkStatusPermission(){
 
-        boolean permissionReadCallLogs = ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
-        boolean permissionWriteCallLogs = ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
+        boolean permissionReadCallLogs = checkSelfPermission(context, READ_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
+        boolean permissionWriteCallLogs = checkSelfPermission(context, Manifest.permission.WRITE_CALL_LOG) == PackageManager.PERMISSION_GRANTED;
 
           if (permissionReadCallLogs && permissionWriteCallLogs){
              return true;
@@ -94,17 +125,21 @@ public class FragmentContactsCPBNV extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == CODE_REQUEST_PERMISSION){
-            Toast.makeText(context, "¡Prmisos ya aceptados!", Toast.LENGTH_SHORT).show();
-            consultCPCalls();
-        }else {
-            Toast.makeText(context, "¡Permisos no aceptados!", Toast.LENGTH_SHORT).show();
-        }
+        switch (requestCode){
+            case CODE_REQUEST_PERMISSION:
 
+              if (checkStatusPermission()){
+                  Toast.makeText(context, "¡Permisos ya aceptados!", Toast.LENGTH_SHORT).show();
+                  consultCPCalls();
+              }else {
+                  Toast.makeText(context, "¡Permisos no han sido aceptados!", Toast.LENGTH_SHORT).show();
+              }
+            break;
+        }
     }
 
     //do the query for bring the log the calls
-    public void consultCPCalls(){
+    private void consultCPCalls(){
 
     }
 

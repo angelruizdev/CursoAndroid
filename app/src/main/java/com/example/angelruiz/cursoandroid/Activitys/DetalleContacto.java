@@ -67,16 +67,17 @@ public class DetalleContacto extends AppCompatActivity {
             }
         });
     }
+
     //pasamos ambos metodos al lineallayout, con la propiedad onClick="telefono", para que al precionar el numero o email, se ejecute el metodo y el intent que llama o manda correo
     //metodo para llamar con intent implicito
     public void telefono(View v) {
 
         if (permisoLlamada()){
-           Intent llamada = new Intent(ACTION_CALL, Uri.parse("tel:"+telefono));
-           startActivityForResult(llamada, LLAMADA);
-           Toast.makeText(this, "llamando a: "+telefono, Toast.LENGTH_SHORT).show();
+            Intent llamada = new Intent(ACTION_CALL, Uri.parse("tel:" + telefono));
+            startActivityForResult(llamada, LLAMADA);
+            Toast.makeText(this, "llamando a: " + telefono, Toast.LENGTH_SHORT).show();
         }
-     }
+    }
 
     public boolean permisoLlamada(){
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
@@ -85,11 +86,12 @@ public class DetalleContacto extends AppCompatActivity {
         if (getApplicationContext().checkSelfPermission(CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
+
         if (shouldShowRequestPermissionRationale(CALL_PHONE)){
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
              alertDialog.setIcon(R.drawable.phone);
              alertDialog.setTitle("Permisos necesarios");
-             alertDialog.setMessage("Activarlos para su completo funcionamiento");
+             alertDialog.setMessage("Activelos para su completo funcionamiento");
              alertDialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
                  @TargetApi(Build.VERSION_CODES.M)
                  @RequiresApi(api = Build.VERSION_CODES.M)
@@ -108,8 +110,9 @@ public class DetalleContacto extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode==PERMISSION){
-            if (grantResults.length == 1 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+
+        if (requestCode == PERMISSION){
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 Toast.makeText(this, "Permisos aceptados", Toast.LENGTH_SHORT).show();
             }
         }
@@ -121,7 +124,7 @@ public class DetalleContacto extends AppCompatActivity {
 
         //guardamos el email que esta en el TV, en un array string y ese se lo pasamos al EXTRA_EMAIL, para mandarle un email
         String[] to = {tvEmail.getText().toString()};
-        Intent mail=new Intent((Intent.ACTION_SEND));
+        Intent mail = new Intent((Intent.ACTION_SEND));
         mail.setData(Uri.parse("mailto:"));
         mail.putExtra(Intent.EXTRA_EMAIL, to);//recibimos el array que guarda el correo
         mail.setType("text/plain");//le decimos que es texto plano con metodo .setType()
