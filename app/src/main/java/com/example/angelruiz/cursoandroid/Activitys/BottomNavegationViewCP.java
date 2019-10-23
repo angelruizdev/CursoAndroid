@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentButton;
-import com.example.angelruiz.cursoandroid.Fragments.FragmentContactsCPBNV;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentCallsContentPBNV;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,7 +26,7 @@ BottomNavigationView bnvContentProvider;
         bnvContentProvider.setOnNavigationItemSelectedListener(navListener);
 
         //show this fragment at the beginning
-        getSupportFragmentManager().beginTransaction().add(R.id.contentCPFragments, new FragmentContactsCPBNV()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.contentCPFragments, new FragmentCallsContentPBNV()).commit();
     }
 
     //method for control the icons to the menu bnv
@@ -39,7 +39,7 @@ BottomNavigationView bnvContentProvider;
 
             switch (menuItem.getItemId()){
                 case R.id.opt_cp_contacts:
-                   selectFragmnt = new FragmentContactsCPBNV();
+                   selectFragmnt = new FragmentCallsContentPBNV();
                 break;
 
                 case R.id.opt_cp_query:

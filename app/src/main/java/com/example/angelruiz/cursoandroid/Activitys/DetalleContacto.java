@@ -2,6 +2,7 @@ package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +31,7 @@ public class DetalleContacto extends AppCompatActivity {
     FloatingActionButton fabGrid;
     private final int PERMISSION = 100;
     private final int LLAMADA = 200;
+    private Context context;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -37,6 +39,7 @@ public class DetalleContacto extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detalle_contacto);
+        context = getApplicationContext();
 
         //damos soporte al actionBar personalizado
         Toolbar actionBar = findViewById(R.id.actionBarPersonalizado);//v7.widget
@@ -83,28 +86,28 @@ public class DetalleContacto extends AppCompatActivity {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M){
             return true;
         }
-        if (getApplicationContext().checkSelfPermission(CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+        if (context.checkSelfPermission(CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
             return true;
         }
 
         if (shouldShowRequestPermissionRationale(CALL_PHONE)){
             AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-             alertDialog.setIcon(R.drawable.phone);
-             alertDialog.setTitle("Permisos necesarios");
-             alertDialog.setMessage("Activelos para su completo funcionamiento");
-             alertDialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                 @TargetApi(Build.VERSION_CODES.M)
-                 @RequiresApi(api = Build.VERSION_CODES.M)
-                 @Override
-                 public void onClick(DialogInterface dialog, int which) {
-                    requestPermissions(new String[]{CALL_PHONE}, PERMISSION);
-                 }
-             });
-             alertDialog.show();
-            }else {
-                    requestPermissions(new String[]{CALL_PHONE}, PERMISSION);
-          }
-        return false;
+            alertDialog.setIcon(R.drawable.phone);
+            alertDialog.setTitle("Permisos necesarios");
+            alertDialog.setMessage("Activelos para su completo funcionamiento");
+            alertDialog.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
+                @TargetApi(Build.VERSION_CODES.M)
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                   requestPermissions(new String[]{CALL_PHONE}, PERMISSION);
+                }
+            });
+            alertDialog.show();
+        }else {
+                   requestPermissions(new String[]{CALL_PHONE}, PERMISSION);
+        }
+    return false;
     }
 
     @Override

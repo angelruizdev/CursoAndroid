@@ -98,7 +98,7 @@ public class FragmentListaContacts extends Fragment  {
 
       //si la version es >= a marshmallow tomara y veridficara si se otorgaron estos permisos:WRITE_EXTERNAL_STORAGE y camera, verifica si son permisos garantizados(aceptados), si lo son devuelve true
       if ((context.checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED &&//mediante el contexto accedemos al metodo: checkSelfPermission(): el cual recibe como parametro cada permiso
-                             context.checkSelfPermission(CAMERA)==PackageManager.PERMISSION_GRANTED)){//ambos son comprobados sin son garantizados
+                           context.checkSelfPermission(CAMERA) == PackageManager.PERMISSION_GRANTED)){//ambos son comprobados sin son garantizados
           return true;//si son aceptados accedemos a la camara y galeria
       }
 
@@ -234,7 +234,7 @@ public class FragmentListaContacts extends Fragment  {
         if (requestCode == MY_PERMISSIONS){
 
             //el parametro grantResults es un arreglo que guarda el numero de permisos que hemos solicitado
-            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]==PackageManager.PERMISSION_GRANTED){//si el resultado concedido es de tamaño 2(si el array grantResults titne 2 permisos), cada posision es un permiso, si el que esta en la posision 0 es aceptado(GRANTED) y el otro igual
+            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){//si el resultado concedido es de tamaño 2(si el array grantResults titne 2 permisos), cada posision es un permiso, si el que esta en la posision 0 es aceptado(GRANTED) y el otro igual
                 Toast.makeText(context, "Permisos aceptados", Toast.LENGTH_SHORT).show();//entonces ambos permisos han sido aceptados, se cumplen las 3 condiciones del if()
                 btnCargarImg.setEnabled(true);//como han sido aceptados los permisos abilitamos el boton cargarImagen
             }
@@ -244,12 +244,12 @@ public class FragmentListaContacts extends Fragment  {
               builder.setTitle("Permisos denegados");
               builder.setMessage("Es necesario aceptar los permisos" +"\n"+ "Para el mejor funcionamiento de la App ");
               builder.setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {//en la opsion aceptar creamos un intent para ir a ajustes y activar los permisos manualmente que necesita esta app
-                @Override
+              @Override
               public void onClick(DialogInterface dialog, int which) {
 
                 Intent ajustes = new Intent();
                   ajustes.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                  Uri uri= Uri.fromParts("package", context.getPackageName(), null);
+                  Uri uri = Uri.fromParts("package", context.getPackageName(), null);
                   ajustes.setData(uri);
                 startActivity(ajustes);
              }
