@@ -5,10 +5,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -131,15 +133,50 @@ private static final int CODE_REQUEST_PERMISSION = 1;
     //do the query for bring the log the calls | (1)
     private void consultCPCalls(){
 
+        //name table calls log
         Uri directionUriCalls = CallLog.Calls.CONTENT_URI;
 
         //fields(projection) to show to the CP table calls
         String[] fieldsQuery = {CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.TYPE, CallLog.Calls.DURATION};
 
-        //this object allows execute querys CRUD in the table directionUriCalls
+        //this object allows execute querys CRUD in the table directionUriCalls CP
         ContentResolver contentResolver = context.getContentResolver();
 
+        //CursorLoader cursorLoader = new CursorLoader(context, directionUriCalls, fieldsQuery, null, null, null);
+        //Cursor cursor = cursorLoader.loadInBackground();
+        Cursor cursor = contentResolver.query(directionUriCalls, fieldsQuery, null, null, null);
+        if(cursor != null){
+            while (cursor.moveToNext()){
+                String number = cursor.getString(cursor.getColumnIndex(fieldsQuery[0]));
+                long date = cursor.getLong(cursor.getColumnIndex(fieldsQuery[1]));
+                int type = cursor.getInt(cursor.getColumnIndex(fieldsQuery[2]));
+                String duration = cursor.getString(cursor.getColumnIndex(fieldsQuery[3]));
+                String typeCall = "";
 
+                switch (type){
+                    case CallLog.Calls.INCOMING_TYPE:
+                        typeCall = "entrada";
+                        break;
+
+                    case CallLog.Calls.MISSED_TYPE:
+                        typeCall = "perdida";
+                        break;
+
+                    case CallLog.Calls.OUTGOING_TYPE:
+                        typeCall = "salida";
+                        break;
+                    default: typeCall = "Desconocido";
+                }
+
+                String detail = "Número:" + number +"."+
+                                "Fecha:" + DateFormat.format("dd/mm/yy k:mm", date) +"."+
+                                "Tipo:" + typeCall +"."+
+                                "Duración" + duration + "s.";
+
+                tvShowLogRegisters.append(detail.replace(".", ".\n"));
+            }
+                cursor.close();
+        }
     }
 
     @Override
@@ -155,5 +192,13 @@ private static final int CODE_REQUEST_PERMISSION = 1;
 /*(1)
 content://call_log/calls --> Uri original
 content:// :scheme especify Uri of content
-call_log :provider authority(owner of the CP)
-calls :name of the table, wath saves the call log*/
+call_log/ :provider authority(owner of the CP)
+/calls :name of the table, wath saves the call log*/
+
+/*Queries the data and returns results
+cursor = getContentResolver().query(
+    UserDictionary.Words.CONTENT_URI, // The content URI, name table
+    projection,                       // The columns to return for each row
+    selectionClause,                  // Selection criteria
+    selectionArgs,                    // Selection criteria
+    sortOrder);                       // The sort order for the returned rows*/

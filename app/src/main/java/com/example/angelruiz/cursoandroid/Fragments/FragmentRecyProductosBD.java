@@ -60,7 +60,6 @@ import java.util.ArrayList;
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
       vista = inflater.inflate(R.layout.fragment_recy_productos_bd, container, false);
 
-
        rvProductosBD = vista.findViewById(R.id.rvProductosBD);
        rvProductosBD.setLayoutManager(new LinearLayoutManager(context, RecyclerView.VERTICAL, false));
        DividerItemDecoration did = new DividerItemDecoration(context, LinearLayoutManager.VERTICAL);//linea divisora de items
