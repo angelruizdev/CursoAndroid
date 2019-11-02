@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentButton;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCallsContentPBNV;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentWeightCPBNV;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -31,7 +31,7 @@ BottomNavigationView bnvContentProvider;
 
     //method for control the icons to the menu bnv
     private BottomNavigationView.OnNavigationItemSelectedListener navListener
-                                                          = new BottomNavigationView.OnNavigationItemSelectedListener() {
+                                = new BottomNavigationView.OnNavigationItemSelectedListener() {
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
 
@@ -43,7 +43,7 @@ BottomNavigationView bnvContentProvider;
                 break;
 
                 case R.id.opt_cp_query:
-                   selectFragmnt = new FragmentApiRest();
+                   selectFragmnt = new FragmentWeightCPBNV();
                 break;
 
                 case R.id.opt_cp_custom:

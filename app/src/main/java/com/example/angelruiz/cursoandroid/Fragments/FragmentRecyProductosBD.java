@@ -90,7 +90,6 @@ import java.util.ArrayList;
                 Bundle bundle = new Bundle();
                 bundle.putString("nombre", nombre);
                 enviar.setArguments(bundle);*/
-
     }
 
     //llenamos el RV con datos de SQLite
