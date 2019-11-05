@@ -12,10 +12,10 @@ public class ContractSqliteConstantsCP {
         public static final String NAME_DATABASE_CP = "registropeso";
         public static final int VERSION_DATABASE = 1;
         //TABLE 0
-        public static final String NAME_TABLE = "";
+        public static final String NAME_TABLE = "pesopersona";
         public static final String _ID = BaseColumns._ID;
-        public static final String COLUMN_PESO = "";
-        public static final String COLUMN_DATE = "";
+        public static final String COLUMN_PESO = "peso";
+        public static final String COLUMN_DATE = "fecha";
         public static final String _COUNT = BaseColumns._COUNT;
     }
 }

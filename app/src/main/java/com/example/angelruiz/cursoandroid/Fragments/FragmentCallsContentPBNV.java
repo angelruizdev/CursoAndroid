@@ -169,11 +169,11 @@ private static final int CODE_REQUEST_PERMISSION = 1;
                 }
 
                 String detail = "Número:" + number +"."+
-                                "Fecha:" + DateFormat.format("dd/mm/yy k:mm", date) +"."+
+                                "Fecha:" + DateFormat.format("dd/MM/yy h:mm a", date) +"."+
                                 "Tipo:" + typeCall +"."+
-                                "Duración" + duration + "s.";
+                                "Duración:" + duration + "s.";
 
-                tvShowLogRegisters.append(detail.replace(".", ".\n"));
+                tvShowLogRegisters.append(".\n" + detail);
             }
                 cursor.close();
         }

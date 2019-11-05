@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-//debemos extender de esta clase, para crear la bd, e implementar su constructor y 2 metodo y
+//debemos extender de esta clase, para crear la bd, e implementar su constructor en activity o fmt
 public class SQLiteOpnHpr extends SQLiteOpenHelper {
     private Context context;
 
