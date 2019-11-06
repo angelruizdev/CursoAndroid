@@ -20,8 +20,8 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import com.example.angelruiz.cursoandroid.R;
-import com.example.angelruiz.cursoandroid.UsingContentPovider.ModelContentProvider.ContractSqliteConstantsCP;
-import com.example.angelruiz.cursoandroid.UsingContentPovider.ModelContentProvider.DataBaseCPOpnHpr;
+import com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvider.ContractSqliteConstantsCP;
+import com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvider.DataBaseCPOpnHpr;
 
 public class FragmentWeightCPBNV extends Fragment {
     View view;
@@ -63,14 +63,10 @@ public class FragmentWeightCPBNV extends Fragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                //showRegisterWeight();
                 saveInfoWeight();
                 showInfoWeight();
             }
         });
-    }
-
-    private void showRegisterWeight(){
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

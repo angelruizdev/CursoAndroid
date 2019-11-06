@@ -1,4 +1,4 @@
-package com.example.angelruiz.cursoandroid.UsingContentPovider.ModelContentProvider;
+package com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

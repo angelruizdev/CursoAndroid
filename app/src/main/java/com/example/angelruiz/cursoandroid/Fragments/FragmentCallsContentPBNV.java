@@ -141,18 +141,24 @@ private static final int CODE_REQUEST_PERMISSION = 1;
 
         //this object allows execute querys CRUD in the table directionUriCalls CP
         ContentResolver contentResolver = context.getContentResolver();
-
+        Cursor cursor = contentResolver.query(directionUriCalls, fieldsQuery, null, null, null);
         //CursorLoader cursorLoader = new CursorLoader(context, directionUriCalls, fieldsQuery, null, null, null);
         //Cursor cursor = cursorLoader.loadInBackground();
-        Cursor cursor = contentResolver.query(directionUriCalls, fieldsQuery, null, null, null);
+
         if(cursor != null){
+            //we access to each row
             while (cursor.moveToNext()){
+                //how not is known the index of each column, we access with method getColumnIndex, passing him the position to the projection
                 String number = cursor.getString(cursor.getColumnIndex(fieldsQuery[0]));
+                //of this shape we obtain the register of each row
                 long date = cursor.getLong(cursor.getColumnIndex(fieldsQuery[1]));
                 int type = cursor.getInt(cursor.getColumnIndex(fieldsQuery[2]));
                 String duration = cursor.getString(cursor.getColumnIndex(fieldsQuery[3]));
-                String typeCall = "";
+                //if we know the index of the column only we use the method correspondent with cursor, cursor.getString(indexColumn), cursor.getInt(n...)
+                //long date = cursor.getLong(1);
+                String typeCall;
 
+                //we access to each type of call
                 switch (type){
                     case CallLog.Calls.INCOMING_TYPE:
                         typeCall = "entrada";
@@ -168,6 +174,7 @@ private static final int CODE_REQUEST_PERMISSION = 1;
                     default: typeCall = "Desconocido";
                 }
 
+                //show all the registers of the table CallLog.Calls
                 String detail = "Número:" + number +"."+
                                 "Fecha:" + DateFormat.format("dd/MM/yy h:mm a", date) +"."+
                                 "Tipo:" + typeCall +"."+
