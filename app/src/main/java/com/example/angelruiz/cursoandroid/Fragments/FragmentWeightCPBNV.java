@@ -14,21 +14,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
-import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvider.ContractSqliteConstantsCP;
-import com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvider.DataBaseCPOpnHpr;
+import com.example.angelruiz.cursoandroid.R;
 
 public class FragmentWeightCPBNV extends Fragment {
     View view;
     private EditText etWeigthEnter;
     private TextView tvShowResults;
     private Button btSaveRegisterCP;
-    private DataBaseCPOpnHpr connection;
+    //private DataBaseCPOpnHpr connection;
     Context context;
     private String dateCurrent;
     private SQLiteDatabase sqLiteDatabase;
@@ -41,7 +41,7 @@ public class FragmentWeightCPBNV extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-        connection = new DataBaseCPOpnHpr(context, ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_DATABASE_CP, null, ContractSqliteConstantsCP.ConstantsSqliteDB.VERSION_DATABASE);
+        //connection = new DataBaseCPOpnHpr(context, ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_DATABASE_CP, null, ContractSqliteConstantsCP.ConstantsSqliteDB.VERSION_DATABASE);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class FragmentWeightCPBNV extends Fragment {
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     private void saveInfoWeight() {
-        sqLiteDatabase = connection.getWritableDatabase();
+        //sqLiteDatabase = connection.getWritableDatabase();
 
         String peso = etWeigthEnter.getText().toString();
         dateCurrent = obtainDateDevice();
@@ -101,16 +101,23 @@ public class FragmentWeightCPBNV extends Fragment {
     }
 
     private void showInfoWeight(){
-        sqLiteDatabase = connection.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, null);
-          if (cursor != null){
-              while (cursor.moveToNext()){
-                  String w = cursor.getString(1);
-                  String d = cursor.getString(2);
-                  tvShowResults.setText("number of raws: " + cursor.getCount() + "---" + w +"-"+ d );
-              }
-              cursor.close();
-          }
+        //sqLiteDatabase = connection.getReadableDatabase();
+        //Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, null);
+        String[] projection = {ContractSqliteConstantsCP.ConstantsSqliteDB._ID,
+                               ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO,
+                               ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_DATE};
+
+        Cursor cursor = context.getContentResolver().query(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, projection, null, null, null);
+        if (cursor != null){
+            while (cursor.moveToNext()){
+                String w = cursor.getString(1);
+                String d = cursor.getString(2);
+                tvShowResults.append("number of raws: "+"\n" + cursor.getCount() + "---" + w +"-"+ d );
+            }
+            cursor.close();
+        }else {
+            Toast.makeText(context, "null", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

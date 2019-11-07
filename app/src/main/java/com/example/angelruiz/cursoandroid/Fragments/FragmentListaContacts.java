@@ -177,7 +177,7 @@ public class FragmentListaContacts extends Fragment  {
            camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(newFileUri));
         }
            startActivityForResult(camera, PHOTO_CODE);//con el metodo startActivityForResult(), mandamos el intent y la constante PHOTO_CODE, para llamarlo desde onActivityResult() y saber que hacer
-       }
+        }
     }
 
     //este metodo permite mediante un intent implisito, acceder a la galeria para seleccionar una imagen, y mostrarla en un IV
@@ -206,7 +206,7 @@ public class FragmentListaContacts extends Fragment  {
            });
 
             //cPath=Environment.getExternalStorageDirectory() + File.separator + APP_DIRECTORY + File.separator + imageName;
-            Bitmap bitmap=BitmapFactory.decodeFile(cPath);//decodifica la ruta del archivo en un mapa de bits
+            Bitmap bitmap = BitmapFactory.decodeFile(cPath);//decodifica la ruta del archivo en un mapa de bits
             ivImg.setImageBitmap(bitmap);//mediante metodo setImageBitmap(): mostramos el archivo decodificado como mapa de bits(bitmap) en IV
 
         break;
