@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Activitys.BottomNavegationViewCP">
 
+  <!--  its can use a LinearLayout  -->
   <RelativeLayout
       android:layout_width="match_parent"
       android:layout_height="match_parent">
@@ -14,7 +15,14 @@
           android:id="@+id/contentCPFragments"
           android:layout_width="match_parent"
           android:layout_height="match_parent"
-          android:layout_above="@+id/bnvContentProvider"/>
+          android:layout_above="@+id/vDivider"/>
+
+      <View
+          android:id="@+id/vDivider"
+          android:layout_width="match_parent"
+          android:layout_height="1dp"
+          android:layout_above="@id/bnvContentProvider"
+          android:background="#000000"/>
 
       <!--the bnv it we inflate with the menu, and we put until down-->
       <com.google.android.material.bottomnavigation.BottomNavigationView
