@@ -16,14 +16,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvider.ContractSqliteConstantsCP;
 import com.example.angelruiz.cursoandroid.R;
 //the objects comented were to access to the db directly without use CP
-public class FragmentWeightCPBNV extends Fragment {
+public class FragmentWeightCPBNV extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     View view;
     private EditText etWeigthEnter;
     private TextView tvShowResults;
@@ -135,5 +138,21 @@ public class FragmentWeightCPBNV extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+
     }
 }

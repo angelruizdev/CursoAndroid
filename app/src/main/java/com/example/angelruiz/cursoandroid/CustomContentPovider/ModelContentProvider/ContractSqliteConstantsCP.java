@@ -9,10 +9,8 @@ public class ContractSqliteConstantsCP {
 
     //content authority(our package)
     public static final String CONTENT_AUTHORITY = "com.example.angelruiz.cursoandroid";
-
     //base content authority(create Uri)
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
-
     //name path(name db)
     public static final String PATCH_WEIGHT = "registropeso";
 
