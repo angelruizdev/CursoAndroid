@@ -37,8 +37,6 @@ public class WeightProvider extends ContentProvider {
         uriMatcher.addURI(ContractSqliteConstantsCP.CONTENT_AUTHORITY, ContractSqliteConstantsCP.PATCH_WEIGHT, PESO_PERSONA);
         uriMatcher.addURI(ContractSqliteConstantsCP.CONTENT_AUTHORITY, ContractSqliteConstantsCP.PATCH_WEIGHT + "/#", PESO_ID);
 
-        mimeTypes.put(PESO_PERSONA, "vnd.android.cursor.dir/vnd." + ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI +"."+ ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE);
-        mimeTypes.put(PESO_ID, "vnd.android.cursor.item/vnd." + ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI +"."+ ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE);
     }
 
     //CREATE SQL - here we connect to the data base
@@ -46,7 +44,8 @@ public class WeightProvider extends ContentProvider {
     public boolean onCreate() {
         context = getContext();
         dataBaseCPOpnHpr = new DataBaseCPOpnHpr(context, ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_DATABASE_CP, null, ContractSqliteConstantsCP.ConstantsSqliteDB.VERSION_DATABASE);
-        sqLiteDatabase = dataBaseCPOpnHpr.getReadableDatabase();
+        sqLiteDatabase = dataBaseCPOpnHpr.getReadableDatabase(); //db mode read
+        sqLiteDatabase = dataBaseCPOpnHpr.getWritableDatabase(); //db mode write
         return true;
     }
 
@@ -62,7 +61,6 @@ public class WeightProvider extends ContentProvider {
             case PESO_PERSONA:
                 //consult all registers
                 cursor = sqLiteDatabase.query(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
-                cursor.setNotificationUri(context.getContentResolver(), ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI);
                 break;
 
             case PESO_ID:
@@ -70,20 +68,14 @@ public class WeightProvider extends ContentProvider {
                 selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?";
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 cursor = sqLiteDatabase.query(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
-                cursor.setNotificationUri(context.getContentResolver(), ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI);
                 break;
 
-            default: throw new IllegalArgumentException("Unknow Uri" + uri);
+            default: throw new IllegalArgumentException("Unknow Uri: " + uri);
         }
+        Log.i("uris", "uri exit: " + uri + "<--->" + ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI);
+        //notify any change in the uri of register(table)
+        cursor.setNotificationUri(context.getContentResolver(), ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI);
         return cursor;
-    }
-
-    //for what other apps can use our CP and know their types mime
-    @Nullable
-    @Override
-    public String getType(@NonNull Uri uri) {
-
-        return mimeTypes.get(uriMatcher.match(uri));
     }
 
     //INSERT SQL
@@ -92,8 +84,7 @@ public class WeightProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
 
         //check which code of uri will use
-        int match1 = uriMatcher.match(uri);
-          switch (match1){
+          switch (uriMatcher.match(uri)){
               case PESO_PERSONA:
 
                  return insertWeight(uri, contentValues);
@@ -118,24 +109,95 @@ public class WeightProvider extends ContentProvider {
         }else{
             Log.i("SaveData", "data saved " + ContentUris.withAppendedId(uri, id));
             uriWithId = ContentUris.withAppendedId(uri, id);
+            //notify to cursor loader of a new (change)register
             context.getContentResolver().notifyChange(uriWithId, null);
         }
-        return ContentUris.withAppendedId(uri, id); // join the uri own with the id(insert) for save it
+        // join the uri own with the id(insert) for save it
+        return ContentUris.withAppendedId(uri, id);
     }
 
     //UPDATE SQL
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
 
-        return 0;
+        switch (uriMatcher.match(uri)){
+            case PESO_PERSONA:
+                if (values != null){
+                    return updateWeight(uri, values, selection, selectionArgs);
+                }
+
+            case PESO_ID:
+                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                if (values != null){
+                    return updateWeight(uri, values, selection, selectionArgs);
+                }
+
+            default: throw new IllegalArgumentException("Update is not support by " + uri);
+        }
+    }
+
+    public int updateWeight(Uri uri, ContentValues values, String selection, String[] selectionArgs){
+
+        if (values.containsKey(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO)){
+            String weightAux = values.getAsString(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO);
+            if (weightAux == null){
+                throw new IllegalArgumentException("El peso es necesario.");
+            }
+        }
+
+        if (values.containsKey(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_DATE)){
+            Integer dateAux = values.getAsInteger(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_DATE);
+            if (dateAux == null){
+                throw new IllegalArgumentException("La fecha es necesaria.");
+            }
+        }
+
+    context.getContentResolver().notifyChange(uri, null);
+    return sqLiteDatabase.update(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, values, selection, selectionArgs);
     }
 
     //DELETE SQL
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
+        int rawDeleted;
+        switch (uriMatcher.match(uri)) {
+            //delete all tha raws of selection and selectionArgs
+            case PESO_PERSONA:
 
-        return 0;
+                rawDeleted = sqLiteDatabase.delete(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, selection, selectionArgs);
+                break;
+            //delete the raw through id selected in the uri
+            case PESO_ID:
+
+                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+
+                rawDeleted = sqLiteDatabase.delete(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Elimination not supported for: " + uri);
+        }
+        context.getContentResolver().notifyChange(uri, null);
+    return rawDeleted;
     }
 
 
+    //for what other apps can use our CP and know their types mime
+    @Nullable
+    @Override
+    public String getType(@NonNull Uri uri) {
+
+        switch (uriMatcher.match(uri)){
+            case PESO_PERSONA:
+
+                return ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_DIR_TYPE; //all register
+            case PESO_ID:
+
+                return ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_ITEM_TYPE; //only register
+
+        default: throw new IllegalArgumentException("UnKnown:" +uri+ "with match" +uriMatcher.match(uri));
+        }
+    }
 }

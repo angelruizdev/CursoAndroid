@@ -148,7 +148,7 @@ private static final int CODE_REQUEST_PERMISSION = 1;
         if(cursor != null){
             //we access to each row
             while (cursor.moveToNext()){
-                //how not is known the index of each column, we access with method getColumnIndex, passing him the position to the projection
+                //how not is known the index of each column, we access with method getColumnIndex, passing the position to the projection
                 String number = cursor.getString(cursor.getColumnIndex(fieldsQuery[0]));
                 //of this shape we obtain the register of each row
                 long date = cursor.getLong(cursor.getColumnIndex(fieldsQuery[1]));
