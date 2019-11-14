@@ -34,8 +34,9 @@ public class WeightCursorAdapter extends CursorAdapter {
 
         String weight = cursor.getString(weightColumnIndex);
         String date = cursor.getString(dateColumnIndex);
+        String weightKg = weight + " Kg";
 
-        tvShowWeight.setText(weight);
+        tvShowWeight.setText(weightKg);
         tvShowDate.setText(date);
     }
 }

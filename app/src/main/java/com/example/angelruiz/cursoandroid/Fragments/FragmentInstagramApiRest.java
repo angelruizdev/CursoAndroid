@@ -38,12 +38,12 @@ public class FragmentInstagramApiRest extends Fragment {
     private Context context;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
-    FragmentDetailInstagramApiRest fragmentDetailInstagramApiRest;
+    private FragmentDetailInstagramApiRest fragmentDetailInstagramApiRest;
     ArrayList<ArrayInstagramObjects> dataInstagram;
     AdapterInstagramApiRest adapterInstagramApiRest;
     private RecyclerView rvShowDataInstagram;
     private String nameUsuarioLocal;
-    ProgressBar pbLoudDataInstagram;
+    private ProgressBar pbLoudDataInstagram;
 
     public FragmentInstagramApiRest() {
         // Required empty public constructor

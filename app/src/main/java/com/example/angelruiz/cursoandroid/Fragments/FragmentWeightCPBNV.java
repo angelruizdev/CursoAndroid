@@ -1,10 +1,12 @@
 package com.example.angelruiz.cursoandroid.Fragments;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,11 +16,12 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.loader.content.CursorLoader;
 
 import com.example.angelruiz.cursoandroid.Adapters.WeightCursorAdapter;
@@ -26,17 +29,20 @@ import com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvi
 import com.example.angelruiz.cursoandroid.R;
 
 //the objects comented were to access to the db directly without use CP
-public class FragmentWeightCPBNV extends Fragment /*implements LoaderManager.LoaderCallbacks<Cursor> deprecate api 29 */{
+public class FragmentWeightCPBNV extends Fragment implements View.OnClickListener /*implements LoaderManager.LoaderCallbacks<Cursor> deprecate api 29 */{
     View view;
     private EditText etWeigthEnter;
-    //private ListView tvShowResults;
+    //private TextView tvShowResults;
     private ListView lvShowResults;
     private WeightCursorAdapter weightCursorAdapter;
-    private Button btSaveRegisterCP;
+    private Button btSaveRegisterCP, btDeleteRegistersCP;
     //private DataBaseCPOpnHpr connection; we coment this object for use Cursor and content resolver for access to the data
     Context context;
     private String dateCurrent;
     //private SQLiteDatabase sqLiteDatabase;
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+    private FragmentUpdateDeleteWeightCP fragmentUpdateDeleteWeightCP;
 
     public FragmentWeightCPBNV() {
         // Required empty public constructor
@@ -46,6 +52,7 @@ public class FragmentWeightCPBNV extends Fragment /*implements LoaderManager.Loa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+
         //connection = new DataBaseCPOpnHpr(context, ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_DATABASE_CP, null, ContractSqliteConstantsCP.ConstantsSqliteDB.VERSION_DATABASE);
     }
 
@@ -57,6 +64,7 @@ public class FragmentWeightCPBNV extends Fragment /*implements LoaderManager.Loa
      //tvShowResults = view.findViewById(R.id.tvShowResults);
      lvShowResults = view.findViewById(R.id.lvShowResults);
      btSaveRegisterCP = view.findViewById(R.id.btSaveRegisterCP);
+     btDeleteRegistersCP = view.findViewById(R.id.btDeleteRegistersCP);
 
      return view;
     }
@@ -66,14 +74,24 @@ public class FragmentWeightCPBNV extends Fragment /*implements LoaderManager.Loa
         super.onActivityCreated(savedInstanceState);
         //getLoaderManager().initLoader(0, null, context); deprecate api 29
 
-        btSaveRegisterCP.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.N)
-            @Override
-            public void onClick(View v) {
+        btSaveRegisterCP.setOnClickListener(this);
+        btDeleteRegistersCP.setOnClickListener(this);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            case R.id.btSaveRegisterCP:
                 saveInfoWeight();
                 showInfoWeight();
-            }
-        });
+                break;
+
+            case R.id.btDeleteRegistersCP:
+                context.getContentResolver().delete(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, null, null);
+                break;
+        }
     }
 
     //obtain date for save register
@@ -113,26 +131,44 @@ public class FragmentWeightCPBNV extends Fragment /*implements LoaderManager.Loa
     }
 
     //show registers of Sqlite CP
-    private void showInfoWeight(){
+    private void showInfoWeight() {
         //sqLiteDatabase = connection.getReadableDatabase();
         //Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, null);
-        String[] projection = {ContractSqliteConstantsCP.ConstantsSqliteDB._ID,
-                               ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO,
-                               ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_DATE};
+        final String[] projection = {ContractSqliteConstantsCP.ConstantsSqliteDB._ID,
+                ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO,
+                ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_DATE};
 
         //this object its communicate with method query of WeightProvider
         //Cursor cursor = context.getContentResolver().query(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, projection, null, null, null);
-        CursorLoader cursorLoader = new CursorLoader(context, ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI ,projection, null, null, null);
-        Cursor cursor = cursorLoader.loadInBackground();
+        final CursorLoader cursorLoader = new CursorLoader(context, ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, projection, null, null, null);
+        final Cursor cursor = cursorLoader.loadInBackground();
+
         weightCursorAdapter = new WeightCursorAdapter(context, cursor, 0);
 
         lvShowResults.setAdapter(weightCursorAdapter);
         lvShowResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Toast.makeText(context, "pos: "+ position+"..."+id, Toast.LENGTH_SHORT).show();
+                fragmentManager = getFragmentManager();
+                if (fragmentManager != null) {
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentUpdateDeleteWeightCP = new FragmentUpdateDeleteWeightCP();
+                }
+
+                //pass uri to FragmentUpdateDeleteWeightCP for do update and delete
+                Bundle passDateWeight = new Bundle();
+
+                Uri uri = ContentUris.withAppendedId(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, id);
+                passDateWeight.putString("passDateUri", String.valueOf(uri));
+                fragmentUpdateDeleteWeightCP.setArguments(passDateWeight);
+
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                fragmentTransaction.replace(R.id.contentCPFragments, fragmentUpdateDeleteWeightCP);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
+    }
 
         /*
         we obtain the data to the cursor how know the index of the columns only we pass the index to cursor.getString(n);
@@ -150,8 +186,8 @@ public class FragmentWeightCPBNV extends Fragment /*implements LoaderManager.Loa
             cursor.close();
         }else {
             Log.i("cursor", "cursor null");
-        }*/
-    }
+        }
+    }*/
 
     private void updateInfoWeight(){
 
@@ -159,6 +195,11 @@ public class FragmentWeightCPBNV extends Fragment /*implements LoaderManager.Loa
 
     private void deleteInfoWeight(){
 
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 
     @Override

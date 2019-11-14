@@ -83,7 +83,7 @@ public class WeightProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
 
-        //check which code of uri will use
+          //check which code of uri will use
           switch (uriMatcher.match(uri)){
               case PESO_PERSONA:
 
@@ -182,7 +182,6 @@ public class WeightProvider extends ContentProvider {
         context.getContentResolver().notifyChange(uri, null);
     return rawDeleted;
     }
-
 
     //for what other apps can use our CP and know their types mime
     @Nullable

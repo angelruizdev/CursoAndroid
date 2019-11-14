@@ -158,11 +158,11 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
           Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
     }
 
+    //es recomendable cerrar aqui la bd
     @Override
     public void onDestroy() {
         super.onDestroy();
         db.close();
-       //es recomendable cerrar aqui la bd
     }
 
    /* *moveToFirst()  para posicionarnos al principio del cursor

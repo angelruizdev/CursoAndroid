@@ -23,9 +23,9 @@ public class FragmentDetailInstagramApiRest extends Fragment {
     View view;
     Context context;
     ArrayInstagramObjects dataUserInstagram; //this array save the data obtain of the key, parceable
-    ImageView ivImageDetail;
-    TextView tvLikesDetail;
-    String imageUrlUser, imageLikes, nameUsuarioLocal;
+    private ImageView ivImageDetail;
+    private TextView tvLikesDetail;
+    private String imageUrlUser, imageLikes, nameUsuarioLocal;
 
     public FragmentDetailInstagramApiRest() {
         // Required empty public constructor
