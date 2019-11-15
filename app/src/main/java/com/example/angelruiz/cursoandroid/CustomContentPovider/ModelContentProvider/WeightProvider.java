@@ -72,7 +72,7 @@ public class WeightProvider extends ContentProvider {
 
             default: throw new IllegalArgumentException("Unknow Uri: " + uri);
         }
-        Log.i("uris", "uri exit: " + uri + "<--->" + ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI);
+        Log.i("uris", "uri exit: " + uri +" = "+ ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI);
         //notify any change in the uri of register(table)
         cursor.setNotificationUri(context.getContentResolver(), ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI);
         return cursor;
@@ -83,7 +83,7 @@ public class WeightProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
 
-          //check which code of uri will use
+          //check which code of uri will use, save all the data
           switch (uriMatcher.match(uri)){
               case PESO_PERSONA:
 
@@ -97,7 +97,7 @@ public class WeightProvider extends ContentProvider {
     private Uri insertWeight(Uri uri, ContentValues contentValues){
         Uri uriWithId;
 
-        //save the the insert in a long
+        //save the insert in a long
         long id = sqLiteDatabase.insert(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, null, contentValues);
 
         //if insert return -1 data not saved
@@ -112,7 +112,7 @@ public class WeightProvider extends ContentProvider {
             //notify to cursor loader of a new (change)register
             context.getContentResolver().notifyChange(uriWithId, null);
         }
-        // join the uri own with the id(insert) for save it
+        //join the uri own CP with the id(insert) for save it
         return ContentUris.withAppendedId(uri, id);
     }
 
@@ -138,6 +138,7 @@ public class WeightProvider extends ContentProvider {
         }
     }
 
+    //verifyc if the data to update are correct and exists
     public int updateWeight(Uri uri, ContentValues values, String selection, String[] selectionArgs){
 
         if (values.containsKey(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO)){

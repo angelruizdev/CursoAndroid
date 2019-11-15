@@ -24,7 +24,7 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
     View vista;
     private SQLiteOpnHpr conn; //instanciamos la conexion a la bd
     Context context;
-    String precioProducto,nombreProducto;
+    String precioProducto, nombreProducto;
     private EditText etPrecioProducto, etNomProducto, etBuscIdProducto, etCoinsidencia, etCoinsidencia1, etElimIdProducto;
     private Button btGuardarProducto, btBuscarProducto, btActualizarProducto, btEliminarProducto;
     private SQLiteDatabase db;
@@ -44,6 +44,8 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
 
         context = getContext();
         conn = new SQLiteOpnHpr(context, ConstantesSqlite.NOMBRE_BD, null, ConstantesSqlite.VERSION_BD); //creamos nuestra conexion con la clase y constructor de la clase .SQLiteOpnHpr.
+        db = conn.getReadableDatabase();
+        db = conn.getWritableDatabase();
     }
 
     @Override
@@ -74,6 +76,7 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
         btEliminarProducto.setOnClickListener(this);
     }
 
+    //onClick to buttons
     @Override
     public void onClick(View v) {
         switch (v.getId()){
@@ -92,7 +95,9 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
         }
     }
 
-    public void guardarDatos(){
+    //INSERT SQL
+    private void guardarDatos(){
+
         precioProducto = etPrecioProducto.getText().toString();//datos a guardar en la bd
         nombreProducto = etNomProducto.getText().toString();
 
@@ -112,7 +117,9 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
       }
     }
 
-    public void buscarProducto(){
+    //LIKE SQL
+    private void buscarProducto(){
+
         db = conn.getReadableDatabase();//para mostrar registro se obtiene el metodo de lectura de bd mediante la conexion(conn)
         String[] buscar = {etBuscIdProducto.getText().toString()};//id(entrada) a buscar debe estar en un array
         String[] datosMostrar = {ConstantesSqlite.PRECIO_PRODUCTO, ConstantesSqlite.NOMBRE_PRODUCTO};//registros a mostrar de la bd, deben estar en un array
@@ -130,7 +137,9 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
         db.close();
     }
 
-    public void actualizarProducto() {
+    //UPDATE SQL
+    private void actualizarProducto() {
+
       if (!etCoinsidencia.getText().toString().equals("") || !etCoinsidencia1.getText().toString().equals("")) {
 
           db = conn.getWritableDatabase();
@@ -149,7 +158,8 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
       }
     }
 
-    public void eliminarProducto(){
+    //DELETE SQL
+    private void eliminarProducto(){
 
           db = conn.getWritableDatabase();
           String[] idEliminar = {etElimIdProducto.getText().toString()};//id a buscar para eliminar esa fila
@@ -158,7 +168,7 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
           Toast.makeText(context, "Eliminado", Toast.LENGTH_SHORT).show();
     }
 
-    //es recomendable cerrar aqui la bd
+    //close db if it destroy the fmt
     @Override
     public void onDestroy() {
         super.onDestroy();

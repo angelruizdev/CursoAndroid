@@ -28,7 +28,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Activitys.BottomNavegationViewCP"></activity>
+        <activity android:name=".Activitys.BottomNavegationViewCP"
+                  android:configChanges="orientation|keyboardHidden|screenSize"><!-- prevents the restart of the activity, for keep the fmt current if it rote the screen for example -->
+        </activity>
         <activity android:name=".Activitys.ActivityVPagerInstruction" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

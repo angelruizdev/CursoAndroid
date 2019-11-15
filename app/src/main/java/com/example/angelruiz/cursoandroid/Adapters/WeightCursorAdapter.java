@@ -11,18 +11,21 @@ import android.widget.TextView;
 import com.example.angelruiz.cursoandroid.CustomContentPovider.ModelContentProvider.ContractSqliteConstantsCP;
 import com.example.angelruiz.cursoandroid.R;
 
+//we extends of cursor adapter for show data in LV
 public class WeightCursorAdapter extends CursorAdapter {
 
     public WeightCursorAdapter(Context context, Cursor cursor, int flags) {
         super(context, cursor, flags);
     }
 
+    //inflate the view item of LV with xml custom
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
 
         return LayoutInflater.from(context).inflate(R.layout.view_inflate_lv_content_provider, viewGroup, false);
     }
 
+    //show the data to the cursor in the view inflate of LV
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 

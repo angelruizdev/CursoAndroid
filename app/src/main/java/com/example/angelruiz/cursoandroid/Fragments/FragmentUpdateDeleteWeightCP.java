@@ -28,7 +28,7 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
     private EditText etReceiveWeight;
     private Uri receiveDataUri;
     private Button btUpdateWeight, btDeleteWeight;
-    FragmentManager fragmentManager;
+    private FragmentManager fragmentManager;
 
     public FragmentUpdateDeleteWeightCP() {
         // Required empty public constructor
@@ -120,9 +120,10 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
                 fragmentManager.popBackStack(); //close this fmt and show the previus
                 break;
 
-            // //delete the raw selected of the column weight
+            //delete the raw selected of the column weight
             case R.id.btDeleteWeight:
                 context.getContentResolver().delete(receiveDataUri, null, null);
+                fragmentManager.popBackStack();
                 break;
         }
     }

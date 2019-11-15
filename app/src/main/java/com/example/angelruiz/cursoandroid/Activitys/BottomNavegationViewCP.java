@@ -16,6 +16,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 public class BottomNavegationViewCP extends AppCompatActivity {
 
 BottomNavigationView bnvContentProvider;
+Fragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,4 +59,24 @@ BottomNavigationView bnvContentProvider;
         return true;
         }
     };
+
+    //pending
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        fragment = getSupportFragmentManager().findFragmentById(R.id.contentCPFragments);
+        if (fragment != null){
+            getSupportFragmentManager().putFragment(outState, "fragmentWeight", fragment);
+        }
+    }
+
+    //pending
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        fragment = getSupportFragmentManager().getFragment(savedInstanceState, "fragmentWeight");
+
+    }
 }

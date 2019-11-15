@@ -30,6 +30,7 @@ import com.example.angelruiz.cursoandroid.R;
 
 //the objects comented were to access to the db directly without use CP
 public class FragmentWeightCPBNV extends Fragment implements View.OnClickListener /*implements LoaderManager.LoaderCallbacks<Cursor> deprecate api 29 */{
+    public static final String TAG_FRAGMENT_WEIGHT = "WEIGHT";
     View view;
     private EditText etWeigthEnter;
     //private TextView tvShowResults;
@@ -37,6 +38,8 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
     private WeightCursorAdapter weightCursorAdapter;
     private Button btSaveRegisterCP, btDeleteRegistersCP;
     //private DataBaseCPOpnHpr connection; we coment this object for use Cursor and content resolver for access to the data
+    private CursorLoader cursorLoader;
+    private Cursor cursor;
     Context context;
     private String dateCurrent;
     //private SQLiteDatabase sqLiteDatabase;
@@ -52,7 +55,6 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-
         //connection = new DataBaseCPOpnHpr(context, ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_DATABASE_CP, null, ContractSqliteConstantsCP.ConstantsSqliteDB.VERSION_DATABASE);
     }
 
@@ -76,6 +78,8 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
 
         btSaveRegisterCP.setOnClickListener(this);
         btDeleteRegistersCP.setOnClickListener(this);
+        //shows the data when its open the fmt
+        showInfoWeight();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -140,13 +144,13 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
 
         //this object its communicate with method query of WeightProvider
         //Cursor cursor = context.getContentResolver().query(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, projection, null, null, null);
-        final CursorLoader cursorLoader = new CursorLoader(context, ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, projection, null, null, null);
-        final Cursor cursor = cursorLoader.loadInBackground();
-
+        cursorLoader = new CursorLoader(context, ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, projection, null, null, null);
+        cursor = cursorLoader.loadInBackground();
+        //we pass the cursor to the adapter
         weightCursorAdapter = new WeightCursorAdapter(context, cursor, 0);
-
+        //we show the adapter in LV
         lvShowResults.setAdapter(weightCursorAdapter);
-        lvShowResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lvShowResults.setOnItemClickListener(new AdapterView.OnItemClickListener() { //onClickItem to LV
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 fragmentManager = getFragmentManager();
@@ -205,6 +209,8 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
     @Override
     public void onDetach() {
         super.onDetach();
+        cursorLoader.cancelLoadInBackground();
+        cursor.close();
     }
 
     /*deprecate api 29
