@@ -124,7 +124,7 @@ public class FragmentSqliteRecycler extends Fragment implements View.OnClickList
         String[] buscar = {etBuscIdProducto.getText().toString()};//id(entrada) a buscar debe estar en un array
         String[] datosMostrar = {ConstantesSqlite.PRECIO_PRODUCTO, ConstantesSqlite.NOMBRE_PRODUCTO};//registros a mostrar de la bd, deben estar en un array
 
-        try {                                                                                                                                                            //Cursor filaSQL = db.rawQuery("SELECT * FROM "+ConstantesSqlite.TABLA_DETALLE+" WHERE "+ConstantesSqlite.ID_PRODUCTO+"=?", buscar);//es lo mismo pero con sentencias SQL, saca todo no solo 2 campos//es necesario ponerlo en bloque try{} por si no hay datos
+        try {//Cursor filaSQL = db.rowQuery("SELECT * FROM "+ConstantesSqlite.TABLA_DETALLE+" WHERE "+ConstantesSqlite.ID_PRODUCTO+"=?", buscar);//es lo mismo pero con sentencias SQL, saca todo no solo 2 campos//es necesario ponerlo en bloque try{} por si no hay datos
             Cursor fila = db.query(ConstantesSqlite.TABLA_DETALLE, datosMostrar, ConstantesSqlite.ID_PRODUCTO+"=?", buscar,null,null,null);//con el obj Cursos fila, extraemos(guardamos) los datos de la consulta
             if (fila.moveToFirst()){//con moveToFirs(), iteramos checamos si nos podemos mover a la la primera posision(si hay registros en la tabla)//String salida = fila.getString(0)+","+ fila.getString(1);//datos juntos para mostrar en un solo TV
                 etCoinsidencia.setText(fila.getString(0));//mediante el objeto fila podemos obtener los registros de cada fila, mediante los metodos getStrnig(pos fila) el metodo es segun el tipo de dato guardado puede ser getInt() etc..

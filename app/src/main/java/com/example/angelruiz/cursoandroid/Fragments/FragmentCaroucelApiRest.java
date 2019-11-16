@@ -34,7 +34,7 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
     CmpCarouselImage cmpCarouselImage;
     Retrofit retrofit;
     private static final String TAG = "SALIDA";
-    FloatingActionButton fabPreviusImage, fabNextImage;
+    private FloatingActionButton fabPreviusImage, fabNextImage;
     private int offset;
 
     public FragmentCaroucelApiRest() {
@@ -135,18 +135,30 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
          }
     }
 
+    //if return to the fmt
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
     //if exit of fmt its stop the animacion
     @Override
     public void onPause() {
-        //this.cmpCarouselImage.cancelAnimation();
         super.onPause();
     }
 
-    //if destroy of app its stop the animacion
+    //stop animation here (check)
+    @Override
+    public void onStop() {
+        super.onStop();
+        this.cmpCarouselImage.cancelAnimation();
+    }
+
+    //if destroy app or activity its stop the animacion
     @Override
     public void onDestroy() {
-        this.cmpCarouselImage.cancelAnimation();
         super.onDestroy();
+        this.cmpCarouselImage.cancelAnimation();
     }
 }
 

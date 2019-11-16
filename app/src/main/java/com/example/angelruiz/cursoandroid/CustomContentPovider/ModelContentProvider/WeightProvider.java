@@ -46,7 +46,7 @@ public class WeightProvider extends ContentProvider {
         dataBaseCPOpnHpr = new DataBaseCPOpnHpr(context, ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_DATABASE_CP, null, ContractSqliteConstantsCP.ConstantsSqliteDB.VERSION_DATABASE);
         sqLiteDatabase = dataBaseCPOpnHpr.getReadableDatabase(); //db mode read
         sqLiteDatabase = dataBaseCPOpnHpr.getWritableDatabase(); //db mode write
-        return true;
+    return true;
     }
 
     //SELECT SQL - we open the db in read mode for show registers
@@ -65,8 +65,8 @@ public class WeightProvider extends ContentProvider {
 
             case PESO_ID:
                 //consult a only register based in the id of uri
-                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?"; //where id
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))}; //be equal to this id(Long)
                 cursor = sqLiteDatabase.query(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
@@ -89,7 +89,7 @@ public class WeightProvider extends ContentProvider {
 
                  return insertWeight(uri, contentValues);
 
-          default: throw new IllegalArgumentException("\n" + "invalid data" + uri);
+          default: throw new IllegalArgumentException("\n invalid data" + uri);
           }
     }
 
@@ -127,8 +127,9 @@ public class WeightProvider extends ContentProvider {
                 }
 
             case PESO_ID:
-                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?"; //where id
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))}; //be equal to this id(Long)
+                Toast.makeText(context, "uri: "+ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?", Toast.LENGTH_SHORT).show();
 
                 if (values != null){
                     return updateWeight(uri, values, selection, selectionArgs);
@@ -162,26 +163,26 @@ public class WeightProvider extends ContentProvider {
     //DELETE SQL
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int rawDeleted;
+        int rowDeleted;
         switch (uriMatcher.match(uri)) {
-            //delete all tha raws of selection and selectionArgs
+            //delete all tha rows if the uri have not id(#)
             case PESO_PERSONA:
 
-                rawDeleted = sqLiteDatabase.delete(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, selection, selectionArgs);
+                rowDeleted = sqLiteDatabase.delete(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, selection, selectionArgs);
                 break;
-            //delete the raw through id selected in the uri
+            //delete the row through his id(#) obtained from the uri
             case PESO_ID:
 
-                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-
-                rawDeleted = sqLiteDatabase.delete(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, selection, selectionArgs);
+                selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?"; //column to compare
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))}; //id to search
+                //DELETE FROM NAME_TABLE WHERE selection = selectionArgs;
+                rowDeleted = sqLiteDatabase.delete(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, selection, selectionArgs);
                 break;
             default:
                 throw new IllegalArgumentException("Elimination not supported for: " + uri);
         }
         context.getContentResolver().notifyChange(uri, null);
-    return rawDeleted;
+    return rowDeleted;
     }
 
     //for what other apps can use our CP and know their types mime

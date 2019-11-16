@@ -26,7 +26,7 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
     View view;
     private TextView tvReceiveDate;
     private EditText etReceiveWeight;
-    private Uri receiveDataUri;
+    private Uri receiveDataUriId; //uri with id
     private Button btUpdateWeight, btDeleteWeight;
     private FragmentManager fragmentManager;
 
@@ -40,14 +40,14 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
 
         context = getContext();
         fragmentManager = getFragmentManager();
-        //recover data sent from FragmentWeightCPBNV
-        Bundle receiveDateWeight = this.getArguments();
+        //recover data(uri) sent from FragmentWeightCPBNV, with id of the row selected whe do click in item of LV
+        Bundle receiveDataWeightId = this.getArguments();
 
-        if (receiveDateWeight != null){
+        if (receiveDataWeightId != null){
             //we parse the uri obtained of FragmentWeightCPBNV
-            receiveDataUri = Uri.parse(getArguments().getString("passDateUri"));
+            receiveDataUriId = Uri.parse(getArguments().getString("passDataUriId"));
         }else {
-            Toast.makeText(context, "Peso no encontrada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Peso no encontrado", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -74,15 +74,15 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
         btDeleteWeight.setOnClickListener(this);
     }
 
-    //load raws for update and delete in db CP
+    //load rows for update and delete in db CP
     private void loadDataShow(){
        //columns to load and query in cursor loader
        final String[] projection = {ContractSqliteConstantsCP.ConstantsSqliteDB._ID,
                                     ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO,
                                     ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_DATE};
 
-       //load the data to the CP with cursor loader in background
-       final CursorLoader cursorLoader = new CursorLoader(context, receiveDataUri, projection, null, null, null);
+       //load the data of the CP in base of the id what bring receiveDataUriId, with cursor loader in background
+       final CursorLoader cursorLoader = new CursorLoader(context, receiveDataUriId, projection, null, null, null);
        final Cursor cursor = cursorLoader.loadInBackground();
 
        //columns to show
@@ -90,7 +90,7 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
        String valueWeightIdx, valueDateIdx;
 
        if (cursor != null){
-           //itera in the raws with cursor
+           //itera in the rows with cursor
            while (cursor.moveToNext()){
                //access to the index of the column
                weightIdx = cursor.getColumnIndex(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO);
@@ -98,7 +98,7 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
                //with the index access to the regiter to the column
                valueWeightIdx = cursor.getString(weightIdx);
                valueDateIdx = cursor.getString(dateIdx);
-               //show the register selected in the viewa
+               //show the register selected in the views
                etReceiveWeight.setText(valueWeightIdx);
                tvReceiveDate.setText(valueDateIdx);
            }
@@ -111,18 +111,22 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
     public void onClick(View view) {
 
         switch (view.getId()){
-            //update the raw selected of the column weight
+            //update the column peso of the row with the id that brings the uri receiveDataUriId with what has etReceiveWeight
             case R.id.btUpdateWeight:
                 ContentValues values = new ContentValues();
                 values.put(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO, etReceiveWeight.getText().toString());
 
-                context.getContentResolver().update(receiveDataUri, values, null, null);
+                //update the column peso with base to the id of the row
+                //UPDATE CONTENT_URI SET COLUMN_PESO = 'etReceiveWeight' WHERE _ID = 'receiveDataUriId'";
+                context.getContentResolver().update(receiveDataUriId, values, null, null);
                 fragmentManager.popBackStack(); //close this fmt and show the previus
                 break;
 
-            //delete the raw selected of the column weight
+            //delete the row selected in base to the id obtained of receiveDataUriId through column peso
             case R.id.btDeleteWeight:
-                context.getContentResolver().delete(receiveDataUri, null, null);
+                //DELETE FROM CONTENT_URI WHERE _ID = receiveDataUriId;
+                //context.getContentResolver().delete(receiveDataUriId, ContractSqliteConstantsCP.ConstantsSqliteDB._ID, new String[]{String.valueOf(receiveDataUriId)});
+                context.getContentResolver().delete(receiveDataUriId, null, null);
                 fragmentManager.popBackStack();
                 break;
         }

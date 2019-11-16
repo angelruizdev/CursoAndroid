@@ -516,15 +516,21 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         });
     }
 
-    //if we press home its pause the fmt, save his state current
+    //if it pass to other activity or fmt its pause the fmt, save his state current
     @Override
     public void onPause() {
         super.onPause();
         Toast.makeText(context, "fmt in pause - onPause", Toast.LENGTH_SHORT).show();
-
     }
 
-    //if we press back its destroy the fmt, no save his state current
+    //fragment not visible if it press home or pass to other activity or fmt, stop task how animations or others(save state current)
+    @Override
+    public void onStop() {
+        super.onStop();
+        Toast.makeText(context, "fmt in stop - onStop", Toast.LENGTH_SHORT).show();
+    }
+
+    //if we press back or it destroy the activity its destroy the fmt, no save his state current(close all task)
     @Override
     public void onDetach() {
         super.onDetach();

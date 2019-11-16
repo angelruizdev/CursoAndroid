@@ -82,17 +82,21 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
         showInfoWeight();
     }
 
+    //onClick to buttons
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onClick(View view) {
         switch (view.getId()){
 
+            //show and save registers
             case R.id.btSaveRegisterCP:
                 saveInfoWeight();
                 showInfoWeight();
                 break;
 
+            //delete all the registers(rows) of the table
             case R.id.btDeleteRegistersCP:
+                //DELETE * FROM CONTENT_URI
                 context.getContentResolver().delete(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, null, null);
                 break;
         }
@@ -137,7 +141,7 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
     //show registers of Sqlite CP
     private void showInfoWeight() {
         //sqLiteDatabase = connection.getReadableDatabase();
-        //Cursor cursor = sqLiteDatabase.rawQuery("SELECT * FROM " + ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, null);
+        //Cursor cursor = sqLiteDatabase.rowQuery("SELECT * FROM " + ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, null);
         final String[] projection = {ContractSqliteConstantsCP.ConstantsSqliteDB._ID,
                 ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO,
                 ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_DATE};
@@ -151,6 +155,7 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
         //we show the adapter in LV
         lvShowResults.setAdapter(weightCursorAdapter);
         lvShowResults.setOnItemClickListener(new AdapterView.OnItemClickListener() { //onClickItem to LV
+            //position and id of the row selected when select item to the LV
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 fragmentManager = getFragmentManager();
@@ -159,12 +164,12 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
                     fragmentUpdateDeleteWeightCP = new FragmentUpdateDeleteWeightCP();
                 }
 
-                //pass uri to FragmentUpdateDeleteWeightCP for do update and delete
-                Bundle passDateWeight = new Bundle();
+                //pass uri to FragmentUpdateDeleteWeightCP with the id of the row(item LV) selected, for do update and delete
+                Bundle passDateWeightId = new Bundle();
 
                 Uri uri = ContentUris.withAppendedId(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, id);
-                passDateWeight.putString("passDateUri", String.valueOf(uri));
-                fragmentUpdateDeleteWeightCP.setArguments(passDateWeight);
+                passDateWeightId.putString("passDataUriId", String.valueOf(uri));
+                fragmentUpdateDeleteWeightCP.setArguments(passDateWeightId);
 
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                 fragmentTransaction.replace(R.id.contentCPFragments, fragmentUpdateDeleteWeightCP);
@@ -185,7 +190,7 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
                 weight = cursor.getString(1);
                 date = cursor.getString(2);
 
-                tvShowResults.append("\n" + "number of raws: "+ cursor.getCount() +"\n" + idPerson +"-"+ weight +"-"+ date );
+                tvShowResults.append("\n" + "number of rows: "+ cursor.getCount() +"\n" + idPerson +"-"+ weight +"-"+ date );
             }
             cursor.close();
         }else {
