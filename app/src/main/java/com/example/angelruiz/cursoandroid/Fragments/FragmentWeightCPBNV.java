@@ -30,7 +30,6 @@ import com.example.angelruiz.cursoandroid.R;
 
 //the objects comented were to access to the db directly without use CP
 public class FragmentWeightCPBNV extends Fragment implements View.OnClickListener /*implements LoaderManager.LoaderCallbacks<Cursor> deprecate api 29 */{
-    public static final String TAG_FRAGMENT_WEIGHT = "WEIGHT";
     View view;
     private EditText etWeigthEnter;
     //private TextView tvShowResults;
@@ -158,6 +157,7 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
             //position and id of the row selected when select item to the LV
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
                 fragmentManager = getFragmentManager();
                 if (fragmentManager != null) {
                     fragmentTransaction = fragmentManager.beginTransaction();
@@ -166,9 +166,9 @@ public class FragmentWeightCPBNV extends Fragment implements View.OnClickListene
 
                 //pass uri to FragmentUpdateDeleteWeightCP with the id of the row(item LV) selected, for do update and delete
                 Bundle passDateWeightId = new Bundle();
-
-                Uri uri = ContentUris.withAppendedId(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, id);
-                passDateWeightId.putString("passDataUriId", String.valueOf(uri));
+                //uri: content://com.example.angelruiz.cursoandroid/registropeso/id | id = id(n) of the row selected
+                Uri uriWithId = ContentUris.withAppendedId(ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_URI, id);
+                passDateWeightId.putString("passDataUriId", String.valueOf(uriWithId)); //cast uri for can pass
                 fragmentUpdateDeleteWeightCP.setArguments(passDateWeightId);
 
                 fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

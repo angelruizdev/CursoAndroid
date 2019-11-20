@@ -47,6 +47,8 @@
     <string name="txt_date_register_update_cp">Fecha de registro</string>
     <string name="bt_update_weight_cp">Actualizar</string>
     <string name="bt_delete_weight_all_cp">Eliminar</string>
+    <string name="tv_list_contact_cp">Lista de contactos</string>
+    <string name="bt_view_contacts_cp">Ver contactos</string>
     <string-array name="nombres">
         <item>Ángel</item>
         <item>Manuel</item>

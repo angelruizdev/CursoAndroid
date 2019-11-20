@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.example.angelruiz.cursoandroid.Fragments.FragmentButton;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCallsContentPBNV;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentReadContactsCP;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentWeightCPBNV;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -49,7 +49,7 @@ Fragment fragment;
                 break;
 
                 case R.id.opt_cp_custom:
-                   selectFragmnt = new FragmentButton();
+                   selectFragmnt = new FragmentReadContactsCP();
                 break;
             }
 

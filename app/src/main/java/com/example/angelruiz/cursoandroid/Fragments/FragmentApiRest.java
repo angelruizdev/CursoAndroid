@@ -66,7 +66,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FragmentApiRest extends Fragment implements View.OnClickListener, ICommunicateDialogFmtWithFragmentApiRest {
     private static final int SELECT_PIKTURE = 100;
     private ProgressBar pb;
-    private Uri pathImageSelected;
+    private Uri pathUriImageSelected;
     View vista;
     Context context;
     private FloatingActionButton fabImagenApi;
@@ -224,8 +224,8 @@ public class FragmentApiRest extends Fragment implements View.OnClickListener, I
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data != null && requestCode == SELECT_PIKTURE) {
-            pathImageSelected = data.getData();
-            uriPathImage = getRealPathFromUri(pathImageSelected);
+            pathUriImageSelected = data.getData();
+            uriPathImage = getRealPathFromUri(pathUriImageSelected);
 
             ivTesting.setImageBitmap(BitmapFactory.decodeFile(uriPathImage));
 

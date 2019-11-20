@@ -25,7 +25,7 @@ public class WeightCursorAdapter extends CursorAdapter {
         return LayoutInflater.from(context).inflate(R.layout.view_inflate_lv_content_provider, viewGroup, false);
     }
 
-    //show the data to the cursor in the view inflate of LV
+    //show the data of the cursor in the view inflate of LV
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 

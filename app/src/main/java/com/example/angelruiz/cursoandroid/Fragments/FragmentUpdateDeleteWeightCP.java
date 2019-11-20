@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,7 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
     View view;
     private TextView tvReceiveDate;
     private EditText etReceiveWeight;
-    private Uri receiveDataUriId; //uri with id
+    private Uri receiveDataUriId; //uri with id, uri: content://com.example.angelruiz.cursoandroid/registropeso/id
     private Button btUpdateWeight, btDeleteWeight;
     private FragmentManager fragmentManager;
 
@@ -111,18 +112,19 @@ public class FragmentUpdateDeleteWeightCP extends Fragment implements View.OnCli
     public void onClick(View view) {
 
         switch (view.getId()){
-            //update the column peso of the row with the id that brings the uri receiveDataUriId with what has etReceiveWeight
+            //update the column peso through the id of his row obtained of the uri receiveDataUriId with etReceiveWeight
             case R.id.btUpdateWeight:
                 ContentValues values = new ContentValues();
                 values.put(ContractSqliteConstantsCP.ConstantsSqliteDB.COLUMN_PESO, etReceiveWeight.getText().toString());
 
-                //update the column peso with base to the id of the row
+                //update the column peso with base to the id of the row obtained in receiveDataUriId ()
                 //UPDATE CONTENT_URI SET COLUMN_PESO = 'etReceiveWeight' WHERE _ID = 'receiveDataUriId'";
                 context.getContentResolver().update(receiveDataUriId, values, null, null);
                 fragmentManager.popBackStack(); //close this fmt and show the previus
+                Log.i("uriOut: ", "uri: " + receiveDataUriId); //here it view the id what bring the uri
                 break;
 
-            //delete the row selected in base to the id obtained of receiveDataUriId through column peso
+            //delete the row selected in base to his id obtained of receiveDataUriId through column peso
             case R.id.btDeleteWeight:
                 //DELETE FROM CONTENT_URI WHERE _ID = receiveDataUriId;
                 //context.getContentResolver().delete(receiveDataUriId, ContractSqliteConstantsCP.ConstantsSqliteDB._ID, new String[]{String.valueOf(receiveDataUriId)});

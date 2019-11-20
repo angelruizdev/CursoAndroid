@@ -1,8 +1,9 @@
 package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.os.Bundle;
-import androidx.fragment.app.FragmentActivity;
 import android.widget.Toast;
+
+import androidx.fragment.app.FragmentActivity;
 
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.gms.maps.CameraUpdateFactory;

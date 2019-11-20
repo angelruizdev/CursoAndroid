@@ -20,10 +20,10 @@ public class WeightProvider extends ContentProvider {
     SQLiteDatabase sqLiteDatabase;
     DataBaseCPOpnHpr dataBaseCPOpnHpr;
 
-    //uri matcher code for bring all the registers of the table peso(*)
-    private static final int PESO_PERSONA = 0;
-    //uri matcher code for bring a only register of the table peso(#)
-    private static final int PESO_ID = 1;
+    //uri matcher code for bring all the registers of the table peso(*), SELECT * FROM...
+    private static final int PESO_PERSONA_URI_INPUT = 0;
+    //uri matcher code for bring a only register of the table peso(#), SELECT FROM...
+    private static final int PESO_ID_URI_INPUT = 1;
 
     //obtect UriMatcher for check the content uri
     private static final UriMatcher uriMatcher;
@@ -34,8 +34,10 @@ public class WeightProvider extends ContentProvider {
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         mimeTypes = new SparseArray<>();
-        uriMatcher.addURI(ContractSqliteConstantsCP.CONTENT_AUTHORITY, ContractSqliteConstantsCP.PATCH_WEIGHT, PESO_PERSONA);
-        uriMatcher.addURI(ContractSqliteConstantsCP.CONTENT_AUTHORITY, ContractSqliteConstantsCP.PATCH_WEIGHT + "/#", PESO_ID);
+        //uri: content://com.example.angelruiz.cursoandroid/registropeso
+        uriMatcher.addURI(ContractSqliteConstantsCP.CONTENT_AUTHORITY, ContractSqliteConstantsCP.PATCH_WEIGHT, PESO_PERSONA_URI_INPUT);
+        //uri: content://com.example.angelruiz.cursoandroid/registropeso/id(#)
+        uriMatcher.addURI(ContractSqliteConstantsCP.CONTENT_AUTHORITY, ContractSqliteConstantsCP.PATCH_WEIGHT + "/#", PESO_ID_URI_INPUT);
 
     }
 
@@ -51,22 +53,22 @@ public class WeightProvider extends ContentProvider {
 
     //SELECT SQL - we open the db in read mode for show registers
     @Nullable
-    @Override
+    @Override//selection = where of SQL
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 
         Cursor cursor;
 
         int macth = uriMatcher.match(uri);
         switch (macth){
-            case PESO_PERSONA:
+            case PESO_PERSONA_URI_INPUT:
                 //consult all registers
                 cursor = sqLiteDatabase.query(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
-            case PESO_ID:
+            case PESO_ID_URI_INPUT:
                 //consult a only register based in the id of uri
                 selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?"; //where id
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))}; //be equal to this id(Long)
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))}; //be equal to this id(Long), one or various params
                 cursor = sqLiteDatabase.query(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, projection, selection, selectionArgs, null, null, sortOrder);
                 break;
 
@@ -85,7 +87,7 @@ public class WeightProvider extends ContentProvider {
 
           //check which code of uri will use, save all the data
           switch (uriMatcher.match(uri)){
-              case PESO_PERSONA:
+              case PESO_PERSONA_URI_INPUT:
 
                  return insertWeight(uri, contentValues);
 
@@ -121,12 +123,12 @@ public class WeightProvider extends ContentProvider {
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
 
         switch (uriMatcher.match(uri)){
-            case PESO_PERSONA:
+            case PESO_PERSONA_URI_INPUT:
                 if (values != null){
                     return updateWeight(uri, values, selection, selectionArgs);
                 }
 
-            case PESO_ID:
+            case PESO_ID_URI_INPUT:
                 selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?"; //where id
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))}; //be equal to this id(Long)
                 Toast.makeText(context, "uri: "+ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?", Toast.LENGTH_SHORT).show();
@@ -166,12 +168,12 @@ public class WeightProvider extends ContentProvider {
         int rowDeleted;
         switch (uriMatcher.match(uri)) {
             //delete all tha rows if the uri have not id(#)
-            case PESO_PERSONA:
+            case PESO_PERSONA_URI_INPUT:
 
                 rowDeleted = sqLiteDatabase.delete(ContractSqliteConstantsCP.ConstantsSqliteDB.NAME_TABLE, selection, selectionArgs);
                 break;
             //delete the row through his id(#) obtained from the uri
-            case PESO_ID:
+            case PESO_ID_URI_INPUT:
 
                 selection = ContractSqliteConstantsCP.ConstantsSqliteDB._ID + "=?"; //column to compare
                 selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))}; //id to search
@@ -191,10 +193,10 @@ public class WeightProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
 
         switch (uriMatcher.match(uri)){
-            case PESO_PERSONA:
+            case PESO_PERSONA_URI_INPUT:
 
                 return ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_DIR_TYPE; //all register
-            case PESO_ID:
+            case PESO_ID_URI_INPUT:
 
                 return ContractSqliteConstantsCP.ConstantsSqliteDB.CONTENT_ITEM_TYPE; //only register
 
