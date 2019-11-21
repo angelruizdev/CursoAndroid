@@ -4,12 +4,13 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.angelruiz.cursoandroid" //firebase lo usa para registrar app
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         useLibrary 'org.apache.http.legacy'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true //for minSdkVersion 21 or + not nesesary
     }
     buildTypes {
         release {
@@ -45,6 +46,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.0.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'com.android.support:multidex:1.0.3' //for minSdkVersion 21 or + not nesesary
 }
 
 apply plugin: 'com.google.gms.google-services'

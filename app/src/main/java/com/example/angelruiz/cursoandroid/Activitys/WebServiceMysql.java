@@ -17,12 +17,12 @@ import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCalculator;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCaroucelApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentInstagramApiRest;
-import com.example.angelruiz.cursoandroid.Fragments.FragmentRegistroWsMysql;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentRxJavaTest;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class WebServiceMysql extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-    FragmentRegistroWsMysql fragment_registro_ws_mysql;
+    FragmentRxJavaTest fragmentRxJavaTest;
     FragmentCaroucelApiRest fragmentCaroucelApiRest;
     FragmentApiRest fragmentApiRest;
     FragmentCalculator fragmentCalculator;
@@ -35,7 +35,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         setContentView(R.layout.web_service_mysql);
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);//desabilitamos actionbar para tener pantalla completa -- > app_bar_web_service_mysql
         //setSupportActionBar(toolbar);
-        fragment_registro_ws_mysql = new FragmentRegistroWsMysql();
+        fragmentRxJavaTest = new FragmentRxJavaTest();
         fragmentCaroucelApiRest = new FragmentCaroucelApiRest();
         fragmentApiRest = new FragmentApiRest();
         fragmentCalculator = new FragmentCalculator();
@@ -89,7 +89,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-           fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragment_registro_ws_mysql);
+           fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentRxJavaTest);
         } else if (id == R.id.nav_gallery) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentCaroucelApiRest);
         } else if (id == R.id.nav_slideshow) {
