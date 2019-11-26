@@ -1,8 +1,10 @@
 package com.example.angelruiz.cursoandroid.Activitys;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,11 +15,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 public class Splash extends Activity {
-
+ Context context;
  Button btnMsg;
  FloatingActionButton btnFlota;//declaramos el fab
  EditText edtNombre;
  String nombre;
+ Handler handler; //animation splash
 
     //crea la Activity por primera vez o despues de destruirce
     @Override
@@ -25,6 +28,7 @@ public class Splash extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash);
 
+        context = getApplicationContext();
         Toast.makeText(this, "Act onCreate", Toast.LENGTH_SHORT).show();
 
         edtNombre = findViewById(R.id.edtNombres);
@@ -34,11 +38,12 @@ public class Splash extends Activity {
             @Override
             public void onClick(View view) {
                 Toast.makeText(Splash.this, "Enviando...", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getApplicationContext(), WebServiceMysql.class));
+                startActivity(new Intent(context, WebServiceMysql.class));
                 //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://www.facebook.com"));
                 //startActivity(intent);
             }
         });
+
         //lo inicializamos como cualquier componente
         btnFlota = findViewById(R.id.btnFloat);
         //nos brinda un escuchador setOnClickListener, para ejecutar una accion
@@ -62,12 +67,27 @@ public class Splash extends Activity {
                                        //esto ahorra espacio en memoria
                             }
                         })
+
                         //podemos jalar el color de las 2 formas.
                         //.setActionTextColor(Color.GREEN)//nativo con java
                         .setActionTextColor(getResources().getColor(R.color.colorPrimary))//trallendo el recurso del archivo @colors
                         .show();
             }
         });
+
+        animationTimeSplash();
+    }
+
+    //animation time splash
+    public void animationTimeSplash(){
+
+        handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(new Intent(context, WebServiceMysql.class));
+            }
+        },3000);
     }
 
     //Inicia la Activity por primera vez o despues de destruirce
@@ -103,6 +123,9 @@ public class Splash extends Activity {
     protected void onStop() {
         super.onStop();
         Toast.makeText(this, "Act onStop", Toast.LENGTH_SHORT).show();
+        //stop the animation of the splash
+        handler.removeCallbacksAndMessages(null);
+        finish();
     }
 
     //Destrulle la Activity, si se presiona el boton back, o se libera estpacio

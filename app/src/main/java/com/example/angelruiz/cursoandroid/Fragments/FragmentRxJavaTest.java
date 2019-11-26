@@ -53,10 +53,10 @@ public class FragmentRxJavaTest extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //showObservableRxJava();
+        showObservableRxJava();
         //rxJavaTest();
         //observableRxJavaExplained();
-        simpleObserverRxJava();
+        //simpleObserverRxJava();
     }
 
     private void simpleObserverRxJava(){
@@ -141,39 +141,44 @@ public class FragmentRxJavaTest extends Fragment {
         //assign(subscribe) the observer to the observable
         observableNumbers.subscribe(new Observer<Integer>() {
 
+            //notifications of the observer (this 4 methods will notify to the observable about the data issued(results))
             @Override
             public void onSubscribe(Disposable d) {
-
+                Log.i(TAG_RX_JAVA, "onSubscribe: " + Thread.currentThread().getName());
             }
 
+            //provee al Observer con nuevos elementos(transmitter of elements, called for the observable 0+ times)
             @Override
             public void onNext(Integer integer) {
-                Log.i(TAG_RX_JAVA, "onNext: called " + integer);
+                Log.i(TAG_RX_JAVA, "onNext: called " + integer +"THREAD->"+ Thread.currentThread().getName() );
             }
 
+            //notificará al Observer de que se ha producido algún tipo de error
             @Override
             public void onError(Throwable e) {
 
             }
 
+            //notifica al Observer de que el Observable ha terminado de mandar elementos.
             @Override
             public void onComplete() {
-
+                Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName());
             }
         });
     }
 
     private void showObservableRxJava(){
-        //create the observable
+        //create a new object observable
         Observable<ArrayTaskRxJava> taskObservable = Observable
                       //this observable itera in a arrayList
                       .fromIterable(TaskRxJava.createTaskList())
-                      //performs short duration operations(e/s)
+                      //performs short duration operations(e/s), thread in background
                       .subscribeOn(Schedulers.io())
-                      //show only the isComplete true
+                      //operator show only the task isComplete true
                       .filter(new Predicate<ArrayTaskRxJava>() {
                           @Override
                           public boolean test(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
+                              Log.i(TAG_RX_JAVA, "TEST->: " + Thread.currentThread().getName());
                               try {
                                   Thread.sleep(2000);
                               } catch (InterruptedException e) {
@@ -181,13 +186,14 @@ public class FragmentRxJavaTest extends Fragment {
                               }
                               return arrayTaskRxJava.getComplet();
                           }
-                      }).subscribeOn(AndroidSchedulers.mainThread());
+                      //will issue the notifications(results) of the observer to the thread main UI
+                      }).observeOn(AndroidSchedulers.mainThread());
 
         //subscribe(connect) the observer to the observable, for who the observer can receive element issued for the observable
         taskObservable.subscribe(new Observer<ArrayTaskRxJava>() {
             @Override
             public void onSubscribe(Disposable d) {
-                Log.i(TAG_RX_JAVA, "onSubscribe: called");
+                Log.i(TAG_RX_JAVA, "onSubscribe: " + Thread.currentThread().getName());
             }
 
             //provee al Observer con nuevos elementos
@@ -210,7 +216,7 @@ public class FragmentRxJavaTest extends Fragment {
             //notifica al Observer de que el Observable ha terminado de mandar elementos.
             @Override
             public void onComplete() {
-                Log.i(TAG_RX_JAVA, "onComplete: called");
+                Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName());
             }
         });
     }
@@ -252,7 +258,7 @@ public class FragmentRxJavaTest extends Fragment {
 
             @Override
             public void onComplete() {
-                Log.i(TAG_RX_JAVA, "onComplete... ");
+                Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName());
             }
         });
     }

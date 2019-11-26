@@ -11,10 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayImgCaroucelRest;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -129,7 +129,7 @@ public class CmpCarouselImage extends FrameLayout {
     public void animation(int position, final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
 
         arrayImgCaroucelRest = imagesCaroucel.get(position);
-        Picasso.with(context)
+        Glide.with(context)
                 .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/" + arrayImgCaroucelRest.getNumberImage() + ".png")
                 .into(ivCaroucel);
 
