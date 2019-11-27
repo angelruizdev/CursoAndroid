@@ -53,10 +53,11 @@ public class FragmentRxJavaTest extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        showObservableRxJava();
-        //rxJavaTest();
+        //showObservableRxJava();
+        rxJavaTest();
         //observableRxJavaExplained();
         //simpleObserverRxJava();
+        //obsRxJavaJust();
     }
 
     private void simpleObserverRxJava(){
@@ -221,17 +222,20 @@ public class FragmentRxJavaTest extends Fragment {
         });
     }
 
-    //observable reduced
+    //observable reduced, just can receive an string, int too
     private void rxJavaTest(){
 
-        Observable.just(1, 2, 3, 4, 5, 6).filter(new Predicate<Integer>() {
+        Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+          .skip(5)
+          .filter(new Predicate<Integer>() {
             @Override
             public boolean test(Integer integer) throws Exception {
                 //return the numbers pares
                 return integer % 2 == 0;
             }
 
-        }).subscribeOn(AndroidSchedulers.mainThread())//excecute the onservable in thread main
+        }).subscribeOn(Schedulers.newThread()) //excecute the observable in backgrond (new thread)
+          .observeOn(AndroidSchedulers.mainThread()) //excecute the issued (results) in the main thread UI
 
         //subscribe the observer in the observable
         .subscribe(new Observer<Integer>() {
@@ -243,7 +247,7 @@ public class FragmentRxJavaTest extends Fragment {
             @Override
             public void onNext(Integer integer) {
 
-                Log.i(TAG_RX_JAVA, "onNext: impar: " + integer);
+                Log.i(TAG_RX_JAVA, "onNext: par: " + integer);
                 try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
@@ -261,5 +265,34 @@ public class FragmentRxJavaTest extends Fragment {
                 Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName());
             }
         });
+    }
+
+    private void obsRxJavaJust(){
+
+        Observable.just("Hola Ángel", "como estas", "buena tarde")
+                .subscribeOn(Schedulers.newThread())
+                .skip(2)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName() + s);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 }
