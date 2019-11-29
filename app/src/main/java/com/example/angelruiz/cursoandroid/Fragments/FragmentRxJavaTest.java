@@ -15,6 +15,7 @@ import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RxJavaExercises.ArrayTaskRxJava;
 import com.example.angelruiz.cursoandroid.RxJavaExercises.TaskRxJava;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.BiFunction;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
@@ -53,8 +55,10 @@ public class FragmentRxJavaTest extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        concatObservables();
+        //observableUssingZip();
         //showObservableRxJava();
-        rxJavaTest();
+        //rxJavaTest();
         //observableRxJavaExplained();
         //simpleObserverRxJava();
         //obsRxJavaJust();
@@ -226,8 +230,8 @@ public class FragmentRxJavaTest extends Fragment {
     private void rxJavaTest(){
 
         Observable.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-          .skip(5)
-          .filter(new Predicate<Integer>() {
+          .skip(5) //skip the first 5 values
+          .filter(new Predicate<Integer>() { //filter for show only numbers pair
             @Override
             public boolean test(Integer integer) throws Exception {
                 //return the numbers pares
@@ -267,11 +271,12 @@ public class FragmentRxJavaTest extends Fragment {
         });
     }
 
+    //observable with just and string
     private void obsRxJavaJust(){
 
-        Observable.just("Hola Ángel", "como estas", "buena tarde")
+        Observable.just("Hola Ángel", "cómo estás", "buena tarde")
                 .subscribeOn(Schedulers.newThread())
-                .skip(2)
+                .skip(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<String>() {
                     @Override
@@ -281,7 +286,8 @@ public class FragmentRxJavaTest extends Fragment {
 
                     @Override
                     public void onNext(String s) {
-                        Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName() + s);
+                        String recuveData = fetchData(s);
+                        Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName() + recuveData);
                     }
 
                     @Override
@@ -294,5 +300,135 @@ public class FragmentRxJavaTest extends Fragment {
 
                     }
                 });
+    }
+
+    private String fetchData(String data){
+
+       return data;
+    }
+
+    //obsrvable Ussing Zip
+    private void observableUssingZip(){
+
+        //observable with even numbers
+        List<Integer> numbersPair = new ArrayList<>();
+
+        for (int i = 2; i <= 10 ; i+=2) {
+            numbersPair.add(i);
+        }
+
+        Observable<Integer> observablePair = Observable
+                .fromIterable(numbersPair)
+                .subscribeOn(Schedulers.newThread());
+
+        //observable with odd numbers
+        List<Integer> numbersInPair = new ArrayList<>();
+
+        for (int i = 1; i < 10; i++) {
+            numbersInPair.add(i);
+        }
+
+        Observable<Integer> observableInPair = Observable
+                .fromIterable(numbersInPair)
+                .filter(new Predicate<Integer>() {
+                    @Override
+                    public boolean test(Integer integer) throws Exception {
+
+                        return integer % 2 == 1;
+                    }
+                }).subscribeOn(Schedulers.newThread());
+
+        //with operator zip we join and execute 2 observables in parallel
+        Observable<Integer> observableZip = Observable
+                .zip(observablePair, observableInPair, new BiFunction<Integer, Integer, Integer>() {
+
+                    @Override
+                    public Integer apply(Integer integer, Integer integer2) throws Exception {
+                        //cast integer to string for can return concatenated
+                        String evenNumbers = String.valueOf(integer);
+                        String oddNumbers = String.valueOf(integer2);
+                        String concatNumbers = evenNumbers + oddNumbers;
+
+                        Thread.sleep(2000);
+
+                        return Integer.parseInt(concatNumbers);
+                    }
+
+                }).subscribeOn(Schedulers.newThread())
+                  .observeOn(AndroidSchedulers.mainThread());
+
+                observableZip.subscribe(new Observer<Integer>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+                    //we obtain the emissions of the 2 observables at the same time(parallel)
+                    @Override
+                    public void onNext(Integer integer) {
+                        Log.i(TAG_RX_JAVA, "onNext: " + integer);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        Log.i(TAG_RX_JAVA, "onComplete: succesfull");
+                    }
+                });
+    }
+
+
+    private Observable<Integer> observableNumbersId(){
+
+        List<Integer> nameIdFill = new ArrayList<>();
+        for (int i = 1; i <= 5 ; i++) {
+            nameIdFill.add(i);
+        }
+        return Observable.fromIterable(nameIdFill);
+    }
+
+    private Observable<String> observableNames(){
+
+        return Observable.just("Start second observable...", "Angel", "David", "Gustavo", "Magdalena");
+    }
+
+    //obsrvable ussing concat
+    private void concatObservables(){
+
+        Observable.concat(observableNumbersId(), observableNames())
+             .subscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread())
+             .subscribe(new Observer<Serializable>() {
+                 @Override
+                 public void onSubscribe(Disposable d) {
+                     Log.i(TAG_RX_JAVA, "onSubscribe: ");
+                     Log.i(TAG_RX_JAVA, "Start first observable...");
+                 }
+
+                 @Override
+                 public void onNext(Serializable serializable) {
+
+                     Log.i(TAG_RX_JAVA, "onNext: " + serializable);
+
+                     try {
+                         Thread.sleep(1500);
+                     } catch (InterruptedException e) {
+                         e.printStackTrace();
+                     }
+                 }
+
+                 @Override
+                 public void onError(Throwable e) {
+
+                 }
+
+                 @Override
+                 public void onComplete() {
+                     Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName());
+                 }
+             });
     }
 }

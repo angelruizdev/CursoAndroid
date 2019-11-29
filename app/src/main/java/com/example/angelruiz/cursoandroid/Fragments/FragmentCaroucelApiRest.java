@@ -59,8 +59,6 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
                 .baseUrl("http://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-
-        obtenerDatosApiRest(offset);
     }
 
     @Override
@@ -75,9 +73,20 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
     }
 
     @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        //outState.putString("value", value);
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        if (savedInstanceState != null){
+            //savedInstanceState.getString("value");
+        }
+        obtenerDatosApiRest(offset);
         cmpCarouselImage.currentCaroucelImage(0);
 
         fabPreviusImage.setOnClickListener(this);
