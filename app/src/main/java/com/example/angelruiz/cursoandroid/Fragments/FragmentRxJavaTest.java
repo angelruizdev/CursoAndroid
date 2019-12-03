@@ -3,37 +3,30 @@ package com.example.angelruiz.cursoandroid.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.angelruiz.cursoandroid.R;
-import com.example.angelruiz.cursoandroid.RxJavaExercises.ArrayTaskRxJava;
-import com.example.angelruiz.cursoandroid.RxJavaExercises.TaskRxJava;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import io.reactivex.disposables.CompositeDisposable;
 
-import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
-import io.reactivex.Observer;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.BiFunction;
-import io.reactivex.functions.Predicate;
-import io.reactivex.schedulers.Schedulers;
-
-public class FragmentRxJavaTest extends Fragment {
+public class FragmentRxJavaTest extends Fragment implements View.OnClickListener {
     //observer : subscribe(suscriptor,reactor)
     View view;
     Context context;
     private static final String TAG_RX_JAVA = "TAG_RX_JAVA";
+    private TextView tvShowCount;
+    private Button btAddCount;
+    private int count = 0;
+    //for delete the disposables to the observador once recovered the emissions to the observable
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     public FragmentRxJavaTest() {
         // Required empty public constructor
@@ -48,22 +41,77 @@ public class FragmentRxJavaTest extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_rx_java_test, container, false);
+
+        tvShowCount = view.findViewById(R.id.tvShowCount);
+        btAddCount = view.findViewById(R.id.btAddCount);
         return view;
     }
 
+    //save the state(value) of the variable count,(save state of fmt in gral)
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt("contador", count);
+    }
+
+    //this method too is funtional for manage the change of configuration (rotate screen, life cycle)
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        concatObservables();
+        //concatObservables();
         //observableUssingZip();
         //showObservableRxJava();
         //rxJavaTest();
         //observableRxJavaExplained();
         //simpleObserverRxJava();
         //obsRxJavaJust();
+        //clickButtonObservable();
+
+        btAddCount.setOnClickListener(this);
+        //save instate of the count if its rotate the screen
+        if (savedInstanceState != null){
+            count = savedInstanceState.getInt("contador");
+            tvShowCount.setText(String.valueOf(count));
+        }
     }
 
+    @Override
+    public void onClick(View view) {
+       count++;
+       tvShowCount.setText(String.valueOf(count));
+    }
+
+
+    /*//check... onClick to button with rxandroid
+    private void clickButtonObservable(){
+
+        RxView.clicks(btAddCount)
+            .subscribe(new Observer<Unit>() {
+             @Override
+             public void onSubscribe(Disposable d) {
+
+             }
+
+             @Override
+             public void onNext(Unit unit) {
+                 Log.i(TAG_RX_JAVA, "onNext: " + unit);
+             }
+
+             @Override
+             public void onError(Throwable e) {
+
+             }
+
+             @Override
+             public void onComplete() {
+
+             }
+         });
+    }
+
+    //creating obsrvables and observers
     private void simpleObserverRxJava(){
         //create a new observable
         Observable<Integer> observable = Observable.create(new ObservableOnSubscribe<Integer>() {
@@ -175,7 +223,7 @@ public class FragmentRxJavaTest extends Fragment {
     private void showObservableRxJava(){
         //create a new object observable
         Observable<ArrayTaskRxJava> taskObservable = Observable
-                      //this observable itera in a arrayList
+                      //this observable itera in a arrayList(converts the data in observables of single type(is recomended work with data of single type(observable)))
                       .fromIterable(TaskRxJava.createTaskList())
                       //performs short duration operations(e/s), thread in background
                       .subscribeOn(Schedulers.io())
@@ -196,20 +244,24 @@ public class FragmentRxJavaTest extends Fragment {
 
         //subscribe(connect) the observer to the observable, for who the observer can receive element issued for the observable
         taskObservable.subscribe(new Observer<ArrayTaskRxJava>() {
+
+            //receive the disposables to the observer
             @Override
             public void onSubscribe(Disposable d) {
                 Log.i(TAG_RX_JAVA, "onSubscribe: " + Thread.currentThread().getName());
+                //we save the disposables for delete
+                compositeDisposable.add(d);
             }
 
             //provee al Observer con nuevos elementos
             @Override
             public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
                 Log.i(TAG_RX_JAVA, "onNext: " + Thread.currentThread().getName() +" Task completed: "+ arrayTaskRxJava.getDescription());
-                /*try {
+                *//*try {
                     Thread.sleep(2000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
-                }*/
+                }*//*
             }
 
             //notificará al Observer de que se ha producido algún tipo de error
@@ -313,7 +365,7 @@ public class FragmentRxJavaTest extends Fragment {
         //observable with even numbers
         List<Integer> numbersPair = new ArrayList<>();
 
-        for (int i = 2; i <= 10 ; i+=2) {
+        for (int i = 2; i <= 10; i += 2) {
             numbersPair.add(i);
         }
 
@@ -380,26 +432,29 @@ public class FragmentRxJavaTest extends Fragment {
                 });
     }
 
-
+    //observable integer for use with concat
     private Observable<Integer> observableNumbersId(){
 
         List<Integer> nameIdFill = new ArrayList<>();
         for (int i = 1; i <= 5 ; i++) {
             nameIdFill.add(i);
         }
-        return Observable.fromIterable(nameIdFill);
+        return Observable.fromIterable(nameIdFill).subscribeOn(Schedulers.io());
     }
 
+    //observable string for use with concat
     private Observable<String> observableNames(){
 
-        return Observable.just("Start second observable...", "Angel", "David", "Gustavo", "Magdalena");
+        return Observable.just("Start second observable...", "Angel", "David", "Gustavo", "Magdalena").subscribeOn(Schedulers.io());
     }
 
-    //obsrvable ussing concat
+    //operator concat it allow execute 2 observable in series(one at a time)
     private void concatObservables(){
 
+        //obsrvable ussing concat
         Observable.concat(observableNumbersId(), observableNames())
              .subscribeOn(Schedulers.io())
+             .delay(4, TimeUnit.SECONDS) //delay the issue for 4 seconds
              .observeOn(AndroidSchedulers.mainThread())
              .subscribe(new Observer<Serializable>() {
                  @Override
@@ -430,5 +485,12 @@ public class FragmentRxJavaTest extends Fragment {
                      Log.i(TAG_RX_JAVA, "onComplete: " + Thread.currentThread().getName());
                  }
              });
+    }*/
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        //delete the elements disposables to the observer
+        compositeDisposable.clear();
     }
 }
