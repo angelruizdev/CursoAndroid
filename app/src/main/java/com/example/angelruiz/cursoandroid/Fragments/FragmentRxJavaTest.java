@@ -3,19 +3,33 @@ package com.example.angelruiz.cursoandroid.Fragments;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.angelruiz.cursoandroid.R;
+import com.example.angelruiz.cursoandroid.RxJavaExercises.ArrayTaskRxJava;
+import com.example.angelruiz.cursoandroid.RxJavaExercises.TaskRxJava;
 
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 
 public class FragmentRxJavaTest extends Fragment implements View.OnClickListener {
     //observer : subscribe(suscriptor,reactor)
@@ -60,6 +74,8 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+        /* observables of test */
         //concatObservables();
         //observableUssingZip();
         //showObservableRxJava();
@@ -68,6 +84,16 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         //simpleObserverRxJava();
         //obsRxJavaJust();
         //clickButtonObservable();
+
+        /* observables with more detail */
+        //createObservableWithCreate();
+        //createObservableWithCreate1();
+
+        //createObservableWithJust();
+        //createObservableWithRange();
+        //createObservableWithInterval();
+        createObservableWithTimer();
+
 
         btAddCount.setOnClickListener(this);
         //save instate of the count if its rotate the screen
@@ -83,6 +109,251 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
        tvShowCount.setText(String.valueOf(count));
     }
 
+    //crating observable with operator create example 0
+    private void createObservableWithCreate() {
+
+        ArrayTaskRxJava arrayTaskRxJava = new ArrayTaskRxJava("finish module", true, 1);
+
+        //create a observable with a single object(arrayTaskRxJava)
+        Observable<ArrayTaskRxJava> observableWithCreate = Observable
+             .create(new ObservableOnSubscribe<ArrayTaskRxJava>() {
+                 @Override
+                 public void subscribe(ObservableEmitter<ArrayTaskRxJava> emitter) throws Exception {
+                     if (!emitter.isDisposed()){
+                         emitter.onNext(arrayTaskRxJava);
+                         emitter.onComplete();
+                     }
+                 }
+             }).subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread());
+
+        observableWithCreate.subscribe(new Observer<ArrayTaskRxJava>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
+                Log.i(TAG_RX_JAVA, "onNext: " + arrayTaskRxJava.getDescription());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    //crating observable with operator create example 1
+    private void createObservableWithCreate1() {
+
+        //create a observable with an list of objects(arrayTaskRxJava)
+        Observable<ArrayTaskRxJava> observableWithCreate = Observable
+            .create(new ObservableOnSubscribe<ArrayTaskRxJava>() {
+                @Override
+                public void subscribe(ObservableEmitter<ArrayTaskRxJava> emitter) throws Exception {
+
+                    //Inside the subscribe method iterate through the list of tasks and call onNext(arrayTaskRxJava)
+                    for (ArrayTaskRxJava arrayTaskRxJava: TaskRxJava.createTaskList()) {
+                         //if the data emited exists, pass to onNext
+                         if (!emitter.isDisposed()){
+                             emitter.onNext(arrayTaskRxJava);
+                         }else {
+                             Toast.makeText(context, "Flujo de datos eliminado o termindo", Toast.LENGTH_SHORT).show();
+                         }
+                    }
+
+                    //Once the loop is complete, call the onComplete() method
+                    if (!emitter.isDisposed()){
+                        emitter.onComplete();
+                    }
+                }
+            }).subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread());
+
+        observableWithCreate.subscribe(new Observer<ArrayTaskRxJava>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
+                Log.i(TAG_RX_JAVA, "onNext: " + arrayTaskRxJava.getComplete());
+
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    //crating observable with operator just example 0
+    private void createObservableWithJust() {
+
+        //the operator just(), only allows 10 parameters, int or string
+        Observable.just("Monday", "Tuesday", "Wednesday", "Thursday", "Friday")
+              .observeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(new Observer<String>() { //view the results creating a new observer
+
+                  @Override
+                  public void onSubscribe(Disposable d) {
+                      compositeDisposable.add(d);
+                  }
+
+                  @Override
+                  public void onNext(String s) {
+                      Log.i(TAG_RX_JAVA, "onNext: " + s);
+
+                      try {
+                          Thread.sleep(1500);
+                      } catch (InterruptedException e) {
+                          e.printStackTrace();
+                      }
+                  }
+
+                  @Override
+                  public void onError(Throwable e) {
+
+                  }
+
+                  @Override
+                  public void onComplete() {
+
+                  }
+              });
+    }
+
+    //creating observable with range operator
+    private void createObservableWithRange(){
+
+        //this operator create something similar to a loop(for, while)
+        Observable.range(0, 6)
+            .repeat(2) //repeat 2 times the values of the range
+            //.skip(2)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<Integer>() {
+
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                //receibe the values from 0 to 5
+                @Override
+                public void onNext(Integer integer) {
+                    Log.i(TAG_RX_JAVA, "onNext: " + integer);
+
+                    try {
+                        Thread.sleep(1500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+
+    }
+
+    //creating observable with interval operator
+    private void createObservableWithInterval(){
+
+        Observable<Long> observableInterval = Observable
+             .interval(2, TimeUnit.SECONDS)
+             .subscribeOn(Schedulers.io())
+             .takeWhile(new Predicate<Long>() {
+                 @Override
+                 public boolean test(Long aLong) throws Exception {
+                     return aLong < 5;
+                 }
+             })
+             .observeOn(AndroidSchedulers.mainThread());
+
+        observableInterval.subscribe(new Observer<Long>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+                Log.i(TAG_RX_JAVA, "onNext: " + aLong);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i(TAG_RX_JAVA, "onComplete: ready");
+
+            }
+        });
+    }
+
+    //creating observable with timer operator
+    private void createObservableWithTimer(){
+
+        Observable<Long> observableTimer = Observable
+             .timer(2, TimeUnit.SECONDS)
+             .subscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread());
+
+        observableTimer.subscribe(new Observer<Long>() {
+            Long time;
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                time = System.currentTimeMillis() / 1000;
+            }
+
+            @Override
+            public void onNext(Long aLong) {
+                Log.i(TAG_RX_JAVA, "onNext: " +  ((System.currentTimeMillis() / 1000) - time) + " segundos han transcurrido");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
 
     /*//check... onClick to button with rxandroid
     private void clickButtonObservable(){
@@ -186,6 +457,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
 
         //create a new observable
         Observable<Integer> observableNumbers = Observable
+                .repeat(2)
                 .fromIterable(numbers)
                 //create a new thread, in this it makes the work to the (observable)
                 .subscribeOn(Schedulers.newThread())
@@ -237,7 +509,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
                               } catch (InterruptedException e) {
                                   e.printStackTrace();
                               }
-                              return arrayTaskRxJava.getComplet();
+                              return arrayTaskRxJava.getComplete();
                           }
                       //will issue the notifications(results) of the observer to the thread main UI
                       }).observeOn(AndroidSchedulers.mainThread());

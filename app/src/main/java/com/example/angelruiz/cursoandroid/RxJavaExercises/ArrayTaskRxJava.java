@@ -3,12 +3,12 @@ package com.example.angelruiz.cursoandroid.RxJavaExercises;
 public class ArrayTaskRxJava {
 
     private String description;
-    private Boolean isComplet;
+    private Boolean isComplete;
     private int priority;
 
-    public  ArrayTaskRxJava(String description, Boolean isComplet, int priority){
+    public  ArrayTaskRxJava(String description, Boolean isComplete, int priority){
         this.description = description;
-        this.isComplet = isComplet;
+        this.isComplete = isComplete;
         this.priority = priority;
     }
 
@@ -20,12 +20,12 @@ public class ArrayTaskRxJava {
         this.description = description;
     }
 
-    public Boolean getComplet() {
-        return isComplet;
+    public Boolean getComplete() {
+        return isComplete;
     }
 
-    public void setComplet(Boolean complet) {
-        isComplet = complet;
+    public void setComplete(Boolean complete) {
+        isComplete = complete;
     }
 
     public int getPriority() {
