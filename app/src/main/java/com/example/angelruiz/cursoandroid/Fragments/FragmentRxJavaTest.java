@@ -19,6 +19,8 @@ import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RxJavaExercises.ArrayTaskRxJava;
 import com.example.angelruiz.cursoandroid.RxJavaExercises.TaskRxJava;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
@@ -88,11 +90,14 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         /* observables with more detail */
         //createObservableWithCreate();
         //createObservableWithCreate1();
-
         //createObservableWithJust();
         //createObservableWithRange();
         //createObservableWithInterval();
-        createObservableWithTimer();
+        //createObservableWithTimer();
+
+        /* converts objects or data in observable */
+        //convertArrayInObservable();
+        convertListInObservable();
 
 
         btAddCount.setOnClickListener(this);
@@ -287,9 +292,11 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
     //creating observable with interval operator
     private void createObservableWithInterval(){
 
+        //this operator create a observable infinity with a start and period for begin to emit items(how sleep a thread)
         Observable<Long> observableInterval = Observable
-             .interval(2, TimeUnit.SECONDS)
+             .interval(0, 2, TimeUnit.SECONDS)
              .subscribeOn(Schedulers.io())
+             //is how a if, while the sequence be < 5 will issue items(numbers)
              .takeWhile(new Predicate<Long>() {
                  @Override
                  public boolean test(Long aLong) throws Exception {
@@ -325,12 +332,14 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
     //creating observable with timer operator
     private void createObservableWithTimer(){
 
+        //this operator delay the emittions n time(similar to delay)
         Observable<Long> observableTimer = Observable
              .timer(2, TimeUnit.SECONDS)
              .subscribeOn(Schedulers.io())
              .observeOn(AndroidSchedulers.mainThread());
 
         observableTimer.subscribe(new Observer<Long>() {
+            //variable to show how much time has passed
             Long time;
 
             @Override
@@ -340,7 +349,91 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
 
             @Override
             public void onNext(Long aLong) {
+                //show how much time has passed
                 Log.i(TAG_RX_JAVA, "onNext: " +  ((System.currentTimeMillis() / 1000) - time) + " segundos han transcurrido");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    //comverts a array[] in observable with fromArray operator
+    private void convertArrayInObservable(){
+
+        ArrayTaskRxJava[] arrayTaskRxJava = new ArrayTaskRxJava[3];
+
+        arrayTaskRxJava[0] = new ArrayTaskRxJava("module maps", false, 1);
+        arrayTaskRxJava[1] = new ArrayTaskRxJava("module firebase", false, 1);
+        arrayTaskRxJava[2] = new ArrayTaskRxJava("module content provider", true, 0);
+
+        Observable<ArrayTaskRxJava> observableFromArray = Observable
+             //this operator convert the array in observable for work best(for have data of a single type)
+             .fromArray(arrayTaskRxJava)
+             .subscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread());
+
+        observableFromArray.subscribe(new Observer<ArrayTaskRxJava>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
+                Log.i(TAG_RX_JAVA, "onNext: " + arrayTaskRxJava.getDescription());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i(TAG_RX_JAVA, "onComplete: ready");
+            }
+        });
+    }
+
+    //converts a list<> in observable with fromIterable operator
+    private void convertListInObservable(){
+
+        List<ArrayTaskRxJava> listTaskRxJava = new ArrayList<>();
+
+        listTaskRxJava.add(new ArrayTaskRxJava("module firebase", false, 1));
+        listTaskRxJava.add(new ArrayTaskRxJava("module maps", false, 1));
+        listTaskRxJava.add(new ArrayTaskRxJava("module sqlite", true, 0));
+
+        Observable<ArrayTaskRxJava> observableFromIterable = Observable
+             //this operator convert the list in observable for work best(for have data of a single type)
+             .fromIterable(listTaskRxJava)
+             .subscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread());
+
+        //only if is subscribed the observable will issue items
+        observableFromIterable.subscribe(new Observer<ArrayTaskRxJava>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
+                Log.i(TAG_RX_JAVA, "onNext: " + arrayTaskRxJava.getComplete());
+
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
