@@ -25,7 +25,7 @@ public class CmpCarouselImage extends FrameLayout {
     FloatingActionButton fabPreviusImage, fabNextImage;
     TextView tvNameCaroucel;
     Handler handler;
-    int count, count1, index;
+    int count, count1, index, countTest;
     int position;
     int timerSeconds;
     ArrayList<ArrayImgCaroucelRest> imagesCaroucel;
@@ -57,11 +57,26 @@ public class CmpCarouselImage extends FrameLayout {
         count = 0;
         count1 = 5;
         index = 0;
+        countTest = 0;
         timerSeconds = 4000;
 
         this.addView(view);
     }
 
+    public void left(){
+       countTest++;
+       if (countTest > 5){
+           countTest = 0;
+       }
+    }
+
+    public void right(){
+       if (countTest > 0){
+           countTest--;
+       }else {
+           countTest = 5;
+       }
+    }
     public class OnSwipeTouchListener implements OnTouchListener {
 
         private final GestureDetector gestureDetector;
@@ -70,14 +85,18 @@ public class CmpCarouselImage extends FrameLayout {
             gestureDetector = new GestureDetector(context, new GestureListener());
         }
 
+
+
         public void onSwipeLeft() { //finish slide automatic
             //touchLeft(imagesCaroucel);
-            Toast.makeText(context, "left", Toast.LENGTH_SHORT).show();
+            left();
+            Toast.makeText(context, "left" + countTest, Toast.LENGTH_SHORT).show();
         }
 
         public void onSwipeRight() {
             //touchRight(imagesCaroucel);
-            Toast.makeText(context, "right", Toast.LENGTH_SHORT).show();
+            right();
+            Toast.makeText(context, "right" + countTest, Toast.LENGTH_SHORT).show();
         }
 
         public boolean onTouch(View v, MotionEvent event) {
@@ -113,18 +132,28 @@ public class CmpCarouselImage extends FrameLayout {
     }
 
     public void carrucelAnimation(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
+
          handler.postDelayed(new Runnable() {
              @Override
              public void run() {
 
-                 if(count < imagesCaroucel.size()) {
-                     position = count++;
-                     animation(position, imagesCaroucel);
-
-                 }else {
-                     handler.removeCallbacksAndMessages(null);
+                 count++;
+                 if (count >= imagesCaroucel.size()){
                      count = 0;
                  }
+                 animation(count, imagesCaroucel);
+                 handler.removeCallbacksAndMessages(null);
+
+                 /*if(count < imagesCaroucel.size()) {
+                     position = count++;
+
+                     animation(position, imagesCaroucel);
+                     handler.removeCallbacksAndMessages(null);
+
+                 }else{
+                     count = 0;
+                 }*/
+
                  handler.postDelayed(this, timerSeconds);
              }
          }, 0);
@@ -147,7 +176,6 @@ public class CmpCarouselImage extends FrameLayout {
 
     public void touchLeft(final ArrayList<ArrayImgCaroucelRest> imagesCaroucel) {
         //cancelAnimation(); permite que no se adelante el timpo si avanzamos una imagen
-        //carrucelAnimation(imagesCaroucel);
         carrucelAnimation(imagesCaroucel);
     }
 

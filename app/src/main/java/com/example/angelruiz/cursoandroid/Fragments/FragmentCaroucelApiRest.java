@@ -61,8 +61,9 @@ public class FragmentCaroucelApiRest extends Fragment implements View.OnClickLis
                 .build();
     }
 
+    //crea vista de fmt e inicializa vistas
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) { //crea vista de fmt e inicializa vistas
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         vista = inflater.inflate(R.layout.fragment_caroucel_api_rest, container, false);
 
         cmpCarouselImage = vista.findViewById(R.id.ivCaroucelCmp);

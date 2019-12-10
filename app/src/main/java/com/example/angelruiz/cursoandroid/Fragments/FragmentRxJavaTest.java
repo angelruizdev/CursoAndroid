@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,17 +18,12 @@ import com.example.angelruiz.cursoandroid.R;
 import com.example.angelruiz.cursoandroid.RxJavaExercises.ArrayTaskRxJava;
 import com.example.angelruiz.cursoandroid.RxJavaExercises.TaskRxJava;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
-import io.reactivex.ObservableEmitter;
-import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
@@ -97,8 +91,15 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
 
         /* converts objects or data in observable */
         //convertArrayInObservable();
-        convertListInObservable();
+        //convertListInObservable();
+        //convertDataInObservable();
 
+        /* Flowables */
+        //createFlowable();
+        //createSingle();
+
+        /* ussing operators of filter */
+        operatorFilter();
 
         btAddCount.setOnClickListener(this);
         //save instate of the count if its rotate the screen
@@ -114,7 +115,71 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
        tvShowCount.setText(String.valueOf(count));
     }
 
-    //crating observable with operator create example 0
+    //example ussing operator filter (gral)
+    private void operatorFilter(){
+
+        //with this operator its can use all the methods of the class String
+        Observable<ArrayTaskRxJava> obsUssingFilter = Observable
+             .fromIterable(TaskRxJava.createTaskList())
+             //this operator it will take only the 4 first elements of the list, skip the rest. (take(n))
+             .take(4)
+             .takeWhile(new Predicate<ArrayTaskRxJava>() {
+                 @Override
+                 public boolean test(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
+
+                     return arrayTaskRxJava.getDescription().startsWith("T");
+                 }
+             })
+             .filter(new Predicate<ArrayTaskRxJava>() {
+                 @Override
+                 public boolean test(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
+
+                     //this operator will issue only values(string) that end with e
+                     if (arrayTaskRxJava.getDescription().endsWith("e")){
+                         return true;
+                     }else {
+                         Log.i(TAG_RX_JAVA, "without data");
+                     }
+                     return false;
+                 }
+             })
+             //this operator will delete the objects repetead(data), only will issue different
+             .distinct(new Function<ArrayTaskRxJava, String>() {
+                 @Override
+                 public String apply(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
+
+                     return arrayTaskRxJava.getDescription();
+                 }
+             })
+             .subscribeOn(Schedulers.io())
+             .observeOn(AndroidSchedulers.mainThread());
+
+        //subscribe the observer
+        obsUssingFilter.subscribe(new Observer<ArrayTaskRxJava>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            //receive and show only values that meet the condition of the filter
+            @Override
+            public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
+                Log.i(TAG_RX_JAVA, "onNext: " + arrayTaskRxJava.getDescription());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i(TAG_RX_JAVA, "onComplete: success");
+            }
+        });
+    }
+
+    /*//crating observable with operator create example 0
     private void createObservableWithCreate() {
 
         ArrayTaskRxJava arrayTaskRxJava = new ArrayTaskRxJava("finish module", true, 1);
@@ -448,7 +513,171 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         });
     }
 
-    /*//check... onClick to button with rxandroid
+    //converts a callable<> in observable with fromCallable operator
+    private void convertDataInObservable(){
+
+        Observable<ArrayTaskRxJava> observableFromCallable = Observable
+             //this operator issue a single element(useful for task with deley)
+             .fromCallable(new Callable<ArrayTaskRxJava>() {
+                 @Override
+                 public ArrayTaskRxJava call() throws Exception {
+
+                     return null;
+                 }
+
+             }).subscribeOn(Schedulers.io())
+               .observeOn(AndroidSchedulers.mainThread());
+
+        observableFromCallable.subscribe(new Observer<ArrayTaskRxJava>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
+                Log.i(TAG_RX_JAVA, "onNext: " + arrayTaskRxJava.getComplete());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    //useful for work with contrapresion only
+    private void createFlowable(){
+
+        List<Integer> numbers = new ArrayList<>();
+
+        numbers.add(1);
+        numbers.add(2);
+        numbers.add(3);
+
+        //this class its create similar to an observable
+        Flowable<Integer> createFlowable = Flowable
+            .fromIterable(numbers)
+            .onBackpressureBuffer()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread());
+
+        //its subscribe how an observable
+        createFlowable.subscribe(new FlowableSubscriber<Integer>() {
+            @Override
+            public void onSubscribe(Subscription s) {
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                Log.i(TAG_RX_JAVA, "onNext: " + integer);
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                Log.i(TAG_RX_JAVA, "onError: " + t);
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i(TAG_RX_JAVA, "onComplete: Success");
+            }
+        });
+
+        //comverts of frowable a observable ussing the method toObservable
+        Observable<Integer> backToObservable = createFlowable.toObservable();
+            backToObservable.subscribe(new Observer<Integer>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Integer integer) {
+                    Log.i(TAG_RX_JAVA, "onNext: " + integer);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+
+        //comverts of observable a frowable ussing the method toFlowable
+        Flowable<Integer> backToFlowable = backToObservable.toFlowable(BackpressureStrategy.BUFFER);
+            backToFlowable.subscribe(new FlowableSubscriber<Integer>() {
+                @Override
+                public void onSubscribe(Subscription s) {
+
+                }
+
+                @Override
+                public void onNext(Integer integer) {
+                    Log.i(TAG_RX_JAVA, "onNext: " + integer);
+                }
+
+                @Override
+                public void onError(Throwable t) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+    }
+
+    //this class is similar to observable, but only issue 1 value
+    private void createSingle(){
+
+        //this class is useful for receive response of red
+        Single<String> singleResponse = Single
+                .create(new SingleOnSubscribe<String>() {
+                    @Override
+                    public void subscribe(SingleEmitter<String> emitter) throws Exception {
+
+                        if(!emitter.isDisposed()){
+                            emitter.onSuccess("Conectado a la red, onSuccess!");
+                        }
+                    }
+                }).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        //its subscribe how an observable
+        singleResponse.subscribe(new SingleObserver<String>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            //if the single can issue his item
+            @Override
+            public void onSuccess(String s) {
+                Log.i(TAG_RX_JAVA, "onSuccess: " + s);
+            }
+
+            //if the single no can issue his item
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
+
+
+
+    //check... onClick to button with rxandroid
     private void clickButtonObservable(){
 
         RxView.clicks(btAddCount)
@@ -592,7 +821,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
                       .fromIterable(TaskRxJava.createTaskList())
                       //performs short duration operations(e/s), thread in background
                       .subscribeOn(Schedulers.io())
-                      //operator show only the task isComplete true
+                      //operator show only the task isComplete true(filter a boolean)
                       .filter(new Predicate<ArrayTaskRxJava>() {
                           @Override
                           public boolean test(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
