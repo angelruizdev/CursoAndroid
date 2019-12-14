@@ -15,28 +15,31 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.angelruiz.cursoandroid.R;
-import com.example.angelruiz.cursoandroid.RxJavaExercises.ArrayTaskRxJava;
-import com.example.angelruiz.cursoandroid.RxJavaExercises.TaskRxJava;
+import com.jakewharton.rxbinding3.view.RxView;
 
-import io.reactivex.Observable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
-import io.reactivex.schedulers.Schedulers;
+import kotlin.Unit;
 
 public class FragmentRxJavaTest extends Fragment implements View.OnClickListener {
     //observer : subscribe(suscriptor,reactor)
     View view;
     Context context;
     private static final String TAG_RX_JAVA = "TAG_RX_JAVA";
-    private TextView tvShowCount;
-    private Button btAddCount;
+    private TextView tvShowCount, tvShowCountClicks;
+    private Button btAddCount, btCountClicks;
     private int count = 0;
     //for delete the disposables to the observador once recovered the emissions to the observable
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private List<Integer> numbersInteger;
 
     public FragmentRxJavaTest() {
         // Required empty public constructor
@@ -46,6 +49,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        numbersInteger = new ArrayList<>();
     }
 
     @Override
@@ -53,7 +57,9 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         view = inflater.inflate(R.layout.fragment_rx_java_test, container, false);
 
         tvShowCount = view.findViewById(R.id.tvShowCount);
+        tvShowCountClicks = view.findViewById(R.id.tvShowCountClicks);
         btAddCount = view.findViewById(R.id.btAddCount);
+        btCountClicks = view.findViewById(R.id.btCountClicks);
         return view;
     }
 
@@ -69,7 +75,6 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
 
         /* observables of test */
         //concatObservables();
@@ -99,9 +104,13 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         //createSingle();
 
         /* ussing operators of filter */
-        operatorFilter();
+        //operatorFilter();
+
+        /* ussing operators of transformation */
+        operatorsOfTransformation();
 
         btAddCount.setOnClickListener(this);
+        btCountClicks.setOnClickListener(this);
         //save instate of the count if its rotate the screen
         if (savedInstanceState != null){
             count = savedInstanceState.getInt("contador");
@@ -109,13 +118,213 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         }
     }
 
+    //count
     @Override
     public void onClick(View view) {
-       count++;
-       tvShowCount.setText(String.valueOf(count));
+       switch (view.getId()){
+           case R.id.btAddCount:
+               count++;
+               tvShowCount.setText(String.valueOf(count));
+               break;
+
+           case R.id.btCountClicks:
+               countClicksRx();
+               break;
+       }
     }
 
-    //example ussing operator filter (gral)
+    //event onclick(rxjava) in view(button)
+    private void countClicksRx(){
+
+        //map - convert the clicks in an integer
+        RxView.clicks(btCountClicks)
+              .map(new Function<Unit, Integer>() {
+                  @Override
+                  public Integer apply(Unit unit) throws Exception {
+                      return 1;
+                  }
+              })
+              //each 3 seconds save the number of clicks made
+              .buffer(3, TimeUnit.SECONDS)
+              //if does more of 4 clicks its stop the buffer
+              .takeWhile(new Predicate<List<Integer>>() {
+                  @Override
+                  public boolean test(List<Integer> integers) throws Exception {
+                      return integers.size() <= 4;
+                  }
+              })
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(new Observer<List<Integer>>() {
+                  @Override
+                  public void onSubscribe(Disposable d) {
+                      compositeDisposable.add(d);
+                  }
+
+                  //show the number of clicks made in 3 seconds
+                  @Override
+                  public void onNext(List<Integer> integers) {
+                      Log.i(TAG_RX_JAVA, "onNext: You clicked " + integers.size() + " times in 3 seconds!");
+
+                      String numberClicks = integers.size() + " clicks in 4 seconds!";
+                      tvShowCountClicks.setText(numberClicks);
+                  }
+
+                  @Override
+                  public void onError(Throwable e) {
+
+                  }
+
+                  @Override
+                  public void onComplete() {
+                      Log.i(TAG_RX_JAVA, "onComplete: Número de clicks superado");
+                      tvShowCountClicks.setText("Número de clicks superado");
+                  }
+              });
+    }
+
+    //example ussing operators of transformation
+    private void operatorsOfTransformation(){
+
+        /*//fill list of numbers integer
+        for (int i = 1; i <= 10 ; i++) {
+            numbersInteger.add(i);
+        }
+
+        //transform number integers with map operator multiplying by 5
+        Observable<Integer> observableUssingMap = Observable
+            .fromIterable(numbersInteger)
+            .map(new Function<Integer, Integer>() {
+                @Override
+                public Integer apply(Integer integer) throws Exception {
+
+                    //issues the values transformed
+                    return integer * 5;
+                }
+            })
+            .observeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread());
+
+        observableUssingMap.subscribe(new Observer<Integer>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(Integer integer) {
+                Log.i(TAG_RX_JAVA, "onNext: " + integer);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });*/
+
+        /*//transform the object ArrayTaskRxJava delete items duplicates with distinc and with map operator adding email adress
+        Observable<ArrayTaskRxJava> observableWithMap = Observable
+             .fromIterable(TaskRxJava.createTaskList())
+             .doOnNext(c -> System.out.println("processing item on thread " + Thread.currentThread().getName()))
+             .subscribeOn(Schedulers.io())
+
+             .distinct(new Function<ArrayTaskRxJava, String>() {
+                 @Override
+                 public String apply(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
+                     //Log.i(TAG_RX_JAVA, "observable(elements) run in thread: " + Thread.currentThread().getName());
+                     return arrayTaskRxJava.getNameWorker();
+                 }
+             })
+
+             .map(new Function<ArrayTaskRxJava, ArrayTaskRxJava>() {
+                 @Override
+                 public ArrayTaskRxJava apply(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
+
+                     arrayTaskRxJava.setEmailWorker(String.format("%s@rxjava.com", arrayTaskRxJava.getNameWorker()));
+                     arrayTaskRxJava.setNameWorker(arrayTaskRxJava.getNameWorker().toUpperCase()); //pass to uppercase the nameWorker
+                     //Log.i(TAG_RX_JAVA, "observable(elements) run in thread: " + Thread.currentThread().getName());
+
+                     Thread.sleep(2000);
+                     return arrayTaskRxJava;
+                 }
+             })
+             .observeOn(AndroidSchedulers.mainThread());
+
+        observableWithMap.subscribe(new Observer<ArrayTaskRxJava>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                compositeDisposable.add(d);
+            }
+
+            @Override
+            public void onNext(ArrayTaskRxJava arrayTaskRxJava) {
+                //Log.i(TAG_RX_JAVA, "onNext: " + arrayTaskRxJava.getNameWorker() + "-" + arrayTaskRxJava.getEmailWorker());
+                //Log.i(TAG_RX_JAVA, "observer(iu) run in thread: " + Thread.currentThread().getName());
+
+                tvShowCount.append("\n" + arrayTaskRxJava.getNameWorker());
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                Log.i(TAG_RX_JAVA, "onComplete: success");
+            }
+        });*/
+
+        /*//emit in package of 2 the items of the observable with operator buffer (not one by one)
+        Observable<ArrayTaskRxJava> ObsOperatorBuffer = Observable
+            .fromIterable(TaskRxJava.createTaskList())
+            .subscribeOn(Schedulers.io());
+
+        //this operator is useful for work with back pressure
+        ObsOperatorBuffer
+            .distinct(new Function<ArrayTaskRxJava, String>() {
+                @Override
+                public String apply(ArrayTaskRxJava arrayTaskRxJava) throws Exception {
+                    Thread.sleep(1000);
+                    return arrayTaskRxJava.getNameWorker();
+                }
+            })
+            .buffer(2)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<List<ArrayTaskRxJava>>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onNext(List<ArrayTaskRxJava> arrayTaskRxJavas) {
+                    Log.i(TAG_RX_JAVA, "onNext package of 2 items:-> ");
+
+                    for (ArrayTaskRxJava arrayTask: arrayTaskRxJavas) {
+                        Log.i(TAG_RX_JAVA, "onNext: " + arrayTask.getNameWorker());
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+                    Log.i(TAG_RX_JAVA, "onComplete: success");
+                }
+            });*/
+
+        //
+    }
+
+    /*//example ussing operator filter (gral)
     private void operatorFilter(){
 
         //with this operator its can use all the methods of the class String
@@ -179,7 +388,9 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         });
     }
 
-    /*//crating observable with operator create example 0
+
+
+   //crating observable with operator create example 0
     private void createObservableWithCreate() {
 
         ArrayTaskRxJava arrayTaskRxJava = new ArrayTaskRxJava("finish module", true, 1);

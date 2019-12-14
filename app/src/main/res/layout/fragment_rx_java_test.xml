@@ -12,14 +12,38 @@
         android:id="@+id/tvShowCount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/place_autocomplete_separator"
         android:gravity="center"
         android:hint="Resultado"
-        app:layout_constraintBottom_toTopOf="@id/btAddCount"
+        app:layout_constraintBottom_toTopOf="@id/tvShowCountClicks"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.050000012" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tvShowCountClicks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:background="@color/place_autocomplete_separator"
+        android:gravity="center"
+        android:hint="Número de clicks"
+        app:layout_constraintBottom_toTopOf="@id/btCountClicks"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.063" />
+
+    <Button
+        android:id="@+id/btCountClicks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clicks"
+        app:layout_constraintBottom_toTopOf="@+id/btAddCount" />
 
     <Button
         android:id="@+id/btAddCount"
