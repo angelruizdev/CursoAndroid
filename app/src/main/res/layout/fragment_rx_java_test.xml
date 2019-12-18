@@ -31,12 +31,19 @@
         android:background="@color/place_autocomplete_separator"
         android:gravity="center"
         android:hint="Número de clicks"
-        app:layout_constraintBottom_toTopOf="@id/btCountClicks"
+        app:layout_constraintBottom_toTopOf="@id/btClickOperatorThorttleFirst"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.063" />
+
+    <Button
+        android:id="@+id/btClickOperatorThorttleFirst"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ThorttleFirst"
+        app:layout_constraintBottom_toTopOf="@+id/btCountClicks" />
 
     <Button
         android:id="@+id/btCountClicks"

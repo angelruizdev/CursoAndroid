@@ -39,6 +39,7 @@ dependencies {
     implementation 'com.shamanland:xdroid-toaster:0.0.5'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
     implementation 'com.squareup.picasso:picasso:2.5.2' //small projects
     implementation 'com.github.bumptech.glide:glide:4.5.0' //bigest projects
     annotationProcessor 'com.github.bumptech.glide:compiler:4.5.0'

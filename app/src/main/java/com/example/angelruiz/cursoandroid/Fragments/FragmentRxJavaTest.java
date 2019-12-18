@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,11 +36,12 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
     Context context;
     private static final String TAG_RX_JAVA = "TAG_RX_JAVA";
     private TextView tvShowCount, tvShowCountClicks;
-    private Button btAddCount, btCountClicks;
+    private Button btAddCount, btCountClicks, btClickOperatorThorttleFirst;
     private int count = 0;
     //for delete the disposables to the observador once recovered the emissions to the observable
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private List<Integer> numbersInteger;
+    private long timeSinceLastRequest;
 
     public FragmentRxJavaTest() {
         // Required empty public constructor
@@ -50,6 +52,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         super.onCreate(savedInstanceState);
         context = getContext();
         numbersInteger = new ArrayList<>();
+        timeSinceLastRequest = System.currentTimeMillis();
     }
 
     @Override
@@ -60,6 +63,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         tvShowCountClicks = view.findViewById(R.id.tvShowCountClicks);
         btAddCount = view.findViewById(R.id.btAddCount);
         btCountClicks = view.findViewById(R.id.btCountClicks);
+        btClickOperatorThorttleFirst = view.findViewById(R.id.btClickOperatorThorttleFirst);
         return view;
     }
 
@@ -107,10 +111,11 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         //operatorFilter();
 
         /* ussing operators of transformation */
-        operatorsOfTransformation();
+        //operatorsOfTransformation();
 
         btAddCount.setOnClickListener(this);
         btCountClicks.setOnClickListener(this);
+        btClickOperatorThorttleFirst.setOnClickListener(this);
         //save instate of the count if its rotate the screen
         if (savedInstanceState != null){
             count = savedInstanceState.getInt("contador");
@@ -118,7 +123,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
         }
     }
 
-    //count
+    /*count and event onclick(rxjava) in view(button) */
     @Override
     public void onClick(View view) {
        switch (view.getId()){
@@ -129,6 +134,10 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
 
            case R.id.btCountClicks:
                countClicksRx();
+               break;
+
+           case R.id.btClickOperatorThorttleFirst:
+               ussingOperatorThrottleFistr();
                break;
        }
     }
@@ -180,6 +189,41 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
                       tvShowCountClicks.setText("Número de clicks superado");
                   }
               });
+    }
+
+    //throttleFistr
+    private void ussingOperatorThrottleFistr(){
+
+        RxView.clicks(btClickOperatorThorttleFirst)
+              .throttleFirst(500, TimeUnit.MILLISECONDS)
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe(new Observer<Unit>() {
+                  @Override
+                  public void onSubscribe(Disposable d) {
+                      compositeDisposable.add(d);
+                  }
+
+                  @Override
+                  public void onNext(Unit unit) {
+                      Log.i(TAG_RX_JAVA, "onNext: time since the last time it was done click" + (System.currentTimeMillis() - timeSinceLastRequest));
+                      showMessage();
+                  }
+
+                  @Override
+                  public void onError(Throwable e) {
+
+                  }
+
+                  @Override
+                  public void onComplete() {
+
+                  }
+              });
+    }
+
+    //throttleFistr
+    private void showMessage(){
+        Toast.makeText(context, "Mensaje: operador thorttleFirste", Toast.LENGTH_SHORT).show();
     }
 
     //example ussing operators of transformation
@@ -884,35 +928,6 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
 
             }
         });
-    }
-
-
-
-    //check... onClick to button with rxandroid
-    private void clickButtonObservable(){
-
-        RxView.clicks(btAddCount)
-            .subscribe(new Observer<Unit>() {
-             @Override
-             public void onSubscribe(Disposable d) {
-
-             }
-
-             @Override
-             public void onNext(Unit unit) {
-                 Log.i(TAG_RX_JAVA, "onNext: " + unit);
-             }
-
-             @Override
-             public void onError(Throwable e) {
-
-             }
-
-             @Override
-             public void onComplete() {
-
-             }
-         });
     }
 
     //creating obsrvables and observers

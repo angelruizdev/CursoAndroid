@@ -3,6 +3,7 @@ package com.example.angelruiz.cursoandroid.RxJavaExercises;
 import java.util.ArrayList;
 import java.util.List;
 
+//list for simulate a service on operators rxjava
 public class TaskRxJava {
     public static List<ArrayTaskRxJava> createTaskList(){
 

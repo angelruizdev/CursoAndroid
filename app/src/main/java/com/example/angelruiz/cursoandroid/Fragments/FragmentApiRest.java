@@ -64,6 +64,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 //we implements ifz ICommunicateDialogFmtWithFragmentApiRest for receive the data of daialogfragmenteditapirest
 public class FragmentApiRest extends Fragment implements View.OnClickListener, ICommunicateDialogFmtWithFragmentApiRest {
+
     private static final int SELECT_PIKTURE = 100;
     private ProgressBar pb;
     private Uri pathUriImageSelected;

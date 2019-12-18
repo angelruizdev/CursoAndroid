@@ -57,4 +57,4 @@ with body we can send various parameters without especific each one
 @Query, it alows search data in the ws, is used when you have url which has '?',
 http://google.com/index.html?userid, @Get("index.html")...(@Query ("userid") int id);.
 @Path is used when you have url which has '/', http://google.com/index.html/endPoint, http://google.com/index.html/userid
-its use with @GET, so: @Get("index.html/{userid}")...(@Path ("userid") int id);*/
+its use with @GET, so: @Get("index.html/{userid}")...getX(@Path ("userid") int userid);*/

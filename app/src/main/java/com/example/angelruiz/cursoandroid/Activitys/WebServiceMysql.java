@@ -17,16 +17,19 @@ import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCalculator;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCaroucelApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentInstagramApiRest;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentRxJavaApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentRxJavaTest;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class WebServiceMysql extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     FragmentRxJavaTest fragmentRxJavaTest;
     FragmentCaroucelApiRest fragmentCaroucelApiRest;
     FragmentApiRest fragmentApiRest;
     FragmentCalculator fragmentCalculator;
     FragmentInstagramApiRest fragmentInstagramApiRest;
+    FragmentRxJavaApiRest fragmentRxJavaApiRest;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -40,6 +43,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         fragmentApiRest = new FragmentApiRest();
         fragmentCalculator = new FragmentCalculator();
         fragmentInstagramApiRest = new FragmentInstagramApiRest();
+        fragmentRxJavaApiRest = new FragmentRxJavaApiRest();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -88,7 +92,9 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.rxjava_apirest){
+           fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentRxJavaApiRest);
+        } else if (id == R.id.nav_camera) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentRxJavaTest);
         } else if (id == R.id.nav_gallery) {
            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentCaroucelApiRest);
