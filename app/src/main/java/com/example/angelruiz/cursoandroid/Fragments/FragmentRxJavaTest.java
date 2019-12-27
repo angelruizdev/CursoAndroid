@@ -19,15 +19,20 @@ import com.example.angelruiz.cursoandroid.R;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
 import kotlin.Unit;
 
 public class FragmentRxJavaTest extends Fragment implements View.OnClickListener {
@@ -112,6 +117,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
 
         /* ussing operators of transformation */
         //operatorsOfTransformation();
+        //showUseOperatorFlatMap();
 
         btAddCount.setOnClickListener(this);
         btCountClicks.setOnClickListener(this);
@@ -191,7 +197,7 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
               });
     }
 
-    //throttleFistr
+    //throttleFirst
     private void ussingOperatorThrottleFistr(){
 
         RxView.clicks(btClickOperatorThorttleFirst)
@@ -364,8 +370,85 @@ public class FragmentRxJavaTest extends Fragment implements View.OnClickListener
                     Log.i(TAG_RX_JAVA, "onComplete: success");
                 }
             });*/
+    }
 
-        //
+    //join observables ussing FlatMap operator
+    private void showUseOperatorFlatMap(){
+
+        //this operator conbines n observables and return a single observable, not maintains the orden of the items resulting
+        getOriginalObservable()
+            .flatMap(new Function<Integer, Observable<Integer>>() {
+                @Override
+                public Observable<Integer> apply(Integer integer) throws Exception {
+
+                    return getModifiedObservable(integer);
+                }
+            })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Observer<Integer>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+                    compositeDisposable.add(d);
+                }
+
+                @Override
+                public void onNext(Integer integer) {
+                    Log.i(TAG_RX_JAVA, "onNext: " + integer);
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+
+                }
+            });
+
+    }
+
+    //first observable (flatMap)
+    private Observable<Integer> getOriginalObservable(){
+
+       final List<Integer> listIntegers =  Arrays.asList(1, 2, 3, 4, 5, 6);
+
+       return Observable.create(new ObservableOnSubscribe<Integer>() {
+           @Override
+           public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+
+               for (Integer listInteger: listIntegers) {
+                   if (!emitter.isDisposed()){
+                       emitter.onNext(listInteger);
+                   }
+               }
+
+               if (!emitter.isDisposed()){
+                   emitter.onComplete();
+               }
+           }
+       })
+       .subscribeOn(Schedulers.io());
+    }
+
+    //second observable (flatMap)
+    private Observable<Integer> getModifiedObservable(final Integer lstInteger){
+
+        return Observable.create(new ObservableOnSubscribe<Integer>() {
+            @Override
+            public void subscribe(ObservableEmitter<Integer> emitter) throws Exception {
+
+                if(!emitter.isDisposed()){
+                    emitter.onNext((lstInteger * 2));
+                }
+
+                if(!emitter.isDisposed()){
+                    emitter.onComplete();
+                }
+            }
+        })
+        .subscribeOn(Schedulers.io());
     }
 
     /*//example ussing operator filter (gral)

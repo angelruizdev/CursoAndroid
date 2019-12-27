@@ -4,12 +4,10 @@ import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
-import java.util.List;
 //La anotación @SerializedName es necesaria para que Gson mapee las llaves JSON a campos de objeto Java.
 //La anotación @Expose indica que el miembro de la clase debería ser expuesto para serialización o deserialización JSON.
 
-//class
+//class / structure of the json -> end point posts/id/coments
 public class ArrayPostsRxApiRest {
 
     //vars
@@ -26,15 +24,12 @@ public class ArrayPostsRxApiRest {
     @Expose
     private String body;
 
-    private List<ArrayCommentsRxApiRest> comments;
-
     //builder
-    public ArrayPostsRxApiRest(int userId, int id, String title, String body  /*List<ArrayCommentsRxApiRest> comments*/){
+    public ArrayPostsRxApiRest(int userId, int id, String title, String body){
         this.userId = userId;
         this.id = id;
         this.title = title;
         this.body = body;
-        //this.comments = comments;
     }
 
     //geter and seter
@@ -68,14 +63,6 @@ public class ArrayPostsRxApiRest {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public List<ArrayCommentsRxApiRest> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<ArrayCommentsRxApiRest> comments) {
-        this.comments = comments;
     }
 
     //comverts the values json to string

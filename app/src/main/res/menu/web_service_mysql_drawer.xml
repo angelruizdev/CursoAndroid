@@ -5,6 +5,10 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/crud_firebase"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="RxJava ApiRest"/>
+        <item
             android:id="@+id/rxjava_apirest"
             android:icon="@drawable/ic_menu_camera"
             android:title="RxJava ApiRest"/>

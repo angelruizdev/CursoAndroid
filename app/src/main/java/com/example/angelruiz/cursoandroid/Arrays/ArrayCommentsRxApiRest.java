@@ -3,7 +3,7 @@ package com.example.angelruiz.cursoandroid.Arrays;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-//class
+//class / structure of the json -> end point /posts
 public class ArrayCommentsRxApiRest {
 
     //vars

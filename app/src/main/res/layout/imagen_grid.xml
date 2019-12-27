@@ -12,10 +12,12 @@
         android:id="@+id/actionBarPersonalizado"
         layout="@layout/actionbar">
     </include>
+
     <Spinner
         android:id="@+id/sprBD"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
     <GridView
         android:id="@+id/gvImgContact"
         android:layout_width="match_parent"

@@ -16,6 +16,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCalculator;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCaroucelApiRest;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentCrudFireBase;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentInstagramApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentRxJavaApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentRxJavaTest;
@@ -30,6 +31,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
     FragmentCalculator fragmentCalculator;
     FragmentInstagramApiRest fragmentInstagramApiRest;
     FragmentRxJavaApiRest fragmentRxJavaApiRest;
+    FragmentCrudFireBase fragmentCrudFireBase;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -44,6 +46,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         fragmentCalculator = new FragmentCalculator();
         fragmentInstagramApiRest = new FragmentInstagramApiRest();
         fragmentRxJavaApiRest = new FragmentRxJavaApiRest();
+        fragmentCrudFireBase = new FragmentCrudFireBase();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -65,11 +68,13 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         }
     }
 
+    //return false for not show the 3 dots in toolbar
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.web_service_mysql, menu);
-        return true;
+        //getMenuInflater().inflate(R.menu.web_service_mysql, menu);
+
+        return false;
     }
 
     @Override
@@ -81,9 +86,9 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            return false;
         }
-        return super.onOptionsItemSelected(item);
+        return false;
     }
 
     @Override
@@ -110,6 +115,8 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
             fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentInstagramApiRest);
         }else if(id == R.id.nav_content_provider){
             startActivity(new Intent(getApplicationContext(), BottomNavegationViewCP.class));
+        }else if(id == R.id.crud_firebase){
+            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentCrudFireBase);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

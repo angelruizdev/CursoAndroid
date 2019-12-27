@@ -26,7 +26,8 @@ private GridView gvImgContact;
 public FragmentSpinerBD fragmentSprDB;
 public Spinner sprDB; //declaramos el spr
 
-ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo ArrayImgContacto, para llenarlo con ese tipo de datos
+//creamos un ArrayList de tipo ArrayImgContacto, para llenarlo con ese tipo de datos
+ArrayList<ArrayImgContacto> nombreContactos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,24 +46,24 @@ ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo Arra
         //arraylist para los nombre
         nombreContactos = new ArrayList<>();
         final ArrayList<String>nombre=new ArrayList<>();
-         nombre.add("Juan");
-         nombre.add("Ángel");
-         nombre.add("Maia");
-         nombre.add("Pedro");
-         nombre.add("Sandra");
-         nombre.add("Karen");
+            nombre.add("Juan");
+            nombre.add("Ángel");
+            nombre.add("Maia");
+            nombre.add("Pedro");
+            nombre.add("Sandra");
+            nombre.add("Karen");
 
         //arraylist para imagenes
         final ArrayList<Integer> imgContacto = new ArrayList<>();
-         imgContacto.add(R.drawable.ic_touch_app);
-         imgContacto.add(R.drawable.email);
-         imgContacto.add(R.drawable.phone);
-         imgContacto.add(R.drawable.ic_touch_app);
-         imgContacto.add(R.drawable.email);
-         imgContacto.add(R.drawable.phone);
+            imgContacto.add(R.drawable.ic_touch_app);
+            imgContacto.add(R.drawable.email);
+            imgContacto.add(R.drawable.phone);
+            imgContacto.add(R.drawable.ic_touch_app);
+            imgContacto.add(R.drawable.email);
+            imgContacto.add(R.drawable.phone);
 
         //recorremos dichos arrayslist y llenamos pasando como parametro los 2 arrays nombre e imagenContacto a nomContactos
-        for (int i=0; i<nombre.size(); i++){
+        for (int i = 0; i < nombre.size(); i++){
           nombreContactos.add(new ArrayImgContacto(1, imgContacto.get(i), nombre.get(i)));//llenamos con constructor
         }
 
@@ -98,8 +99,9 @@ ArrayList<ArrayImgContacto> nombreContactos; //creamos un ArrayList de tipo Arra
     //llamado:menu_contexto usando el metodo inflate pasando el recurso y el objeto menu y retornamos true
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-         getMenuInflater().inflate(R.menu.menu_opsiones, menu);//inflamos el menú
-         return true;
+       //inflamos el menú
+       getMenuInflater().inflate(R.menu.menu_opsiones, menu);
+       return true;
     }
 
     //sobreescribimos el metodo:onOptionsItemSelected:el cual nos ayuda a manipular la opsion del item seleccionado del menu

@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--creamos este archivo xml de tipo menu en res -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <!--cada item sera una opsion para nuestro menú, aquí hay dos opsiones-->
     <item
         android:id="@+id/fragmentSpnrBD"
         android:title="@string/contacto_menu_opsiones"
         android:orderInCategory="100">
+
     </item>
     <item
         android:id="@+id/muestraSpinner"

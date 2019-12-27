@@ -22,7 +22,9 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 //almacenamiento File I/O y Shared Preference
 
-public class ListaContacto extends AppCompatActivity implements View.OnClickListener {//implementamos la interface View.OnClickListener, para poner a escuchar a todos los botones dentro de su metodo
+//implementamos la interface View.OnClickListener, para poner a escuchar a todos los botones dentro de su metodo
+public class ListaContacto extends AppCompatActivity implements View.OnClickListener {
+
     //creamos nuestro arraylist contactos, le pasamos el arraycontactos, para que sea de ese tipo como si fuera ArrayList<String>
     ArrayList<ArrayContactos> contactos;
 
@@ -41,7 +43,7 @@ public class ListaContacto extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.lista_contacto);
 
         //instanciamos(inicializamos el array)
-        contactos = new ArrayList<ArrayContactos>();
+        contactos = new ArrayList<>();
 
         etNombre = findViewById(R.id.etNombre);
         etTelefono = findViewById(R.id.etTelefono);

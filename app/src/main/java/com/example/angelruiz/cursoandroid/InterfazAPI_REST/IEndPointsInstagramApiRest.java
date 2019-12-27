@@ -8,5 +8,5 @@ import retrofit2.http.GET;
 
 public interface IEndPointsInstagramApiRest {
     @GET(ConstantesApiRestInstagram.URL_GET_RECENT_MEDIA_USER) //endpoint de la api
-     Call<ArrayResponseInstagram> getRecentMedia();
+    Call<ArrayResponseInstagram> getRecentMedia();
 }

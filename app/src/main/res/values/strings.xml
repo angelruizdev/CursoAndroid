@@ -50,6 +50,10 @@
     <string name="tv_list_contact_cp">Lista de contactos</string>
     <string name="bt_view_contacts_cp">Ver contactos</string>
     <string name="tv_rx_publicaciones_y_comentarios">Publicaciones y comentarios.</string>
+    <string name="menu_appbar_save">Gusrdar</string>
+    <string name="menu_appbar_delete">Eliminar</string>
+    <string name="menu_appbar_update">update</string>
+
     <string-array name="nombres">
         <item>Ángel</item>
         <item>Manuel</item>

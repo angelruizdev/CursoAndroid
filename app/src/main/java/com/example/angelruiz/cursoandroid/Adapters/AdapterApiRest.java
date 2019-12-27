@@ -24,7 +24,7 @@ public class AdapterApiRest extends RecyclerView.Adapter<AdapterApiRest.ViewHold
 public Context context;
 private ArrayList<ArrayWSMysqlApi> pokemon;
 private IOnClickMenuItemRecyclerApiRest listener;
-private static final String TAG = "API_REST";
+private static final String TAG_RESULT = "API_REST";
 
     public  AdapterApiRest(Context context, ArrayList<ArrayWSMysqlApi> pokemon){
        this.context = context;
@@ -66,16 +66,19 @@ private static final String TAG = "API_REST";
     }
 
     public class ViewHolderAdapterApiRest extends RecyclerView.ViewHolder {
-        ImageView ivImgProducto;TextView tvDetalleProducto;
 
+        ImageView ivImgProducto;
+        TextView tvDetalleProducto;
         ImageButton ibElimProducto;
 
         public ViewHolderAdapterApiRest(@NonNull View itemView, final IOnClickMenuItemRecyclerApiRest listener) {
             super(itemView);
+
             tvDetalleProducto = itemView.findViewById(R.id.tvDetalleProducto);
             ivImgProducto = itemView.findViewById(R.id.ivImgProducto);
             ibElimProducto = itemView.findViewById(R.id.ibElimProducto);
             ibElimProducto.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();

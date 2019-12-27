@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_save_firebase"
+        android:title="@string/menu_appbar_save"
+        android:icon="@drawable/ic_save_frb"
+        android:orderInCategory="100"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/menu_update_firebase"
+        android:title="@string/menu_appbar_update"
+        android:icon="@drawable/ic_update_frb"
+        android:orderInCategory="100"
+        app:showAsAction="always">
+    </item>
+
+    <item
+        android:id="@+id/menu_delete_firebase"
+        android:title="@string/menu_appbar_delete"
+        android:icon="@drawable/ic_delete_frb"
+        android:orderInCategory="100"
+        app:showAsAction="always">
+    </item>
+</menu>

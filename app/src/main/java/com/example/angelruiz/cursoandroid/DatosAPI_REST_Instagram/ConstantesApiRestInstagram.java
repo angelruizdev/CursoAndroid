@@ -1,6 +1,7 @@
 package com.example.angelruiz.cursoandroid.DatosAPI_REST_Instagram;
 
-public final class ConstantesApiRestInstagram { //datos de la api instagram -- final and static for super global access
+//datos de la api instagram -- final and static for super global access
+public final class ConstantesApiRestInstagram {
     public static final String VERSION = "/v1/";
     public static final String ROOT_URL_BASE = "https://api.instagram.com" + VERSION; //https://api.instagram.com/v1/ --> url base
     public static final String KEY_GET_RECENT_MEDIA_USER = "users/self/media/recent";

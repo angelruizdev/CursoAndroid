@@ -12,16 +12,19 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         tools:ignore="UseCompoundDrawables,UselessParent">
+
         <ImageView
             android:id="@+id/imgPersona"
             android:layout_width="100dp"
             android:layout_height="100dp"/>
+
         <TextView
             android:id="@+id/nomPersona"
             android:layout_width="0dp"
             android:layout_height="100dp"
             android:layout_weight="1"
             android:gravity="center"/>
+
         <TextView
             android:id="@+id/tvEliminar"
             android:layout_width="50dp"
@@ -30,5 +33,4 @@
             android:text="@string/trespnts"
             android:textSize="20sp"/>
     </LinearLayout>
-
 </RelativeLayout>
