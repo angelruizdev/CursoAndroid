@@ -28,10 +28,6 @@
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
             android:title="Maps"/>
-        <item
-            android:id="@+id/nav_fmt_git"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Ussing Git"/>
     </group>
 
     <item android:title="Communicate">

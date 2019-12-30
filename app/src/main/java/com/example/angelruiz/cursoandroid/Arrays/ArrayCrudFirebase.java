@@ -10,7 +10,7 @@ public class ArrayCrudFirebase {
     private String frbUserEmail;
     private String frbUserPassword;
 
-    //builder void for fill array with methods set
+    //builder
     public ArrayCrudFirebase(){
 
     }
