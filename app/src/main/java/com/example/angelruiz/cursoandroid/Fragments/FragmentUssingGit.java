@@ -70,24 +70,18 @@ public class FragmentUssingGit extends Fragment implements View.OnClickListener 
 
     public String showManualUser(){
 
-        return "Una página de portada.\n" +
-                "Una página de título.\n" +
-                "Una página de derechos de autor.\n" +
-                "Un prefacio, que contiene detalles de los documentos relacionados y la información sobre cómo navegar por la guía del usuario.\n" +
-                "Una sección de introducción, que incluye:\n" +
-                "Una breve descripción del sistema y su finalidad.\n" +
-                "Una sección de novedades desde la última versión.\n" +
-                "Una sección de requisitos previos necesarios para usar el sistema, que incluye:\n" +
-                "Conocimientos mínimos del usuario\n" +
-                "Requisitos técnicos previos, incluyendo:\n" +
-                "Capacidades técnicas mínimas del equipo\n" +
-                "Software asociado necesario\n" +
-                "Mecanismo para acceder al sistema\n" +
-                "Una sección de instalación y configuración\n" +
-                "Una guía sobre cómo utilizar al menos las principales funciones del sistema, es decir, sus funciones básicas.\n" +
-                "Una sección de solución de problemas que detalla los posibles errores o problemas que pueden surgir, junto con la forma de solucionarlos.\n" +
-                "Una sección de preguntas frecuentes, donde encontrar más ayuda, y datos de contacto.\n" +
-                "Un Glosario y, para documentos más grandes, un Índice.\n" +
-                "modalidad de pagina";
+        return "1-Una página de portada.\n" +
+                "2-Una página de título.\n" +
+                "3-Una página de derechos de autor.\n" +
+                "4-Un prefacio, que contiene detalles de los documentos relacionados y la información sobre cómo navegar por la guía del usuario.\n" +
+                "11-Capacidades técnicas mínimas del equipo.\n" +
+                "12-Software asociado necesario.\n" +
+                "13-Mecanismo para acceder al sistema.\n" +
+                "14-Una sección de instalación y configuración.\n" +
+                "15-Una guía sobre cómo utilizar al menos las principales funciones del sistema, es decir, sus funciones básicas.\n" +
+                "16-Una sección de solución de problemas que detalla los posibles errores o problemas que pueden surgir, junto con la forma de solucionarlos.\n" +
+                "17-Una sección de preguntas frecuentes, donde encontrar más ayuda, y datos de contacto.\n" +
+                "18-Un Glosario y, para documentos más grandes, un Índice.\n" +
+                "19.modalidad de pagina.";
     }
 }
