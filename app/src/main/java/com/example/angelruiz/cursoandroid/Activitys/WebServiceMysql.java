@@ -18,6 +18,7 @@ import com.example.angelruiz.cursoandroid.Fragments.FragmentCalculator;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCaroucelApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentCrudFireBase;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentInstagramApiRest;
+import com.example.angelruiz.cursoandroid.Fragments.FragmentUssingGit;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentRxJavaApiRest;
 import com.example.angelruiz.cursoandroid.Fragments.FragmentRxJavaTest;
 import com.example.angelruiz.cursoandroid.R;
@@ -32,6 +33,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
     FragmentInstagramApiRest fragmentInstagramApiRest;
     FragmentRxJavaApiRest fragmentRxJavaApiRest;
     FragmentCrudFireBase fragmentCrudFireBase;
+    FragmentUssingGit fragmentUssingGit;
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -47,6 +49,7 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
         fragmentInstagramApiRest = new FragmentInstagramApiRest();
         fragmentRxJavaApiRest = new FragmentRxJavaApiRest();
         fragmentCrudFireBase = new FragmentCrudFireBase();
+        fragmentUssingGit = new FragmentUssingGit();
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -117,6 +120,8 @@ public class WebServiceMysql extends AppCompatActivity implements NavigationView
             startActivity(new Intent(getApplicationContext(), BottomNavegationViewCP.class));
         }else if(id == R.id.crud_firebase){
             fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentCrudFireBase);
+        }else if (id == R.id.nav_fmt_git){
+            fragmentTransaction.replace(R.id.contenedorMysqlFragments, fragmentUssingGit);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

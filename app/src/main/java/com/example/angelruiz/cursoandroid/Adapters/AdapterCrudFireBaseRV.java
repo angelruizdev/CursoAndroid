@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.Arrays.ArrayCrudFirebase;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickItemRecyclerView;
 import com.example.angelruiz.cursoandroid.R;
 
 import java.util.List;
@@ -20,11 +21,13 @@ public class AdapterCrudFireBaseRV extends RecyclerView.Adapter<AdapterCrudFireB
     //vars
     private Context context;
     private List<ArrayCrudFirebase> arrayCrudFirebase;
+    private IOnClickItemRecyclerView iOnClickItemRecyclerView;
 
     //builder
-    public AdapterCrudFireBaseRV(Context context, List<ArrayCrudFirebase> arrayCrudFirebases) {
+    public AdapterCrudFireBaseRV(Context context, List<ArrayCrudFirebase> arrayCrudFirebases, IOnClickItemRecyclerView iOnClickItemRecyclerView) {
         this.context = context;
         this.arrayCrudFirebase = arrayCrudFirebases;
+        this.iOnClickItemRecyclerView = iOnClickItemRecyclerView;
     }
 
     //get and set for array
@@ -54,6 +57,17 @@ public class AdapterCrudFireBaseRV extends RecyclerView.Adapter<AdapterCrudFireB
             tvUserNameFrb = itemView.findViewById(R.id.tv_username_firebase);
             tvUserEmailFrb = itemView.findViewById(R.id.tv_useremail_firebase);
         }
+
+        //
+        public void onClickItemRecyclerview(int position, IOnClickItemRecyclerView iOnClickItemRecyclerView){
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //int position = getAdapterPosition();
+                    iOnClickItemRecyclerView.setOnClickItemRecylcerView(position);
+                }
+            });
+        }
     }
 
     //show data of firebase in views of RV
@@ -63,6 +77,8 @@ public class AdapterCrudFireBaseRV extends RecyclerView.Adapter<AdapterCrudFireB
 
         holder.tvUserNameFrb.setText(result.getFrbUserName());
         holder.tvUserEmailFrb.setText(result.getFrbUserEmail());
+
+        holder.onClickItemRecyclerview(position, iOnClickItemRecyclerView);
     }
 
     //return the size(content) of array
