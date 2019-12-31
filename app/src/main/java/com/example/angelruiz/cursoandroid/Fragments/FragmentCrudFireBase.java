@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.angelruiz.cursoandroid.Adapters.AdapterCrudFireBaseRV;
 import com.example.angelruiz.cursoandroid.Arrays.ArrayCrudFirebase;
+import com.example.angelruiz.cursoandroid.InterfazAPI_REST.IOnClickItemRecyclerView;
 import com.example.angelruiz.cursoandroid.R;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//ET -> edittext
 //class
 public class FragmentCrudFireBase extends Fragment {
 
@@ -47,7 +49,6 @@ public class FragmentCrudFireBase extends Fragment {
     private List<ArrayCrudFirebase> arrayCrudFirebaseList;
     private AdapterCrudFireBaseRV adapterCrudFireBaseRV;
     private ArrayCrudFirebase arrayCrudItemSelected;
-
 
     //views
     View view;
@@ -65,7 +66,7 @@ public class FragmentCrudFireBase extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
-        arrayCrudFirebases = new ArrayList<>();
+        arrayCrudFirebaseList = new ArrayList<>();
         inicializeFireBase();
         showUserData();
     }
@@ -83,13 +84,17 @@ public class FragmentCrudFireBase extends Fragment {
         databaseReference.child("UserData").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                arrayCrudFirebases.clear();
+                arrayCrudFirebaseList.clear();
 
                 for (DataSnapshot objectDataSnapshot : dataSnapshot.getChildren()) {
-                    ArrayCrudFirebase arrayCrudFirebase = objectDataSnapshot.getValue(ArrayCrudFirebase.class);
-                    arrayCrudFirebases.add(arrayCrudFirebase);
+                    ArrayCrudFirebase arrayCrudDataSnapshot = objectDataSnapshot.getValue(ArrayCrudFirebase.class);
+                    arrayCrudFirebaseList.add(arrayCrudDataSnapshot);
 
-                    adapterCrudFireBaseRV = new AdapterCrudFireBaseRV(context, arrayCrudFirebases);
+                    adapterCrudFireBaseRV = new AdapterCrudFireBaseRV(context, arrayCrudFirebaseList, new IOnClickItemRecyclerView() {
+                        @Override
+                        public void setOnClickItemRecylcerView(int position) {
+                            showDataInEditText(position);                        }
+                    });
                     rvShowUsersFrb.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
                     rvShowUsersFrb.setAdapter(adapterCrudFireBaseRV);
                 }
@@ -109,6 +114,16 @@ public class FragmentCrudFireBase extends Fragment {
 
             }
         });
+    }
+
+    //show all the data of the item RV selected in ET
+    private void showDataInEditText(int position){
+        arrayCrudItemSelected = arrayCrudFirebaseList.get(position);
+
+        etUserNameFrb.setText(arrayCrudItemSelected.getFrbUserName());
+        etUserLastNameFrb.setText(arrayCrudItemSelected.getFrbUserLastName());
+        etUserEmailFrb.setText(arrayCrudItemSelected.getFrbUserEmail());
+        etUserPasswordFrb.setText(arrayCrudItemSelected.getFrbUserPassword());
     }
 
     //inicialize views
@@ -171,7 +186,7 @@ public class FragmentCrudFireBase extends Fragment {
 
         switch(item.getItemId()){
             case R.id.menu_save_firebase:
-                saveDataFireBase(userName, userLastName, userEmail, userPassword);
+                saveDataFireBase();
                 break;
 
             case R.id.menu_update_firebase:
@@ -186,33 +201,65 @@ public class FragmentCrudFireBase extends Fragment {
     }
 
     //save register in db firebase
-    private void saveDataFireBase(String userName, String userLastName, String userEmail, String userPassword) {
+    private void saveDataFireBase() {
 
-        if (userName.isEmpty() || userLastName.isEmpty() || userEmail.isEmpty() || userPassword.isEmpty()) {
+        if (validateEditTextNotEmpty()) {
             Toast.makeText(context, "Faltan datos", Toast.LENGTH_SHORT).show();
         } else {
 
-            ArrayCrudFirebase arrayCrudFirebase = new ArrayCrudFirebase();
-            arrayCrudFirebase.setFrbUserId(UUID.randomUUID().toString());
-            arrayCrudFirebase.setFrbUserName(userName);
-            arrayCrudFirebase.setFrbUserLastName(userLastName);
-            arrayCrudFirebase.setFrbUserEmail(userEmail);
-            arrayCrudFirebase.setFrbUserPassword(userPassword);
+            ArrayCrudFirebase arrayCrudSave = new ArrayCrudFirebase();
+            arrayCrudSave.setFrbUserId(UUID.randomUUID().toString());
+            arrayCrudSave.setFrbUserName(userName);
+            arrayCrudSave.setFrbUserLastName(userLastName);
+            arrayCrudSave.setFrbUserEmail(userEmail);
+            arrayCrudSave.setFrbUserPassword(userPassword);
 
-            databaseReference.child("UserData").child(arrayCrudFirebase.getFrbUserId()).setValue(arrayCrudFirebase);
+            databaseReference.child("UserData").child(arrayCrudSave.getFrbUserId()).setValue(arrayCrudSave);
             Toast.makeText(context, "Usuario guardado", Toast.LENGTH_SHORT).show();
             cleanEditText();
         }
     }
 
-    //update register in db firebase
+    //update register by id in db firebase
     private void updateDataFireBase() {
-        Toast.makeText(context, "update", Toast.LENGTH_SHORT).show();
+
+        if (validateEditTextNotEmpty()){
+            Toast.makeText(context, "Seleccionar registro", Toast.LENGTH_SHORT).show();
+        }else {
+            ArrayCrudFirebase arrayCrudUpdate = new ArrayCrudFirebase();
+
+            arrayCrudUpdate.setFrbUserName(userName.trim());
+            arrayCrudUpdate.setFrbUserLastName(userLastName.trim());
+            arrayCrudUpdate.setFrbUserEmail(userEmail.trim());
+            arrayCrudUpdate.setFrbUserPassword(userPassword.trim());
+
+            databaseReference.child("UserData").child(arrayCrudItemSelected.getFrbUserId()).setValue(arrayCrudUpdate);
+
+            Toast.makeText(context, "Registro actualizado", Toast.LENGTH_SHORT).show();
+            cleanEditText();
+        }
     }
 
-    //delete register in db firebase
+    //delete register by id in db firebase
     private void deleteDataFireBase() {
-        Toast.makeText(context, "delete", Toast.LENGTH_SHORT).show();
+
+        if (validateEditTextNotEmpty()){
+            Toast.makeText(context, "Seleccionar registro", Toast.LENGTH_SHORT).show();
+        }else {
+            databaseReference.child("UserData").child(arrayCrudItemSelected.getFrbUserId()).removeValue();
+
+            Toast.makeText(context, "Registro eliminado", Toast.LENGTH_SHORT).show();
+            cleanEditText();
+        }
+
+    }
+
+    //validate that the ET are not empty
+    private Boolean validateEditTextNotEmpty(){
+        if(userName.isEmpty() || userLastName.isEmpty() || userEmail.isEmpty() || userPassword.isEmpty()){
+           return true;
+        }
+        return false;
     }
 
     //clean the box text
