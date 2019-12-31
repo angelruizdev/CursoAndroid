@@ -36,7 +36,7 @@ public class FragmentUssingGit extends Fragment implements View.OnClickListener 
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        vista = inflater.inflate(R.layout.fragment_ussing_gitl, container, false);
+        vista = inflater.inflate(R.layout.fragment_ussing_git, container, false);
         pbWebService = vista.findViewById(R.id.pb_web_service);
         tvShowRedFind = vista.findViewById(R.id.tv_show_redfind);
         btSearchRed = vista.findViewById(R.id.bt_search_red);
@@ -64,11 +64,11 @@ public class FragmentUssingGit extends Fragment implements View.OnClickListener 
         }
     }
 
-    public void searchRed() {
+    private void searchRed() {
         Toast.makeText(context, "searching...", Toast.LENGTH_SHORT).show();
     }
 
-    public String showManualUser(){
+    private String showManualUser(){
 
         return "1-Una página de portada.\n" +
                 "2-Una página de título.\n" +
