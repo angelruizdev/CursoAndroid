@@ -44,8 +44,10 @@ public class FragmentCrudFireBase extends Fragment {
     private FirebaseDatabase firebaseDatabase;
     private DatabaseReference databaseReference;
     private String userName, userLastName, userEmail, userPassword;
-    private List<ArrayCrudFirebase> arrayCrudFirebases;
+    private List<ArrayCrudFirebase> arrayCrudFirebaseList;
     private AdapterCrudFireBaseRV adapterCrudFireBaseRV;
+    private ArrayCrudFirebase arrayCrudItemSelected;
+
 
     //views
     View view;
