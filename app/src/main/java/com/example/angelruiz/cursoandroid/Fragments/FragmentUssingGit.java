@@ -70,7 +70,17 @@ public class FragmentUssingGit extends Fragment implements View.OnClickListener 
 
     private String showManualUser(){
 
-        return  "11-Capacidades técnicas mínimas del equipo.\n" +
+        return "1-Una página de portada.\n" +
+                "2-Una página de título.\n" +
+                "3-Una página de derechos de autor.\n" +
+                "4-Un prefacio, que contiene detalles de los documentos relacionados y la información sobre cómo navegar por la guía del usuario.\n" +
+                "5-Una sección de introducción, que incluye.\n" +
+                "6-Una breve descripción del sistema y su finalidad.\n" +
+                "7-Una sección de novedades desde la última versión.\n" +
+                "8-Una sección de requisitos previos necesarios para usar el sistema, que incluye.\n" +
+                "9-Conocimientos mínimos del usuari.\n" +
+                "10-Requisitos técnicos previos, incluyendo.\n" +
+                "11-Capacidades técnicas mínimas del equipo.\n" +
                 "12-Software asociado necesario.\n" +
                 "13-Mecanismo para acceder al sistema.\n" +
                 "14-Una sección de instalación y configuración.\n" +
