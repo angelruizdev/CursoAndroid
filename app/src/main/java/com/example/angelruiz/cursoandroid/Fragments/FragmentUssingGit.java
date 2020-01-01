@@ -18,11 +18,15 @@ import com.example.angelruiz.cursoandroid.R;
 
 public class FragmentUssingGit extends Fragment implements View.OnClickListener /*implements Response.Listener<JSONObject>, Response.ErrorListener */ {
 
+    //viewa
     View vista;
-    Context context;
     ProgressBar pbWebService;
     Button btSearchRed;
     TextView tvManualUser, tvShowRedFind;
+
+    //vars
+    Context context;
+    int count;
 
     public FragmentUssingGit() {
 
@@ -32,6 +36,7 @@ public class FragmentUssingGit extends Fragment implements View.OnClickListener 
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getContext();
+        count = 0;
     }
 
     @Override
@@ -51,7 +56,6 @@ public class FragmentUssingGit extends Fragment implements View.OnClickListener 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         tvShowRedFind.setVisibility(View.GONE);
-        tvShowRedFind.setText("Completado...");
         tvManualUser.setText(showManualUser());
     }
 
@@ -66,6 +70,22 @@ public class FragmentUssingGit extends Fragment implements View.OnClickListener 
 
     private void searchRed() {
         Toast.makeText(context, "searching...", Toast.LENGTH_SHORT).show();
+        count++;
+        if (count == 5){
+            finfFinshed(true);
+        }else {
+            finfFinshed(false);
+        }
+    }
+
+    private void finfFinshed(Boolean result){
+
+        if (result){
+            pbWebService.setVisibility(View.GONE);
+            tvShowRedFind.setVisibility(View.VISIBLE);
+        }else {
+            pbWebService.setVisibility(View.VISIBLE);
+        }
     }
 
     private String showManualUser(){
